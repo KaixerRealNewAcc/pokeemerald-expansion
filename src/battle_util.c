@@ -12174,10 +12174,17 @@ bool32 IsSleepClauseActiveForSide(u32 battlerSide)
 
 bool32 IsSleepClauseEnabled()
 {
+    u32 battlerPlayer = GetBattlerAtPosition(B_SIDE_PLAYER);
+    u32 battlerAI = GetBattlerAtPosition(B_SIDE_OPPONENT);
+
     if (B_SLEEP_CLAUSE)
         return TRUE;
     if (FlagGet(B_FLAG_SLEEP_CLAUSE))
         return TRUE;
+    if (GetBattlerAbility(battlerPlayer) == ABILITY_BAD_DREAMS 
+     || GetBattlerAbility(battlerAI) == ABILITY_BAD_DREAMS)
+        return FALSE;
+
     return FALSE;
 }
 
