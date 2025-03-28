@@ -1778,6 +1778,16 @@ void CalculateMonStats(struct Pokemon *mon)
 
     u8 nature = GetMonData(mon, MON_DATA_HIDDEN_NATURE, NULL);
 
+    if(B_REMOVE_EVS == TRUE)
+    {
+        hpEV = 0;
+        attackEV = 0;
+        defenseEV = 0;
+        spAttackEV = 0;
+        spDefenseEV = 0;
+        speedEV = 0;
+    }
+
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
     if (species == SPECIES_SHEDINJA)
