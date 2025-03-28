@@ -4797,29 +4797,67 @@ Music: Female
 Double Battle: No
 AI: Very Smart Trainer
 
-Geodude
-Level: 12
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Tackle
-- Defense Curl
-- Rock Throw
-- Rock Tomb
+Sudowoodo @ Lum Berry  
+Ability: Rattled  
+Level: 14  
+Tera Type: Rock  
+Careful Nature  
+- Stealth Rock  
+- Smack Down  
+- Razor Leaf  
+- Seismic Toss  
 
-Geodude
-Level: 12
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Tackle
-- Defense Curl
-- Rock Throw
-- Rock Tomb
+Archen @ Lum Berry  
+Ability: Defeatist  
+Level: 15  
+Tera Type: Rock  
+Jolly Nature  
+- Aerial Ace  
+- Rock Tomb  
+- Bulldoze  
+- Roost  
 
-Nosepass @ Oran Berry
-Level: 15
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Block
-- Harden
-- Tackle
-- Rock Tomb
+Lunatone @ Lum Berry  
+Ability: Levitate  
+Level: 14  
+Tera Type: Rock  
+Timid Nature  
+IVs: 0 Atk  
+- Psybeam  
+- Ancient Power  
+- Icy Wind  
+- Hypnosis  
+
+Growlithe-Hisui @ Lum Berry  
+Ability: Rock Head  
+Level: 16  
+Tera Type: Fire  
+Jolly Nature  
+- Rock Slide  
+- Temper Flare  
+- Morning Sun  
+- Howl  
+
+Relicanth @ Lum Berry  
+Ability: Sturdy  
+Level: 14  
+Tera Type: Water  
+Sassy Nature  
+- Rock Tomb  
+- Temper Flare  
+- Water Pulse  
+- Yawn  
+
+Lileep @ Lum Berry  
+Ability: Storm Drain  
+Level: 15  
+Tera Type: Rock  
+Bold Nature  
+IVs: 0 Atk  
+- Mega Drain  
+- Ancient Power  
+- Toxic  
+- Recover  
 
 === TRAINER_BRAWLY_1 ===
 Name: BRAWLY
@@ -5940,7 +5978,7 @@ Level: 39
 IVs: 29 HP / 29 Atk / 29 Def / 29 SpA / 29 SpD / 29 Spe
 
 === TRAINER_CALVIN_1 ===
-Name: CALVIN
+Name: Calvin
 Class: Youngster
 Pic: Youngster
 Gender: Male
@@ -5948,12 +5986,36 @@ Music: Male
 Double Battle: No
 AI: Check Bad Move
 
-Poochyena
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Lechonk  
+Ability: Thick Fat  
+Level: 7  
+Tera Type: Normal  
+Jolly Nature  
+- Covet  
+- Bullet Seed  
+- Headbutt  
+
+Azurill  
+Ability: Huge Power  
+Level: 7  
+Tera Type: Normal  
+Jolly Nature  
+- Covet  
+- Headbutt  
+- Aqua Jet  
+
+Pidgey  
+Ability: Keen Eye  
+Level: 7  
+Tera Type: Normal  
+Timid Nature  
+IVs: 0 Atk  
+- Air Cutter  
+- Twister  
+- Roost  
 
 === TRAINER_BILLY ===
-Name: BILLY
+Name: Billy
 Class: Youngster
 Pic: Youngster
 Gender: Male
@@ -5961,13 +6023,35 @@ Music: Male
 Double Battle: No
 AI: Check Bad Move
 
-Zigzagoon
-Level: 5
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Phanpy (M) @ Oran Berry  
+Ability: Sturdy  
+Level: 9  
+Tera Type: Ground  
+Adamant Nature  
+- Attract  
+- Bulldoze  
+- Covet  
+- Rapid Spin  
 
-Seedot
-Level: 7
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Drowzee @ Oran Berry  
+Ability: Bad Dreams  
+Level: 9  
+Tera Type: Dark  
+Bold Nature  
+- Hex  
+- Psybeam  
+- Shock Wave  
+- Hypnosis  
+
+Chinchou @ Oran Berry  
+Ability: Volt Absorb  
+Level: 9  
+Tera Type: Water  
+IVs: 0 Atk  
+- Thunder Wave  
+- Shock Wave  
+- Water Pulse  
+- Icy Wind  
 
 === TRAINER_JOSH ===
 Name: JOSH
@@ -6206,21 +6290,39 @@ Level: 16
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_ALLEN ===
-Name: ALLEN
-Class: Youngster
+Name: Allen
 Pic: Youngster
 Gender: Male
 Music: Male
 Double Battle: No
 AI: Check Bad Move
 
-Zigzagoon
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Cacnea @ Oran Berry  
+Ability: Water Absorb  
+Level: 8  
+Tera Type: Grass  
+Jolly Nature  
+- Power-Up Punch  
+- Trailblaze  
+- Smack Down  
 
-Taillow
-Level: 3
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Blitzle @ Oran Berry  
+Ability: Sap Sipper  
+Level: 8  
+Tera Type: Electric  
+Jolly Nature  
+- Flame Charge  
+- Double Kick  
+- Spark  
+
+Sandshrew @ Oran Berry  
+Ability: Battle Armor 
+Level: 8  
+Tera Type: Ground  
+Jolly Nature  
+- Seismic Toss  
+- Bulldoze  
+- Smack Down  
 
 === TRAINER_TIMMY ===
 Name: TIMMY
@@ -11044,7 +11146,7 @@ Level: 25
 IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
 
 === TRAINER_TIANA ===
-Name: TIANA
+Name: Tiana
 Class: Lass
 Pic: Lass
 Gender: Female
@@ -11052,13 +11154,32 @@ Music: Female
 Double Battle: No
 AI: Check Bad Move
 
-Zigzagoon
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Deerling-Summer @ Focus Sash  
+Ability: Serene Grace  
+Level: 9  
+Tera Type: Normal  
+Jolly Nature  
+- Grassy Glide  
+- Feint Attack  
+- Double Kick  
 
-Shroomish
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Houndour @ Black Glasses  
+Ability: Flash Fire  
+Level: 9  
+Tera Type: Dark  
+Timid Nature  
+- Snarl  
+- Incinerate  
+- Sucker Punch  
+
+Buizel @ Heavy-Duty Boots  
+Ability: Swift Swim  
+Level: 9  
+Tera Type: Water  
+Jolly Nature  
+- Flip Turn  
+- Ice Fang  
+- Low Kick  
 
 === TRAINER_HALEY_1 ===
 Name: HALEY
@@ -11248,7 +11369,7 @@ Level: 39
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
 === TRAINER_RICK ===
-Name: RICK
+Name: Rick
 Class: Bug Catcher
 Pic: Bug Catcher
 Gender: Male
@@ -11256,13 +11377,31 @@ Music: Male
 Double Battle: No
 AI: Check Bad Move
 
-Wurmple
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Surskit @ Oran Berry   
+Ability: Rain Dish  
+Level: 7  
+Tera Type: Water 
+Timid Nature  
+- Mega Drain  
+- Struggle Bug  
+- Bubble Beam  
 
-Wurmple
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Spinarak @ Oran Berry 
+Ability: Swarm
+Level: 7  
+Tera Type: Normal  
+Timid Nature  
+- Mega Drain
+- Venoshock  
+  
+
+Pineco @ Oran Berry  
+Ability: Sturdy
+Level: 7  
+Tera Type: Normal  
+Adamant Nature    
+- Pin Missile  
+- Iron Defense   
 
 === TRAINER_LYLE ===
 Name: LYLE
