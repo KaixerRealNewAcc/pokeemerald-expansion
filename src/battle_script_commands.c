@@ -13094,6 +13094,7 @@ static void Cmd_unused_96(void)
 {
 }
 
+//Make Attract work on the same Gender too!
 static void Cmd_tryinfatuating(void)
 {
     CMD_ARGS(const u8 *failInstr);
@@ -13107,9 +13108,9 @@ static void Cmd_tryinfatuating(void)
     else
     {
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION
-            || !AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
+            || AreBattlersOfOppositeGender(gBattlerAttacker, gBattlerTarget))
         {
-            gBattlescriptCurrInstr = cmd->failInstr;
+            gBattlescriptCurrInstr = cmd->nextInstr;
         }
         else
         {
