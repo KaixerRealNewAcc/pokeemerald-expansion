@@ -4860,80 +4860,148 @@ IVs: 0 Atk
 - Recover  
 
 === TRAINER_BRAWLY_1 ===
-Name: BRAWLY
+Name: Brawly
 Class: Leader
 Pic: Leader Brawly
 Gender: Male
 Music: Male
-Items: Super Potion / Super Potion
 Double Battle: No
 AI: Very Smart Trainer
 
-Machop
-Level: 16
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Karate Chop
-- Low Kick
-- Seismic Toss
-- Bulk Up
+Mienshao @ Focus Sash  
+Ability: Regenerator  
+Level: 35  
+Tera Type: Fighting  
+Jolly Nature  
+- U-turn  
+- Drain Punch  
+- Ice Spinner  
+- Knock Off  
 
-Meditite
-Level: 16
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-- Focus Punch
-- Light Screen
-- Reflect
-- Bulk Up
+Scrafty @ Leftovers  
+Ability: Shed Skin  
+Level: 36  
+Tera Type: Dark  
+Adamant Nature  
+- Bulk Up  
+- Drain Punch  
+- Rock Slide  
+- Rest  
 
-Makuhita @ Sitrus Berry
-Level: 19
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Arm Thrust
-- Vital Throw
-- Reversal
-- Bulk Up
+Lilligant-Hisui @ Lum Berry  
+Ability: Own Tempo  
+Level: 36  
+Tera Type: Grass  
+Jolly Nature  
+- Brick Break  
+- Leaf Blade  
+- Ice Spinner  
+- Sleep Powder  
+
+Hitmontop @ Protective Pads  
+Ability: Technician  
+Level: 37  
+Tera Type: Fighting  
+Jolly Nature  
+- Pursuit  
+- Rolling Kick  
+- Rock Slide  
+- Mach Punch  
+
+Infernape @ Lum Berry  
+Ability: Blaze  
+Level: 36  
+IVs: 30 Atk / 30 SpA
+Tera Type: Fire  
+Timid Nature  
+- Flame Burst  
+- Aura Sphere  
+- Hidden Power 
+- Fake Out  
+
+Gallade @ Galladite  
+Ability: Justified  
+Level: 35  
+Tera Type: Psychic  
+Jolly Nature  
+- Brick Break  
+- Psycho Cut  
+- Rock Slide  
+- Shadow Sneak  
 
 === TRAINER_WATTSON_1 ===
-Name: WATTSON
+Name: Wattson
 Class: Leader
 Pic: Leader Wattson
 Gender: Male
 Music: Male
-Items: Super Potion / Super Potion
 Double Battle: No
 AI: Very Smart Trainer
 
-Voltorb
-Level: 20
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Rollout
-- Spark
-- Self Destruct
-- Shock Wave
+Magneton @ Sitrus Berry  
+Ability: Levitate  
+Level: 26  
+IVs: 30 Atk / 30 SpA 
+Tera Type: Electric  
+Timid Nature  
+- Flash Cannon  
+- Discharge  
+- Hidden Power
+- Volt Switch  
 
-Electrike
-Level: 20
-IVs: 24 HP / 24 Atk / 24 Def / 24 SpA / 24 SpD / 24 Spe
-- Shock Wave
-- Leer
-- Quick Attack
-- Howl
+Electrode-Hisui @ Lum Berry  
+Ability: Static  
+Level: 26  
+IVs: 30 SpA / 30 SpD 
+Tera Type: Electric  
+Modest Nature   
+- Giga Drain  
+- Hidden Power
+- Substitute  
+- Leech Seed  
 
-Magneton
-Level: 22
-IVs: 26 HP / 26 Atk / 26 Def / 26 SpA / 26 SpD / 26 Spe
-- Supersonic
-- Shock Wave
-- Thunder Wave
-- Sonic Boom
+Emolga @ Magnet  
+Ability: Motor Drive  
+Level: 27  
+IVs: 30 Atk / 30 SpA  
+Tera Type: Electric  
+Timid Nature  
+- Discharge  
+- Air Slash  
+- Hidden Power
+- Roost  
 
-Manectric @ Sitrus Berry
-Level: 24
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Quick Attack
-- Thunder Wave
-- Shock Wave
-- Howl
+Lanturn @ Leftovers  
+Ability: Volt Absorb  
+Level: 27  
+Tera Type: Water  
+Bold Nature  
+IVs: 0 Atk  
+- Discharge  
+- Bubble Beam  
+- Thunder Wave  
+- Moonlight  
+
+Manectric @ Sitrus Berry  
+Ability: Intimidate  
+Level: 28  
+IVs: 30 Atk / 30 SpA  
+Tera Type: Electric  
+Timid Nature  
+- Discharge  
+- Flame Burst  
+- Hidden Power  
+- Thunder Wave  
+
+Toxtricity @ Lum Berry  
+Ability: Punk Rock  
+Level: 27  
+Tera Type: Electric  
+Timid Nature   
+- Discharge  
+- Psychic Noise  
+- Snarl  
+- Sludge Bomb  
 
 === TRAINER_FLANNERY_1 ===
 Name: FLANNERY
