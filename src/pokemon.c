@@ -5541,11 +5541,32 @@ static const u16 sUniversalMoves[] =
     MOVE_SECRET_POWER,
     MOVE_SUBSTITUTE,
     MOVE_TERA_BLAST,
+    MOVE_HIDDEN_POWER,
 };
 
 u8 CanLearnTeachableMove(u16 species, u16 move)
 {
-    if (species == SPECIES_EGG)
+    //Put First, so it goes:
+    //First check trough any pokemon's moveset.
+    //Don't let them learn the moves below.
+    //Then Check trough Eggs moveset Return False, cause Eggs can't learn moves.
+    //After then check for mew's moveset, if thats done do the normal moveset Check.
+    if(species != SPECIES_NONE)
+    {
+        switch (move)
+        {
+            case MOVE_SWORDS_DANCE:
+            case MOVE_AGILITY:
+            case MOVE_ACID_ARMOR:
+            case MOVE_IRON_DEFENSE:
+            case MOVE_DRAGON_DANCE:
+            case MOVE_BULK_UP:
+                return FALSE;
+            default:
+                return TRUE;
+        }
+    }
+    else if (species == SPECIES_EGG)
     {
         return FALSE;
     }
@@ -5568,6 +5589,13 @@ u8 CanLearnTeachableMove(u16 species, u16 move)
         case MOVE_SPLISHY_SPLASH:
         case MOVE_VOLT_TACKLE:
         case MOVE_ZIPPY_ZAP:
+            return FALSE;
+        case MOVE_SWORDS_DANCE:
+        case MOVE_AGILITY:
+        case MOVE_ACID_ARMOR:
+        case MOVE_IRON_DEFENSE:
+        case MOVE_DRAGON_DANCE:
+        case MOVE_BULK_UP:
             return FALSE;
         default:
             return TRUE;
@@ -6988,6 +7016,34 @@ u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler)
     if (moveType != TYPE_NONE)
         return moveType;
     return GetMoveType(move);
+}
+
+#include "constants/species.h"
+
+#define HIPPO_FAMILY(species) (species == SPECIES_HIPPOPOTAS || species == SPECIES_HIPPOWDON)
+
+u16 ReplaceGoodAbility(u16 ability, u16 species)
+{
+    switch(ability)
+    {
+        case ABILITY_DROUGHT:
+            return ABILITY_SOLAR_POWER;
+        case ABILITY_DRIZZLE:
+            return ABILITY_SWIFT_SWIM;
+        case ABILITY_SAND_STREAM:
+        case ABILITY_SAND_SPIT:
+        case ABILITY_SAND_VEIL:
+            if(HIPPO_FAMILY(species))
+                return ABILITY_CHEEK_POUCH;
+            return ABILITY_SAND_FORCE;
+        case ABILITY_SNOW_WARNING:
+        case ABILITY_SNOW_CLOAK:
+            return ABILITY_SLUSH_RUSH;
+        case ABILITY_STAMINA:
+            return ABILITY_BATTLE_ARMOR;
+    }
+    
+    return ability;
 }
 
 uq4_12_t GetDynamaxLevelHPMultiplier(u32 dynamaxLevel, bool32 inverseMultiplier)
