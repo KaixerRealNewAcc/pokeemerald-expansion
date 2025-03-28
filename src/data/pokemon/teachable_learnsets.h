@@ -99,6 +99,7 @@
 // - MOVE_BIDE                                         //
 // - MOVE_FRUSTRATION                                  //
 // - MOVE_HIDDEN_POWER                                 //
+// - MOVE_HIDDEN_POWER                                 //
 // - MOVE_MIMIC                                        //
 // - MOVE_NATURAL_GIFT                                 //
 // - MOVE_RAGE                                         //

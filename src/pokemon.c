@@ -5547,7 +5547,7 @@ static const u16 sUniversalMoves[] =
 u8 CanLearnTeachableMove(u16 species, u16 move)
 {
     //Put First, so it goes:
-    //First check trough any pokemon's moveset.
+    //First check trough any pokemon's moveset (hence why 'species != SPECIES_NONE').
     //Don't let them learn the moves below.
     //Then Check trough Eggs moveset Return False, cause Eggs can't learn moves.
     //After then check for mew's moveset, if thats done do the normal moveset Check.
