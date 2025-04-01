@@ -5137,7 +5137,7 @@ Gender: Female
 Music: Female
 Double Battle: No
 Boss Trainer: Yes
-AI: Very Smart Trainer
+AI: Smart Trainer
 
 Nosepass @ Custap Berry
 Ability: Sturdy
@@ -9985,8 +9985,7 @@ Jolly Nature
 - Knock Off 
 - Roost  
 
-Simipour @ Mystic Water  
-Ability: Mystic Power 
+Simipour @ Mystic Water
 Level: 104  
 Tera Type: Water  
 IVs: 30 SpA
@@ -10073,7 +10072,6 @@ Jolly Nature
 - Nasty Plot  
 
 Simisage @ Miracle Seed
-Ability: Mystic Power
 Level: 104  
 Tera Type: Grass  
 IVs: 30 Atk / 30 SpA / 30 Spe
@@ -10158,8 +10156,7 @@ Jolly Nature
 - Low Kick  
 - Swords Dance  
 
-Simisear @ Charcoal
-Ability: Mystic Power  
+Simisear @ Charcoal  
 Level: 104  
 Tera Type: Dark  
 IVs: 30 Def / 30 SpD 
@@ -10244,8 +10241,7 @@ Jolly Nature
 - Knock Off 
 - Roost  
 
-Simipour @ Mystic Water  
-Ability: Mystic Power 
+Simipour @ Mystic Water
 Level: 104  
 Tera Type: Water  
 IVs: 30 SpA
@@ -10330,7 +10326,6 @@ Jolly Nature
 - Nasty Plot  
 
 Simisage @ Miracle Seed
-Ability: Mystic Power
 Level: 104  
 Tera Type: Grass  
 IVs: 30 Atk / 30 SpA / 30 Spe
@@ -10413,8 +10408,7 @@ Jolly Nature
 - Low Kick  
 - Swords Dance  
 
-Simisear @ Charcoal
-Ability: Mystic Power  
+Simisear @ Charcoal  
 Level: 104  
 Tera Type: Dark  
 IVs: 30 Def / 30 Spe  
@@ -15022,7 +15016,7 @@ Pic: Leader Roxanne
 Gender: Female
 Music: Female
 Double Battle: No
-AI: Very Smart Trainer
+AI: Smart Trainer
 
 Sandy Shocks @ Focus Sash  
 Ability: Protosynthesis  

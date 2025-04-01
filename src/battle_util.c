@@ -9394,7 +9394,15 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         break;
     case ABILITY_IRON_FIST:
         if (IsPunchingMove(move))
-           modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_SUPER_SLAMMER:
+        if (IsSlamingOrHammeringMove(move))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_STRIKER:
+        if (IsKickingMove(move))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
     case ABILITY_SHEER_FORCE:
         if (MoveIsAffectedBySheerForce(move))
@@ -9456,6 +9464,7 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
         break;
     case ABILITY_PUNK_ROCK:
+    case ABILITY_SOUND_WAVES:
         if (IsSoundMove(move))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
@@ -9469,6 +9478,11 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         break;
     case ABILITY_SUPREME_OVERLORD:
         modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
+        break;
+    case ABILITY_LIQUID_VOICE:
+    case ABILITY_SAND_SONG:
+        if(IsSoundMove(move))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
         break;
     }
 
@@ -10263,6 +10277,7 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(u32 move, u32 moveType, u32 
             return UQ_4_12(0.5);
         break;
     case ABILITY_PUNK_ROCK:
+    case ABILITY_SOUND_WAVES:
         if (IsSoundMove(move))
             return UQ_4_12(0.5);
         break;
@@ -10559,7 +10574,8 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
 {
     uq4_12_t mod = GetTypeModifier(moveType, defType);
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
-
+    u32 abilityDef = GetBattlerAbility(battlerDef);
+    u32 StealthRockMultiplier = GetStealthHazardDamage(TYPE_SIDE_HAZARD_POINTED_STONES, battlerDef);
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)
     {
         mod = UQ_4_12(1.0);
@@ -10578,6 +10594,15 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, abilityAtk);
     }
+    else if((IsBoneMove(move)) && (mod == UQ_4_12(0.0) || mod == UQ_4_12(0.5)) 
+        //|| (IsBoneMove(move) && mod == UQ_4_12(0.5))
+        && abilityAtk == ABILITY_BONE_ZONE
+        && mod == UQ_4_12(0.0))
+    {
+        mod = UQ_4_12(1.0);
+        if (recordAbilities)
+            RecordAbilityBattle(battlerAtk, abilityAtk);
+    }
 
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
@@ -10585,6 +10610,8 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         mod = UQ_4_12(2.0);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
+    if ((moveType == TYPE_ROCK || StealthRockMultiplier) && (abilityDef == ABILITY_MOUNTAINEER && mod >= UQ_4_12(1.0)))
+        mod = UQ_4_12(0.0);
     if (moveType == TYPE_STELLAR && GetActiveGimmick(battlerDef) == GIMMICK_TERA)
         mod = UQ_4_12(2.0);
 
@@ -10808,6 +10835,11 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
 {
     s32 dmg = 0;
     uq4_12_t modifier = UQ_4_12(1.0);
+    uq4_12_t ZroDmg = UQ_4_12(0.0);
+    u32 abilityDef = GetBattlerAbility(gBattlerAttacker);
+
+    if (abilityDef == ABILITY_MOUNTAINEER)
+        return ZroDmg;
 
     modifier = uq4_12_multiply(modifier, GetTypeModifier((u8)hazardType, type1));
     if (type2 != type1)

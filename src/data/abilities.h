@@ -2408,4 +2408,19 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .cantBeSwapped = TRUE,
         .cantBeTraced = TRUE,
     },
+
+    [ABILITY_SAND_SONG] =
+    {
+        .name = _("Sand Song"),
+        .description = COMPOUND_STRING("Makes sound moves Ground."),
+        .aiRating = 5,
+    },
+
+    [ABILITY_SOUND_WAVES] =
+    {
+        .name = _("Sound Waves"),
+        .description = COMPOUND_STRING("Ups and resists sound."),
+        .aiRating = 2,
+        .breakable = TRUE,
+    },
 };
