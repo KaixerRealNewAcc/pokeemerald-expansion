@@ -99,6 +99,7 @@ struct Trainer
     /*0x22*/ u8 poolRuleIndex;
     /*0x23*/ u8 poolPickIndex;
     /*0x24*/ u8 poolPruneIndex;
+             u8 isBossTrainer;
 };
 
 struct TrainerClass

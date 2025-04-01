@@ -144,6 +144,7 @@ struct Trainer
     struct String pool_prune;
     int pool_prune_line;
 
+    //New
     bool boss_trainer;
     int boss_trainer_line;
 };
@@ -1254,7 +1255,7 @@ static bool parse_trainer(struct Parser *p, const struct Parsed *parsed, struct 
             trainer->pool_prune_line = value.location.line;
             trainer->pool_prune = token_string(&value);
         }
-        else if (is_literal_token(&key, "Boss Trainer"))
+        else if (is_literal_token(&key, "Boss Trainer")) //New
         {
             if (trainer->boss_trainer_line)
                 any_error = !set_show_parse_error(p, key.location, "duplicate 'Boss Trainer'");
@@ -1813,7 +1814,7 @@ static void fprint_trainers(const char *output_path, FILE *f, struct Parsed *par
             fprintf(f, ",\n");
         }
 
-        if (trainer->boss_trainer_line)
+        if (trainer->boss_trainer_line) //New
         {
             fprintf(f, "#line %d\n", trainer->boss_trainer_line);
             fprintf(f, "        .isBossTrainer = ");
