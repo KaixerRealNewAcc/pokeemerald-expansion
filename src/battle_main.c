@@ -1954,7 +1954,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
 
                 if(partyData[monIndex].lvl == ONE_BELOW_PLAYER_MAX)
                     finalLevel -=1;
-
+                    
                 if(partyData[monIndex].lvl == TWO_BELOW_PLAYER_MAX)
                     finalLevel -=2;
 
