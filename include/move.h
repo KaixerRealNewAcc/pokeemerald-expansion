@@ -68,7 +68,7 @@ struct MoveInfo
     bool32 snatchAffected:1;
     bool32 ignoresKingsRock:1;
     bool32 punchingMove:1;
-    bool32 slammerOrHammerMove:1;
+    bool32 slammingOrHammerMove:1;
     bool32 kickingMove:1;
     bool32 boneMove:1;
     bool32 bitingMove:1;
@@ -272,7 +272,7 @@ static inline bool32 IsPunchingMove(u32 moveId)
 
 static inline bool32 IsSlammingOrHammeringMove(u32 moveId)
 {
-    return gMovesInfo[SanitizeMoveId(moveId)].slammerOrHammerMove;
+    return gMovesInfo[SanitizeMoveId(moveId)].slammingOrHammerMove;
 }
 
 static inline bool32 IsKickingMove(u32 moveId)
