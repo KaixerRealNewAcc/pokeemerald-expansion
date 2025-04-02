@@ -5818,6 +5818,7 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
             break;
         case ABILITY_ROUGH_SKIN:
         case ABILITY_IRON_BARBS:
+        case ABILITY_SPIKY_BARBS:
             if (!(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_NO_EFFECT)
              && IsBattlerAlive(gBattlerAttacker)
              && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
@@ -10595,7 +10596,6 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
             RecordAbilityBattle(battlerAtk, abilityAtk);
     }
     else if((IsBoneMove(move)) && (mod == UQ_4_12(0.0) || mod == UQ_4_12(0.5)) 
-        //|| (IsBoneMove(move) && mod == UQ_4_12(0.5))
         && abilityAtk == ABILITY_BONE_ZONE
         && mod == UQ_4_12(0.0))
     {
@@ -10610,7 +10610,7 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         mod = UQ_4_12(2.0);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
-    if ((moveType == TYPE_ROCK || StealthRockMultiplier) && (abilityDef == ABILITY_MOUNTAINEER && mod >= UQ_4_12(1.0)))
+    if ((moveType == TYPE_ROCK && abilityDef == ABILITY_MOUNTAINEER && mod >= UQ_4_12(1.0)))
         mod = UQ_4_12(0.0);
     if (moveType == TYPE_STELLAR && GetActiveGimmick(battlerDef) == GIMMICK_TERA)
         mod = UQ_4_12(2.0);
@@ -10837,9 +10837,7 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
     uq4_12_t modifier = UQ_4_12(1.0);
     uq4_12_t ZroDmg = UQ_4_12(0.0);
     u32 abilityDef = GetBattlerAbility(gBattlerAttacker);
-
-    if (abilityDef == ABILITY_MOUNTAINEER)
-        return ZroDmg;
+    u32 StealthRockImmuneAbility = (abilityDef == ABILITY_MOUNTAINEER | abilityDef == ABILITY_SHIELD_DUST | abilityDef == ABILITY_AROMATIC_MIST);
 
     modifier = uq4_12_multiply(modifier, GetTypeModifier((u8)hazardType, type1));
     if (type2 != type1)
@@ -10848,29 +10846,41 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
     switch (modifier)
     {
     case UQ_4_12(0.0):
+        if(StealthRockImmuneAbility)
+            dmg = 0; 
         dmg = 0;
         break;
     case UQ_4_12(0.25):
+        if(StealthRockImmuneAbility)
+            dmg = 0;  
         dmg = maxHp / 32;
         if (dmg == 0)
             dmg = 1;
         break;
     case UQ_4_12(0.5):
+        if(StealthRockImmuneAbility)
+            dmg = 0; 
         dmg = maxHp / 16;
         if (dmg == 0)
             dmg = 1;
         break;
     case UQ_4_12(1.0):
+        if(StealthRockImmuneAbility)
+            dmg = 0; 
         dmg = maxHp / 8;
         if (dmg == 0)
             dmg = 1;
         break;
     case UQ_4_12(2.0):
+        if(StealthRockImmuneAbility)
+            dmg = 0; 
         dmg = maxHp / 4;
         if (dmg == 0)
             dmg = 1;
         break;
     case UQ_4_12(4.0):
+            if(StealthRockImmuneAbility)
+            dmg = 0; 
         dmg = maxHp / 2;
         if (dmg == 0)
             dmg = 1;
@@ -12227,7 +12237,7 @@ bool32 DoesDestinyBondFail(u32 battler)
 // This check has always to be the last in a condtion statement because of the recording of AI data.
 bool32 IsMoveEffectBlockedByTarget(u32 ability)
 {
-    if (ability == ABILITY_SHIELD_DUST)
+    if (ability == ABILITY_SHIELD_DUST || ability == ABILITY_AROMATIC_MIST)
     {
         RecordAbilityBattle(gBattlerTarget, ability);
         return TRUE;
