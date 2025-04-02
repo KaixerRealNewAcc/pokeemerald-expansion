@@ -270,7 +270,7 @@ static inline bool32 IsPunchingMove(u32 moveId)
     return gMovesInfo[SanitizeMoveId(moveId)].punchingMove;
 }
 
-static inline bool32 IsSlamingOrHammeringMove(u32 moveId)
+static inline bool32 IsSlammingOrHammeringMove(u32 moveId)
 {
     return gMovesInfo[SanitizeMoveId(moveId)].slammerOrHammerMove;
 }

@@ -9398,7 +9398,7 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
     case ABILITY_SUPER_SLAMMER:
-        if (IsSlamingOrHammeringMove(move))
+        if (IsSlammingOrHammeringMove(move))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STRIKER:
