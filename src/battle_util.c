@@ -10576,7 +10576,7 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
     uq4_12_t mod = GetTypeModifier(moveType, defType);
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
     u32 abilityDef = GetBattlerAbility(battlerDef);
-    u32 StealthRockMultiplier = GetStealthHazardDamage(TYPE_SIDE_HAZARD_POINTED_STONES, battlerDef);
+    
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)
     {
         mod = UQ_4_12(1.0);
@@ -10835,7 +10835,6 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
 {
     s32 dmg = 0;
     uq4_12_t modifier = UQ_4_12(1.0);
-    uq4_12_t ZroDmg = UQ_4_12(0.0);
     u32 abilityDef = GetBattlerAbility(gBattlerAttacker);
     u32 StealthRockImmuneAbility = (abilityDef == ABILITY_MOUNTAINEER || abilityDef == ABILITY_SHIELD_DUST || abilityDef == ABILITY_AROMATIC_MIST);
 
