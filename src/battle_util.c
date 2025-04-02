@@ -9405,6 +9405,10 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         if (IsKickingMove(move))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
+    case ABILITY_SPINNER:
+        if (IsKickingMove(move))
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        break;
     case ABILITY_SHEER_FORCE:
         if (MoveIsAffectedBySheerForce(move))
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
@@ -10576,7 +10580,8 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
     uq4_12_t mod = GetTypeModifier(moveType, defType);
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
     u32 abilityDef = GetBattlerAbility(battlerDef);
-    
+    u32 isBoneMove = IsBoneMove(move);
+
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)
     {
         mod = UQ_4_12(1.0);
@@ -10595,9 +10600,9 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, abilityAtk);
     }
-    else if((IsBoneMove(move)) && (mod == UQ_4_12(0.0) || mod == UQ_4_12(0.5)) 
-        && abilityAtk == ABILITY_BONE_ZONE
-        && mod == UQ_4_12(0.0))
+    else if((isBoneMove 
+         && abilityAtk == ABILITY_BONE_ZONE)
+         && (mod == UQ_4_12(0.0) || mod == UQ_4_12(0.5)))
     {
         mod = UQ_4_12(1.0);
         if (recordAbilities)
