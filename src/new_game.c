@@ -48,6 +48,7 @@
 #include "constants/items.h"
 #include "difficulty.h"
 #include "save_location.h"
+#include "tx_registered_items_menu.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -188,9 +189,10 @@ void NewGameInitData(void)
     ResetPokemonStorageSystem();
     DeactivateAllRoamers();
     ForceBattleStyleSet();
-    gSaveBlock1Ptr->registeredItem = ITEM_NONE;
+    gSaveBlock1Ptr->registeredItemSelect = ITEM_NONE;
     ClearBag();
     NewGameInitPCItems();
+    TxRegItemsMenu_RegisteredItemsMenuNewGame();
     ClearPokeblocks();
     ClearDecorationInventories();
     InitEasyChatPhrases();
