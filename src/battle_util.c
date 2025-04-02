@@ -10837,7 +10837,7 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
     uq4_12_t modifier = UQ_4_12(1.0);
     uq4_12_t ZroDmg = UQ_4_12(0.0);
     u32 abilityDef = GetBattlerAbility(gBattlerAttacker);
-    u32 StealthRockImmuneAbility = (abilityDef == ABILITY_MOUNTAINEER | abilityDef == ABILITY_SHIELD_DUST | abilityDef == ABILITY_AROMATIC_MIST);
+    u32 StealthRockImmuneAbility = (abilityDef == ABILITY_MOUNTAINEER || abilityDef == ABILITY_SHIELD_DUST || abilityDef == ABILITY_AROMATIC_MIST);
 
     modifier = uq4_12_multiply(modifier, GetTypeModifier((u8)hazardType, type1));
     if (type2 != type1)
