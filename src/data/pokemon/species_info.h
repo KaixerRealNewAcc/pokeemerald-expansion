@@ -223,14 +223,14 @@ const struct SpeciesInfo gSpeciesInfo[] =
         .iconPalIndex = 2,
         SHADOW(1, 0, SHADOW_SIZE_S)
         FOOTPRINT(Cubone)
-        OVERWORLD(
+        /*OVERWORLD(
             sPicTable_CuboneAlola,
             SIZE_32x32,
             SHADOW_SIZE_M,
             TRACKS_FOOT,
             gOverworldPalette_CuboneAlola,
             gShinyOverworldPalette_CuboneAlola
-        )
+        )*/
         .isAlolanForm = TRUE,
         .levelUpLearnset = sCuboneAlolaLevelUpLearnset,
         .teachableLearnset = sCuboneTeachableLearnset,
