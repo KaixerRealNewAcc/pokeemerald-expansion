@@ -9724,7 +9724,7 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
     // apply attack stat modifiers
     modifier = UQ_4_12(1.0);
 
-    u32 boostsSameAttackZoroark = IS_BATTLER_OF_TYPE(battlerAtk, moveType);
+    u32 boostsSameTypeAttackZoroark = IS_BATTLER_OF_TYPE(battlerAtk, moveType);
 
     // attacker's abilities
     switch (atkAbility)
@@ -9852,7 +9852,7 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3333));
         break;
     case ABILITY_ILLUSION:
-        if (ZOROARK_FAM(atkBaseSpeciesId) && boostsSameAttackZoroark)
+        if (ZOROARK_FAM(atkBaseSpeciesId) && boostsSameTypeAttackZoroark)
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3333));
     }
 
