@@ -12834,7 +12834,7 @@ F_TRAINER_FEMALE |
             },
             {
 #line 5173
-            .species = SPECIES_CUBONE,
+            .species = SPECIES_CUBONE_ALOLA,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5173
             .heldItem = ITEM_THICK_CLUB,

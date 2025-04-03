@@ -10420,6 +10420,8 @@ static inline s32 DoMoveDamageCalcVars(struct DamageCalculationData *damageCalcD
     u32 targetFinalDefense;
     u32 battlerAtk = damageCalcData->battlerAtk;
     u32 battlerDef = damageCalcData->battlerDef;
+    u32 isBoneMove;
+    u32 move = damageCalcData->move;
 
     if (fixedBasePower)
         gBattleMovePower = fixedBasePower;
@@ -10435,6 +10437,13 @@ static inline s32 DoMoveDamageCalcVars(struct DamageCalculationData *damageCalcD
     DAMAGE_APPLY_MODIFIER(GetWeatherDamageModifier(damageCalcData, holdEffectAtk, holdEffectDef, weather));
     DAMAGE_APPLY_MODIFIER(GetCriticalModifier(damageCalcData->isCrit));
     DAMAGE_APPLY_MODIFIER(GetGlaiveRushModifier(battlerDef));
+
+    isBoneMove = IsBoneMove(move);
+    if((isBoneMove && abilityAtk == ABILITY_BONE_ZONE))
+    {
+        if(typeEffectivenessModifier <= UQ_4_12(0.5)) //Counts for both Immune and Not Very Effective Hits.
+            typeEffectivenessModifier = UQ_4_12(1.0);
+    }
 
     if (damageCalcData->randomFactor)
     {
@@ -10462,6 +10471,7 @@ static inline s32 DoMoveDamageCalc(struct DamageCalculationData *damageCalcData,
 
     if (typeEffectivenessModifier == UQ_4_12(0.0))
         return 0;
+    
 
     holdEffectAtk = GetBattlerHoldEffect(damageCalcData->battlerAtk, TRUE);
     holdEffectDef = GetBattlerHoldEffect(damageCalcData->battlerDef, TRUE);
@@ -10580,8 +10590,6 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
     uq4_12_t mod = GetTypeModifier(moveType, defType);
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
     u32 abilityDef = GetBattlerAbility(battlerDef);
-    u32 isBoneMove = IsBoneMove(move);
-
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)
     {
         mod = UQ_4_12(1.0);
@@ -10595,14 +10603,6 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
     else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST
         && (abilityAtk == ABILITY_SCRAPPY || abilityAtk == ABILITY_MINDS_EYE)
         && mod == UQ_4_12(0.0))
-    {
-        mod = UQ_4_12(1.0);
-        if (recordAbilities)
-            RecordAbilityBattle(battlerAtk, abilityAtk);
-    }
-    else if((isBoneMove 
-         && abilityAtk == ABILITY_BONE_ZONE)
-         && (mod == UQ_4_12(0.0) || mod == UQ_4_12(0.5)))
     {
         mod = UQ_4_12(1.0);
         if (recordAbilities)
@@ -10883,7 +10883,7 @@ s32 GetStealthHazardDamageByTypesAndHP(enum TypeSideHazard hazardType, u8 type1,
             dmg = 1;
         break;
     case UQ_4_12(4.0):
-            if(StealthRockImmuneAbility)
+        if(StealthRockImmuneAbility)
             dmg = 0; 
         dmg = maxHp / 2;
         if (dmg == 0)
