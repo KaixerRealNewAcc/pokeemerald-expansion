@@ -9651,6 +9651,8 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
     return uq4_12_multiply_by_int_half_down(modifier, basePower);
 }
 
+#define ZOROARK_FAM(atkBaseSpeciesId) (atkBaseSpeciesId == SPECIES_ZORUA || atkBaseSpeciesId == SPECIES_ZOROARK)
+
 static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather)
 {
     u8 atkStage;
@@ -9721,6 +9723,8 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
 
     // apply attack stat modifiers
     modifier = UQ_4_12(1.0);
+
+    u32 boostsSameAttackZoroark = IS_BATTLER_OF_TYPE(battlerAtk, moveType);
 
     // attacker's abilities
     switch (atkAbility)
@@ -9847,6 +9851,9 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
         if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN && IsBattleMoveSpecial(move))
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3333));
         break;
+    case ABILITY_ILLUSION:
+        if (ZOROARK_FAM(atkBaseSpeciesId) && boostsSameAttackZoroark)
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.3333));
     }
 
     // target's abilities
