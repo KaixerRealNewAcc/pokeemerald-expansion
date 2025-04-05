@@ -1897,7 +1897,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
         u32 monIndices[monsCount];
         DoTrainerPartyPool(trainer, monIndices, monsCount, battleTypeFlags);
         bool8 decidedLevel = FALSE;
-        u8 maxLevel;
+        u8 maxLevel = 100;
         u8 playerLevelMinus;
         u8 finalLevel;
 
