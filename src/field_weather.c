@@ -19,6 +19,7 @@
 #include "gpu_regs.h"
 #include "field_camera.h"
 #include "overworld.h"
+#include "gba/macro.h"
 
 #define DROUGHT_COLOR_INDEX(color) ((((color) >> 1) & 0xF) | (((color) >> 2) & 0xF0) | (((color) >> 3) & 0xF00))
 
@@ -727,7 +728,6 @@ void FadeScreen(u8 mode, s8 delay)
     u32 fadeColor;
     bool8 fadeOut;
     bool8 useWeatherPal;
-    struct TimeBlendSettings currentTimeBlend = currentTimeBlendDN;
 
     switch (mode)
     {
@@ -786,9 +786,9 @@ void FadeScreen(u8 mode, s8 delay)
           if (MapHasNaturalLight(gMapHeader.mapType)) {
             UpdateAltBgPalettes(PALETTES_BG);
             BeginTimeOfDayPaletteFade(PALETTES_ALL, delay, 16, 0,
-              currentTimeBlend->bld0,
-              currentTimeBlend->bld1,
-              currentTimeBlend->weight, fadeColor);
+              &currentTimeBlend.bld0,
+              &currentTimeBlend.bld1,
+              currentTimeBlend.weight, fadeColor);
           } else {
             BeginNormalPaletteFade(PALETTES_ALL, delay, 16, 0, fadeColor);
           }

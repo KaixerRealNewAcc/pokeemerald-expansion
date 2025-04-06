@@ -83,14 +83,14 @@ extern u32 gPlttBufferTransferPending;
 extern u16 ALIGNED(4) gPlttBufferUnfaded[PLTT_BUFFER_SIZE];
 extern u16 ALIGNED(4) gPlttBufferFaded[PLTT_BUFFER_SIZE];
 
-void LoadCompressedPalette(const u32 *src, u16 offset, u16 size);
-void LoadPalette(const void *src, u16 offset, u16 size);
+void LoadCompressedPalette(const u32 *src, u32 offset, u16 size);
+void LoadPalette(const void *src, u32 offset, u32 size);
 void LoadPaletteFast(const void *src, u16 offset, u16 size);
 void FillPalette(u16 value, u16 offset, u16 size);
 void TransferPlttBuffer(void);
 u32 UpdatePaletteFade(void);
 void ResetPaletteFade(void);
-bool8 BeginNormalPaletteFade(u32 selectedPalettes, s8 delay, u8 startY, u8 targetY, u16 blendColor);
+bool8 BeginNormalPaletteFade(u32 selectedPalettes, s8 delay, u8 startY, u8 targetY, u32 blendColor);
 bool8 BeginTimeOfDayPaletteFade(u32, s8, u8, u8, struct BlendSettings *, struct BlendSettings *, u16, u16);
 void PaletteStruct_ResetById(u16 id);
 void ResetPaletteFadeControl(void);

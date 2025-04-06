@@ -15,7 +15,11 @@ enum
     NORMAL_FADE,
     FAST_FADE,
     HARDWARE_FADE,
+    TIME_OF_DAY_FADE,
 };
+
+// These are structs for some unused palette system.
+// The full functionality of this system is unknown.
 
 #define NUM_PALETTE_STRUCTS 16
 
@@ -68,6 +72,11 @@ EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
 static EWRAM_DATA u32 sFiller = 0;
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
 EWRAM_DATA u8 ALIGNED(2) gPaletteDecompressionBuffer[PLTT_SIZE] = {0};
+
+static const struct PaletteStructTemplate sDummyPaletteStructTemplate = {
+    .id = 0xFFFF,
+    .state = 1
+};
 
 static const u8 sRoundedDownGrayscaleMap[] = {
      0,  0,  0,  0,  0,

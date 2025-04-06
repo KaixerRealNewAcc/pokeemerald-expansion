@@ -17,6 +17,7 @@
 #include "constants/rgb.h"
 #include "constants/metatile_behaviors.h"
 #include "wild_encounter.h"
+#include "gba/macro.h"
 
 struct ConnectionFlags
 {
@@ -876,8 +877,6 @@ static void UNUSED ApplyGlobalTintToPaletteSlot(u8 slot, u8 count)
 {
 
 }
-
-#include "macro.h"
 
 static void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size, bool8 skipFaded)
 {
