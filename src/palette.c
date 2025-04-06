@@ -9,14 +9,51 @@
 #include "task.h"
 #include "constants/field_weather.h"
 #include "constants/rgb.h"
+#include "gba/defines.h"
 
 enum
 {
     NORMAL_FADE,
     FAST_FADE,
     HARDWARE_FADE,
+    TIME_OF_DAY_FADE,
 };
 
+// These are structs for some unused palette system.
+// The full functionality of this system is unknown.
+
+#define NUM_PALETTE_STRUCTS 16
+
+struct PaletteStructTemplate
+{
+    u16 id;
+    u16 *src;
+    bool16 pst_field_8_0:1;
+    u16 unused:9;
+    u16 size:5;
+    u8 time1;
+    u8 srcCount:5;
+    u8 state:3;
+    u8 time2;
+};
+
+struct PaletteStruct
+{
+    const struct PaletteStructTemplate *template;
+    bool32 active:1;
+    bool32 flag:1;
+    u32 baseDestOffset:9;
+    u32 destOffset:10;
+    u32 srcIndex:7;
+    u8 countdown1;
+    u8 countdown2;
+};
+
+static void PaletteStruct_Copy(struct PaletteStruct *, u32 *);
+static void PaletteStruct_Blend(struct PaletteStruct *, u32 *);
+static void PaletteStruct_TryEnd(struct PaletteStruct *);
+static void PaletteStruct_Reset(u8);
+static u8 PaletteStruct_GetPalNum(u16);
 static u32 UpdateNormalPaletteFade(void);
 static void BeginFastPaletteFadeInternal(u32);
 static u32 UpdateFastPaletteFade(void);
@@ -29,8 +66,16 @@ static void Task_BlendPalettesGradually(u8 taskId);
 // unaligned word reads are issued in BlendPalette otherwise
 ALIGNED(4) EWRAM_DATA u16 gPlttBufferUnfaded[PLTT_BUFFER_SIZE] = {0};
 ALIGNED(4) EWRAM_DATA u16 gPlttBufferFaded[PLTT_BUFFER_SIZE] = {0};
+static EWRAM_DATA struct PaletteStruct sPaletteStructs[NUM_PALETTE_STRUCTS] = {0};
 EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
+static EWRAM_DATA u32 sFiller = 0;
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
+EWRAM_DATA u8 ALIGNED(2) gPaletteDecompressionBuffer[PLTT_SIZE] = {0};
+
+static const struct PaletteStructTemplate sDummyPaletteStructTemplate = {
+    .id = 0xFFFF,
+    .state = 1
+};
 
 static const u8 sRoundedDownGrayscaleMap[] = {
      0,  0,  0,  0,  0,
@@ -1355,9 +1400,9 @@ void TintPalette_RGB_Copy(u16 palOffset, u32 blendColor) {
         s32 b = (srcColor << 17) >> 27;
 
         if (altBlendIndices & 1) {
-            r = (u16)((rTone * r)) >> 8;
+            r = (u16)((gTone * r)) >> 8;
             g = (u16)((gTone * g)) >> 8;
-            b = (u16)((bTone * b)) >> 8;
+            b = (u16)((gTone * b)) >> 8;
         } else { // Use provided blend color
             r = (u16)((newR * r)) >> 8;
             g = (u16)((newG * g)) >> 8;

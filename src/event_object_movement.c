@@ -1839,6 +1839,19 @@ static u32 LoadDynamicFollowerPaletteFromGraphicsId(u16 graphicsId, struct Sprit
     return paletteNum;
 }
 
+// Like LoadObjectEventPalette, but overwrites the palette tag that is loaded
+static u32 LoadObjectEventPaletteWithTag(u16 paletteTag, u16 overTag) {
+    u32 i = FindObjectEventPaletteIndexByTag(paletteTag);
+    struct SpritePalette spritePalette;
+    if (i == 0xFF)
+        return i;
+    spritePalette = sObjectEventSpritePalettes[i];
+    if (overTag != TAG_NONE)
+        spritePalette.tag = overTag; // overwrite palette tag
+    return LoadSpritePaletteIfTagExists(&spritePalette);
+}
+
+
 // Used to create a sprite using a graphicsId associated with object events.
 u8 CreateObjectGraphicsSpriteWithTag(u16 graphicsId, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u16 paletteTag)
 {
@@ -2643,7 +2656,8 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType) {
     }
     lightType = min(lightType, ARRAY_COUNT(gFieldEffectLightTemplates) - 1); // bounds checking
     template = gFieldEffectLightTemplates[lightType];
-    LoadSpriteSheetByTemplate(template, 0);
+    //Return 0 for Offset till i find a fix.
+    LoadSpriteSheetByTemplate(template, 0, 0);
     sprite = &gSprites[CreateSprite(template, 0, 0, 0)];
     if (lightType == 0 && (i = IndexOfSpritePaletteTag(template->paletteTag + 1)) < 16)
         sprite->oam.paletteNum = i;
@@ -2889,7 +2903,7 @@ static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct 
     sprite->inUse = TRUE;
     if (IndexOfSpritePaletteTag(spritePalette->tag) == 0xFF) {
         sprite->oam.paletteNum = LoadSpritePalette(spritePalette);
-        UpdateSpritePaletteWithWeather(sprite->oam.paletteNum, FALSE);
+        UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
     } else {
         sprite->oam.paletteNum = LoadSpritePalette(spritePalette);
     }
@@ -3157,7 +3171,7 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
         return paletteNum;
     paletteNum = LoadSpritePalette(spritePalette);
     if (paletteNum != 0xFF)
-        UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+        UpdateSpritePaletteWithWeather(paletteNum);
     return paletteNum;
 }
 
@@ -10175,6 +10189,10 @@ static void (*const sGroundEffectFuncs[])(struct ObjectEvent *objEvent, struct S
     GroundEffect_HotSprings,            // GROUND_EFFECT_FLAG_HOT_SPRINGS
     GroundEffect_Seaweed                // GROUND_EFFECT_FLAG_SEAWEED
 };
+
+static void GroundEffect_Shadow(struct ObjectEvent *objEvent, struct Sprite *sprite) {
+    SetUpShadow(objEvent, sprite);
+}
 
 static void DoFlaggedGroundEffects(struct ObjectEvent *objEvent, struct Sprite *sprite, u32 flags)
 {
