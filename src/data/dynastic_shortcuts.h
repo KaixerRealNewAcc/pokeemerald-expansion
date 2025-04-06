@@ -27,4 +27,20 @@ static inline u32 IsMinimalGrindingMode(void)
     return FlagGet(FLAG_MINIMAL_GRINDING_MODE);
 }
 
+static inline u32 IsFollowerEnabled(void)
+{
+    return FlagClear(FLAG_DISABLED_FOLLOWERS);
+}
+
+static inline u32 SetFollowerToDisabled(void)
+{
+    return FlagSet(FLAG_DISABLED_FOLLOWERS);
+}
+
+static inline u32 IsFollowerDisabled(void)
+{
+    return FlagGet(FLAG_DISABLED_FOLLOWERS);
+}
+
+
 #endif // GUARD_DYNASTIC_SHORTCUTS_H

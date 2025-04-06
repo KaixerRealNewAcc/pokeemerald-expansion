@@ -12759,7 +12759,7 @@ F_TRAINER_FEMALE |
         {
             {
 #line 5142
-            .species = SPECIES_NOSEPASS,
+            .species = SPECIES_GEODUDE_ALOLA,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5142
             .heldItem = ITEM_CUSTAP_BERRY,
@@ -12809,26 +12809,26 @@ F_TRAINER_FEMALE |
             },
             {
 #line 5162
-            .species = SPECIES_SHELLOS,
+            .species = SPECIES_WOOPER,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5162
-            .heldItem = ITEM_BERRY_JUICE,
+            .heldItem = ITEM_EVIOLITE,
 #line 5167
             .iv = TRAINER_PARTY_IVS(31, 0, 31, 31, 31, 31),
 #line 5163
-            .ability = ABILITY_STORM_DRAIN,
+            .ability = ABILITY_WATER_ABSORB,
 #line 5164
-            .lvl = 13,
+            .lvl = 12,
 #line 5166
-            .nature = NATURE_MODEST,
+            .nature = NATURE_CAREFUL,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 5165
             .teraType = TYPE_GROUND,
             .moves = {
 #line 5168
-                MOVE_WATER_PULSE,
-                MOVE_MUD_SHOT,
-                MOVE_ICY_WIND,
+                MOVE_POISON_TAIL,
+                MOVE_BULLDOZE,
+                MOVE_TOXIC,
                 MOVE_RECOVER,
             },
             },
@@ -12880,102 +12880,102 @@ F_TRAINER_FEMALE |
         {
             {
 #line 5192
-            .species = SPECIES_MONFERNO,
+            .species = SPECIES_MIENFOO,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5192
-            .heldItem = ITEM_FOCUS_SASH,
+            .heldItem = ITEM_EVIOLITE,
 #line 5197
             .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
 #line 5193
-            .ability = ABILITY_BLAZE,
+            .ability = ABILITY_REGENERATOR,
 #line 5194
-            .lvl = 24,
+            .lvl = 23,
 #line 5196
             .nature = NATURE_JOLLY,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 5195
-            .teraType = TYPE_FIRE,
+            .teraType = TYPE_FIGHTING,
             .moves = {
 #line 5197
-                MOVE_DRAIN_PUNCH,
-                MOVE_FIRE_PUNCH,
-                MOVE_ROCK_SLIDE,
-                MOVE_STEALTH_ROCK,
+                MOVE_FORCE_PALM,
+                MOVE_KNOCK_OFF,
+                MOVE_ROCK_TOMB,
+                MOVE_FAKE_OUT,
             },
             },
             {
 #line 5202
-            .species = SPECIES_LUCARIO,
+            .species = SPECIES_BRELOOM,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5202
-            .heldItem = ITEM_EXPERT_BELT,
+            .heldItem = ITEM_TOXIC_ORB,
 #line 5207
             .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
 #line 5203
-            .ability = ABILITY_JUSTIFIED,
+            .ability = ABILITY_POISON_HEAL,
 #line 5204
-            .lvl = 23,
+            .lvl = 22,
 #line 5206
             .nature = NATURE_JOLLY,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 5205
-            .teraType = TYPE_FIGHTING,
+            .teraType = TYPE_GRASS,
             .moves = {
 #line 5207
-                MOVE_BULLET_PUNCH,
-                MOVE_CRUNCH,
-                MOVE_BONE_RUSH,
-                MOVE_DRAIN_PUNCH,
+                MOVE_LOW_SWEEP,
+                MOVE_ROCK_TOMB,
+                MOVE_MACH_PUNCH,
+                MOVE_SPORE,
             },
             },
             {
 #line 5212
-            .species = SPECIES_THROH,
+            .species = SPECIES_SCRAGGY,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5212
-            .heldItem = ITEM_LEFTOVERS,
+            .heldItem = ITEM_BERRY_JUICE,
 #line 5217
             .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
 #line 5213
-            .ability = ABILITY_INNER_FOCUS,
+            .ability = ABILITY_SHED_SKIN,
 #line 5214
-            .lvl = 23,
+            .lvl = 22,
 #line 5216
-            .nature = NATURE_BRAVE,
+            .nature = NATURE_ADAMANT,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 5215
-            .teraType = TYPE_FIGHTING,
+            .teraType = TYPE_DARK,
             .moves = {
 #line 5217
+                MOVE_LOW_SWEEP,
                 MOVE_KNOCK_OFF,
-                MOVE_DRAIN_PUNCH,
-                MOVE_ROCK_SLIDE,
-                MOVE_CURSE,
+                MOVE_BULK_UP,
+                MOVE_REST,
             },
             },
             {
 #line 5222
-            .species = SPECIES_ELECTABUZZ,
+            .species = SPECIES_HITMONTOP,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5222
-            .heldItem = ITEM_SITRUS_BERRY,
+            .heldItem = ITEM_BERRY_JUICE,
 #line 5227
             .iv = TRAINER_PARTY_IVS(31, 31, 31, 31, 31, 31),
 #line 5223
-            .ability = ABILITY_STATIC,
+            .ability = ABILITY_STEADFAST,
 #line 5224
-            .lvl = 25,
+            .lvl = 23,
 #line 5226
-            .nature = NATURE_NAIVE,
+            .nature = NATURE_JOLLY,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 5225
-            .teraType = TYPE_ELECTRIC,
+            .teraType = TYPE_FIGHTING,
             .moves = {
 #line 5227
-                MOVE_DRAIN_PUNCH,
-                MOVE_VOLT_SWITCH,
-                MOVE_SIGNAL_BEAM,
-                MOVE_SLEEP_TALK,
+                MOVE_LOW_SWEEP,
+                MOVE_BRUTAL_SWING,
+                MOVE_ROCK_TOMB,
+                MOVE_RAPID_SPIN,
             },
             },
         },

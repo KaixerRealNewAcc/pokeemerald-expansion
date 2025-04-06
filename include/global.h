@@ -215,6 +215,8 @@ struct SaveBlock3
 #endif
     u8 dexNavChain;
     u8 permanentRepel:1;
+    u8 autoRun:1;
+    u8 shinyRate:1;
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;

@@ -1509,7 +1509,7 @@
 #define FLAG_UNUSED_0x8E5                           (SYSTEM_FLAGS + 0x85) // Unused Flag
 #define FLAG_VGC_MODE                               (SYSTEM_FLAGS + 0x86) // VGC Mode Flag.
 #define FLAG_MINIMAL_GRINDING_MODE                  (SYSTEM_FLAGS + 0x87) // Minimal Grinding Mode Flag.
-#define FLAG_UNUSED_0x8E8                           (SYSTEM_FLAGS + 0x88) // Unused Flag
+#define FLAG_DISABLED_FOLLOWERS                     (SYSTEM_FLAGS + 0x88) // Disables Followers.
 #define FLAG_UNUSED_0x8E9                           (SYSTEM_FLAGS + 0x89) // Unused Flag
 #define FLAG_UNUSED_0x8EA                           (SYSTEM_FLAGS + 0x8A) // Unused Flag
 #define FLAG_UNUSED_0x8EB                           (SYSTEM_FLAGS + 0x8B) // Unused Flag
