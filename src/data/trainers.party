@@ -5139,7 +5139,7 @@ Double Battle: No
 Boss Trainer: Yes
 AI: Smart Trainer
 
-Nosepass @ Custap Berry
+Geodude-Alola @ Custap Berry
 Ability: Sturdy
 Level: 13   
 Tera Type: Dark 
@@ -5159,15 +5159,15 @@ Jolly Nature
 - Bulldoze  
 - Roost  
 
-Shellos @ Berry Juice  
-Ability: Storm Drain
-Level: 13  
+Wooper @ Eviolite
+Ability: Water Absorb
+Level: 12  
 Tera Type: Ground  
-Modest Nature  
+Careful Nature  
 IVs: 0 Atk  
-- Water Pulse  
-- Mud Shot  
-- Icy Wind
+- Poison Tail 
+- Bulldoze  
+- Toxic
 - Recover  
 
 Cubone-Alola @ Thick Club
@@ -5189,45 +5189,45 @@ Music: Male
 Double Battle: No
 AI: Smart Trainer
 
-Monferno @ Focus Sash  
-Ability: Blaze
-Level: 24  
-Tera Type: Fire  
-Jolly Nature  
-- Drain Punch  
-- Fire Punch  
-- Rock Slide 
-- Stealth Rock
-
-Lucario @ Expert Belt  
-Ability: Justified  
+Mienfoo @ Eviolite  
+Ability: Regenerator  
 Level: 23  
 Tera Type: Fighting  
 Jolly Nature  
-- Bullet Punch  
-- Crunch  
-- Bone Rush 
-- Drain Punch  
-
-Throh @ Leftovers  
-Ability: Inner Focus  
-Level: 23  
-Tera Type: Fighting 
-Brave Nature  
+- Force Palm  
 - Knock Off  
-- Drain Punch
-- Rock Slide 
-- Curse  
+- Rock Tomb  
+- Fake Out  
 
-Electabuzz @ Sitrus Berry
-Ability: Static  
-Level: 25  
-Tera Type: Electric  
-Naive Nature  
-- Drain Punch
-- Volt Switch   
-- Signal Beam  
-- Sleep Talk
+Breloom @ Toxic Orb  
+Ability: Poison Heal  
+Level: 22  
+Tera Type: Grass  
+Jolly Nature  
+- Low Sweep  
+- Rock Tomb  
+- Mach Punch  
+- Spore  
+
+Scraggy @ Berry Juice  
+Ability: Shed Skin  
+Level: 22  
+Tera Type: Dark  
+Adamant Nature  
+- Low Sweep  
+- Knock Off  
+- Bulk Up  
+- Rest  
+
+Hitmontop @ Berry Juice  
+Ability: Steadfast  
+Level: 23  
+Tera Type: Fighting  
+Jolly Nature  
+- Low Sweep  
+- Brutal Swing  
+- Rock Tomb  
+- Rapid Spin  
 
 === TRAINER_WATTSON_1 ===
 Name: Wattson
