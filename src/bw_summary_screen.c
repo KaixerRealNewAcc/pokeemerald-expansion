@@ -706,9 +706,9 @@ static const struct WindowTemplate sPageSkillsTemplate[] =
     },
     [PSS_DATA_WINDOW_SKILLS_ABILITY] = {
         .bg = 0,
-        .tilemapLeft = 3,
+        .tilemapLeft = 2,
         .tilemapTop = 15,
-        .width = 24,
+        .width = 27,
         .height = 5,
         .paletteNum = 6,
         .baseBlock = 491,
