@@ -3336,7 +3336,7 @@ void SetMoveEffect(bool32 primary, bool32 certain)
                 if (primary == FALSE && certain == FALSE && IS_BATTLER_OF_TYPE(gEffectBattler, moveType))
                     break;
             }
-            if (!CanBeFrozen(gEffectBattler))
+            if (!CanBeFrozen(gEffectBattler, GetBattlerAbility(gEffectBattler)))
                 break;
 
             cancelMultiTurnMovesResult = CancelMultiTurnMoves(gEffectBattler);
@@ -3447,7 +3447,7 @@ void SetMoveEffect(bool32 primary, bool32 certain)
                 if (primary == FALSE && certain == FALSE && IS_BATTLER_OF_TYPE(gEffectBattler, moveType))
                     break;
             }
-            if (!CanGetFrostbite(gEffectBattler))
+            if (!CanGetFrostbite(gEffectBattler, GetBattlerAbility(gEffectBattler)))
                 break;
 
             statusChanged = TRUE;
@@ -11024,7 +11024,7 @@ static void Cmd_various(void)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 3;
             else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP) && CanBeSlept(gBattlerTarget, targetAbility, BLOCKED_BY_SLEEP_CLAUSE))
                 gBattleCommunication[MULTISTRING_CHOOSER] = 4;
-            else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FROSTBITE) && CanGetFrostbite(gBattlerTarget))
+            else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FROSTBITE) && CanGetFrostbite(gBattlerTarget, targetAbility))
                 gBattleCommunication[MULTISTRING_CHOOSER] = 5;
             else if (IsSleepClauseActiveForSide(GetBattlerSide(battler)))
             {

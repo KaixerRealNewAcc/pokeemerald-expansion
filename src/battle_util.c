@@ -5988,6 +5988,24 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 effect++;
             }
             break;
+        case ABILITY_HOARFROST:
+            if (!(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_NO_EFFECT)
+             && IsBattlerAlive(gBattlerAttacker)
+             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+             && IsBattlerTurnDamaged(gBattlerTarget)
+             && CanGetFrostbite(gBattlerAttacker, GetBattlerAbility(gBattlerAttacker))
+             && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_PROTECTIVE_PADS
+             && IsMoveMakingContact(move, gBattlerAttacker)
+             && (B_ABILITY_TRIGGER_CHANCE >= GEN_4 ? RandomPercentage(RNG_FROZEN_ABLITY, 30) : RandomChance(RNG_FROZEN_ABLITY, 1, 3)))
+            {
+                gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_FROSTBITE;
+                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                gHitMarker |= HITMARKER_STATUS_ABILITY_EFFECT;
+                effect++;
+            }
+            break;
         case ABILITY_CUTE_CHARM:
             if (!(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_NO_EFFECT)
              && IsBattlerAlive(gBattlerAttacker)
@@ -6840,9 +6858,8 @@ bool32 CanBeParalyzed(u32 battler, u32 ability)
     return TRUE;
 }
 
-bool32 CanBeFrozen(u32 battler)
+bool32 CanBeFrozen(u32 battler, u32 ability)
 {
-    u16 ability = GetBattlerAbility(battler);
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
      || IsBattlerWeatherAffected(battler, B_WEATHER_SUN)
      || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
@@ -6856,9 +6873,8 @@ bool32 CanBeFrozen(u32 battler)
     return TRUE;
 }
 
-bool32 CanGetFrostbite(u32 battler)
+bool32 CanGetFrostbite(u32 battler, u32 ability)
 {
-    u16 ability = GetBattlerAbility(battler);
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
       || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
       || ability == ABILITY_MAGMA_ARMOR
