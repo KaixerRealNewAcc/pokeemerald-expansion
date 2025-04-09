@@ -1120,7 +1120,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_ILLUSION] =
     {
         .name = _("Illusion"),
-        .description = COMPOUND_STRING("Disguises as the last member of ur team. 33% boost to its STAB moves when disguised."),
+        .description = COMPOUND_STRING("Disguises as the last member of your team. 33% boost to its STAB moves when disguised."),
         .aiRating = 8,
         .cantBeCopied = TRUE,
         .cantBeSwapped = TRUE,
