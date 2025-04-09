@@ -52,6 +52,7 @@
 #include "constants/region_map_sections.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "item_icon.h"
 
 // Screen titles (upper left)
 #define PSS_LABEL_WINDOW_POKEMON_INFO_TITLE 0
@@ -111,6 +112,7 @@ enum
 {
     SPRITE_ARR_ID_MON,
     SPRITE_ARR_ID_BALL,
+    SPRITE_ARR_ID_ITEM_ICON,
     SPRITE_ARR_ID_STATUS,
     SPRITE_ARR_ID_TYPE, // 2 for mon types, 5 for move types(4 moves and 1 to learn), used interchangeably, because mon types and move types aren't shown on the same screen
     SPRITE_ARR_ID_MOVE_SELECTOR1 = SPRITE_ARR_ID_TYPE + TYPE_ICON_SPRITE_COUNT, // 10 sprites that make up the selector
@@ -190,6 +192,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or Pokémon data
     u8 unk_filler4[6];
     u8 categoryIconSpriteId;
+    u8 itemIconSpriteId;
 } *sMonSummaryScreen = NULL;
 
 EWRAM_DATA u8 gLastViewedMonIndex = 0;
@@ -310,6 +313,8 @@ static void StopPokemonAnimations(void);
 static void CreateMonMarkingsSprite(struct Pokemon *);
 static void RemoveAndCreateMonMarkingsSprite(struct Pokemon *);
 static void CreateCaughtBallSprite(struct Pokemon *);
+static void CreateItemIconSprite(struct Pokemon *);
+static void DestroyItemIconSprite(struct Pokemon *);
 static void CreateSetStatusSprite(void);
 static void CreateMoveSelectorSprites(u8);
 static void SpriteCB_MoveSelector(struct Sprite *);
@@ -330,7 +335,7 @@ void ExtractMonSkillStatsData(struct Pokemon *mon, struct PokeSummary *sum);
 void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum);
 void ExtractMonSkillEvData(struct Pokemon *mon, struct PokeSummary *sum);
 static void PrintTextOnWindow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
-static void PrintTextOnWindow_ShortNarrow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
+static void PrintTextOnWindow_SmallNarrow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
 static void PrintTextOnWindowWithFont(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId, u32 fontId);
 static const u8 *GetLetterGrade(u32 stat);
 static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 templateId);
@@ -611,10 +616,10 @@ static const struct WindowTemplate sPageInfoTemplate[] =
     },
     [PSS_DATA_WINDOW_INFO_ABILITY] = {
         .bg = 0,
-        .tilemapLeft = 11,
+        .tilemapLeft = 10,
         .tilemapTop = 8,
-        .width = 18,
-        .height = 6,
+        .width = 20,
+        .height = 8,
         .paletteNum = 6,
         .baseBlock = 504,
     },
@@ -625,14 +630,14 @@ static const struct WindowTemplate sPageInfoTemplate[] =
         .width = 20,
         .height = 4,
         .paletteNum = 6,
-        .baseBlock = 613,
+        .baseBlock = 665,
     },
 };
 static const struct WindowTemplate sPageSkillsTemplate[] =
 {
     [PSS_DATA_WINDOW_SKILLS_HELD_ITEM] = {
         .bg = 0,
-        .tilemapLeft = 10,
+        .tilemapLeft = 9,
         .tilemapTop = 4,
         .width = 10,
         .height = 2,
@@ -1355,6 +1360,8 @@ static bool8 LoadGraphics(void)
         break;
     case 19:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+        if(sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+            DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         gMain.state++;
         break;
     case 20:
@@ -1949,6 +1956,8 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 2:
         DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]]);
+        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HELD_ITEM))
+            DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]]);
         break;
     case 3:
         CopyMonToSummaryStruct(&sMonSummaryScreen->currentMon);
@@ -1983,6 +1992,8 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 6:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+        if (sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+            DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         break;
     case 7:
         if (sMonSummaryScreen->summary.ailment != AILMENT_NONE)
@@ -3100,7 +3111,7 @@ static void PrintTextOnWindow(u8 windowId, const u8 *string, u8 x, u8 y, u8 line
     PrintTextOnWindowWithFont(windowId, string, x, y, lineSpacing, colorId, FONT_NORMAL);
 }
 
-static void PrintTextOnWindow_ShortNarrow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId)
+static void PrintTextOnWindow_SmallNarrow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId)
 {
     PrintTextOnWindowWithFont(windowId, string, x, y, lineSpacing, colorId, FONT_SMALL_NARROW);
 }
@@ -3423,25 +3434,28 @@ static void Task_PrintInfoPage(u8 taskId)
     s16 *data = gTasks[taskId].data;
     switch (data[0])
     {
-    case 1:
-        PrintMonOTName();
+    case 1:       
+        SetSpriteInvisibility(SPRITE_ARR_ID_ITEM_ICON, TRUE);
         break;
     case 2:
-        PrintMonOTID();
+        PrintMonOTName();
         break;
     case 3:
-        PrintMonAbilityName();
+        PrintMonOTID();
         break;
     case 4:
-        PrintMonAbilityDescription();
+        PrintMonAbilityName();
         break;
     case 5:
-        BufferMonTrainerMemo();
+        PrintMonAbilityDescription();
         break;
     case 6:
-        PrintMonTrainerMemo();
+        BufferMonTrainerMemo();
         break;
     case 7:
+        PrintMonTrainerMemo();
+        break;
+    case 8:
         DestroyTask(taskId);
         return;
     }
@@ -3477,13 +3491,62 @@ static void PrintMonOTID(void)
 static void PrintMonAbilityName(void)
 {
     u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 0, 8, 0, 1);
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 5, 8, 0, 1);
+}
+
+static void FormatTextByWidth(u8 *result, s32 maxWidth, u8 fontId, const u8 *str, s16 letterSpacing)
+{
+    u8 *end, *ptr, *curLine, *lastSpace;
+
+    end = result;
+    // copy string, replacing all space with EOS
+    while (*str != EOS)
+    {
+        if (*str == CHAR_SPACE)
+            *end = EOS;
+        else
+            *end = *str;
+
+        end++;
+        str++;
+    }
+    *end = EOS; // now end points to the true end of the string
+
+    ptr = result;
+    curLine = ptr;
+
+    while (*ptr != EOS)
+        ptr++;
+    // now ptr is the first EOS char
+
+    while (ptr != end)
+    {
+        // all the EOS chars (except *end) must be replaced by either ' ' or '\n'
+        lastSpace = ptr++; // this points at the EOS
+
+        // check that adding the next word this line still fits
+        *lastSpace = CHAR_SPACE;
+        if (GetStringWidth(fontId, curLine, letterSpacing) > maxWidth)
+        {
+            *lastSpace = CHAR_NEWLINE;
+
+            curLine = ptr;
+        }
+
+        while (*ptr != EOS)
+            ptr++;
+        // now ptr is the next EOS char
+    }
 }
 
 static void PrintMonAbilityDescription(void)
 {
+    u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
+    u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
     u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    PrintTextOnWindow_ShortNarrow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].description, 0, 22, 2, 0);
+
+    FormatTextByWidth(desc, 149, FONT_SHORT_NARROW, gAbilitiesInfo[ability].description, 0);
+    PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
 }
 
 static void BufferMonTrainerMemo(void)
@@ -3674,7 +3737,7 @@ static void PrintEggMemo(void)
 static void PrintSkillsPageText(void)
 {
     PrintHeldItemName();
-    PrintRibbonCount();
+    //PrintRibbonCount();
     if(ShouldShowIvEvPrompt())
         ShowUtilityPrompt(SUMMARY_SKILLS_MODE_STATS);
     BufferLeftColumnStats();
@@ -3694,7 +3757,7 @@ static void Task_PrintSkillsPage(u8 taskId)
         PrintHeldItemName();
         break;
     case 2:
-        PrintRibbonCount();
+        //PrintRibbonCount();
         break;
     case 3:
         ChangeStatLabel(SUMMARY_SKILLS_MODE_STATS);
@@ -3726,6 +3789,8 @@ static void PrintHeldItemName(void)
     const u8 *text;
     u32 fontId;
     int x;
+
+    CreateItemIconSprite(&sMonSummaryScreen->currentMon);
 
     if (sMonSummaryScreen->summary.item == ITEM_ENIGMA_BERRY_E_READER
         && IsMultiBattle() == TRUE
@@ -3941,22 +4006,25 @@ static void Task_PrintBattleMoves(u8 taskId)
     switch (data[0])
     {
     case 1:
-        PrintMoveNameAndPP(0);
+        SetSpriteInvisibility(SPRITE_ARR_ID_ITEM_ICON, TRUE);
         break;
     case 2:
-        PrintMoveNameAndPP(1);
+        PrintMoveNameAndPP(0);
         break;
     case 3:
-        PrintMoveNameAndPP(2);
+        PrintMoveNameAndPP(1);
         break;
     case 4:
-        PrintMoveNameAndPP(3);
+        PrintMoveNameAndPP(2);
         break;
     case 5:
+        PrintMoveNameAndPP(3);
+        break;
+    case 6:
         if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
             PrintNewMoveDetailsOrCancelText();
         break;
-    case 6:
+    case 7:
         if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
         {
             if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES)
@@ -3965,14 +4033,14 @@ static void Task_PrintBattleMoves(u8 taskId)
                 data[1] = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
         }
         break;
-    case 7:
+    case 8:
         if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
         {
             if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
                 PrintMoveDetails(data[1]);
         }
         break;
-    case 8:
+    case 9:
         DestroyTask(taskId);
         return;
     }
@@ -4119,6 +4187,7 @@ static void PrintMoveDetails(u16 move)
 {
     u8 windowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_DESCRIPTION);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+    SetSpriteInvisibility(SPRITE_ARR_ID_ITEM_ICON, TRUE);
     if (move != MOVE_NONE)
     {
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
@@ -4544,6 +4613,37 @@ static void CreateCaughtBallSprite(struct Pokemon *mon)
     gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].callback = SpriteCallbackDummy;
     gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].oam.priority = 3;
 }
+
+static void CreateItemIconSprite(struct Pokemon *mon)
+{
+
+    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
+
+    if (item != ITEM_NONE)
+    {
+        FreeSpriteTilesByTag(5501);
+        FreeSpritePaletteByTag(5501);
+        sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON] = AddItemIconSprite(5501, 5501, item);
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]].callback = SpriteCallbackDummy;
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]].oam.priority = 1;
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]].x = 162;
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]].y = 44;
+    }
+}
+
+static void DestroyItemIconSprite(struct Pokemon *mon)
+{
+    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
+
+    if (item != ITEM_NONE)
+    {
+        DestroySprite(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON]]);
+        FreeSpriteTilesByTag(5501);
+        FreeSpritePaletteByTag(5501);
+        sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_ITEM_ICON] = SPRITE_NONE;
+    }
+}
+
 
 static void CreateSetStatusSprite(void)
 {
