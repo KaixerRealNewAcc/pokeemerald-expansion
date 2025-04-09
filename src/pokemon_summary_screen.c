@@ -704,9 +704,9 @@ static const struct WindowTemplate sPageMovesTemplate[] = // This is used for bo
     [PSS_DATA_WINDOW_MOVE_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 10,
-        .tilemapTop = 15,
+        .tilemapTop = 14,
         .width = 20,
-        .height = 4,
+        .height = 6,
         .paletteNum = 6,
         .baseBlock = 617,
     },
@@ -4192,10 +4192,12 @@ static void PrintMoveDetails(u16 move)
     {
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
+            u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
             if (B_SHOW_CATEGORY_ICON == TRUE)
                 ShowCategoryIcon(GetBattleMoveCategory(move));
             PrintMovePowerAndAccuracy(move);
-            PrintTextOnWindow(windowId, GetMoveDescription(move), 6, 1, 0, 0);
+            FormatTextByWidth(desc, 159, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
+            PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
         }
         else
         {
