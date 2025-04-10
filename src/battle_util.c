@@ -10614,7 +10614,11 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
     u32 abilityDef = GetBattlerAbility(battlerDef);
     u32 moveEffect = GetMoveEffect(move);
+    u32 itemAtk = gBattleMons[battlerDef].item;
+    u32 itemDef = gBattleMons[battlerDef].item;
+    u32 isStatusMove = IsBattleMoveStatus(move);
     u32 species = gBattleMons[battlerDef].species;
+
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)
     {
         mod = UQ_4_12(1.0);
@@ -10646,6 +10650,46 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         mod = UQ_4_12(0.0);
     if (moveType == TYPE_STELLAR && GetActiveGimmick(battlerDef) == GIMMICK_TERA)
         mod = UQ_4_12(2.0);
+
+    if (abilityAtk == ABILITY_MYCELIUM_MIGHT || abilityAtk == ABILITY_NULLIFY)
+    {
+        //if Statements (Dynastic)
+        if(isStatusMove)
+        {
+            //Switches (Dynastic)
+            switch(moveType)
+            {
+                case TYPE_GRASS: //Spore, Stun Spore, Sleep Powder, etc.
+                    if(defType == TYPE_GRASS)
+                        mod = UQ_4_12(1.0);
+                case TYPE_POISON: //Toxic, Poison Powder, etc.
+                    if(defType == TYPE_POISON || defType == TYPE_GRASS)
+                        mod = UQ_4_12(1.0);
+                case TYPE_ELECTRIC: //Thunder Wave, etc.
+                    if(defType == TYPE_ELECTRIC || defType == TYPE_GROUND)
+                        mod = UQ_4_12(1.0);
+                case TYPE_FIRE: //Will-O-Wisp, etc.
+                    if(defType == TYPE_FIRE || abilityDef == ABILITY_FLASH_FIRE)
+                        mod = UQ_4_12(1.0);
+            }
+    
+            switch(abilityDef)
+            {
+                case ABILITY_GOOD_AS_GOLD:
+                    mod = UQ_4_12(1.0);
+                case ABILITY_PURIFYING_SALT:
+                    mod = UQ_4_12(1.0);
+            }
+        
+            switch(itemDef)
+            {
+                case ITEM_ABILITY_SHIELD:
+                    mod = UQ_4_12(1.0);
+                case ITEM_SAFETY_GOGGLES:
+                    mod = UQ_4_12(1.0);
+            }
+        }
+    }
 
     // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
     if (gBattleWeather & B_WEATHER_STRONG_WINDS && HasWeatherEffect())

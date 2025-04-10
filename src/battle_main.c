@@ -4790,7 +4790,9 @@ void SwapTurnOrder(u8 id1, u8 id2)
 // For AI, so it doesn't 'cheat' by knowing player's ability
 u32 GetBattlerTotalSpeedStatArgs(u32 battler, u32 ability, u32 holdEffect)
 {
+    int i;
     u32 speed = gBattleMons[battler].speed;
+    u32 move;
 
     // weather abilities
     if (HasWeatherEffect())
@@ -4818,6 +4820,17 @@ u32 GetBattlerTotalSpeedStatArgs(u32 battler, u32 ability, u32 holdEffect)
         speed = (GetHighestStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
     else if (ability == ABILITY_FLOWER_GIFT && IsBattlerWeatherAffected(battler, B_WEATHER_SUN))
         speed = (speed * 150) / 100;
+    else if(ability == ABILITY_MYCELIUM_MIGHT)
+    {
+        for (i = 0; i < 4; i++)
+        {
+            move = gBattleMons[battler].moves[i];
+            if (IsBattleMoveStatus(move))
+                speed /= (speed * 125) / 100;
+            else
+                speed = 1;
+        }
+    }
 
 
     // stat stages

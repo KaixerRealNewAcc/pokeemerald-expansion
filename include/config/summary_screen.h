@@ -24,10 +24,17 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 #define P_SUMMARY_SCREEN_IV_ONLY         FALSE  // If TRUE, will only show IV info in the summary screen.
 #define P_SUMMARY_SCREEN_EV_ONLY         FALSE  // If TRUE, will only show EV info in the summary screen.
 
+// Flags
+#define P_FLAG_SUMMARY_SCREEN_IV_EV_INFO 0      // If this flag is set, will allow player to cycle through the Stats, IVs, and EVs in the summary screen skills page. Note: if P_SUMMARY_SCREEN_IV_EV_INFO is TRUE, this flag does nothing.
+
+//Summary Screen Expanded Branch
+//This should only be used if SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION is TRUE
 #define MAX_ABILITY_DESCRIPTION_LENGTH 96 //The maximum length of the ability description string, This is used to allocate memory for the string in the summary screen.
 #define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string, This is used to allocate memory for the string in the summary screen.
 
-// Flags
-#define P_FLAG_SUMMARY_SCREEN_IV_EV_INFO 0      // If this flag is set, will allow player to cycle through the Stats, IVs, and EVs in the summary screen skills page. Note: if P_SUMMARY_SCREEN_IV_EV_INFO is TRUE, this flag does nothing.
+#define SUMMARY_SCREEN_MON_SHADOWS TRUE //If TRUE, the mon sprite will have a shadow loaded behind it.
+#define SUMMARY_SCREEN_MEGA_FORMS  TRUE //If TRUE, the mon sprite will have its mega sprite and stats loaded instead of the normal sprite and stats.
+#define SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION TRUE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
+#define SUMMARY_SCREEN_ABILITY_COLOR TRUE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability. This is used to make it easier to read the ability description.
 
 #endif // GUARD_CONFIG_SUMMARY_SCREEN_H

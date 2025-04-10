@@ -2485,4 +2485,11 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 4,
     },
 
+    [ABILITY_NULLIFY] =
+    {
+        .name = _("Nullify"),
+        .description = COMPOUND_STRING("Status-Moves hit through Immunities, but has negative priority."),
+        .aiRating = 7,
+    },
+
 };
