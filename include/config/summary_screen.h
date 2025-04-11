@@ -31,6 +31,8 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 
 //Shadow Settings
 #define P_SUMMARY_SCREEN_MON_SHADOWS FALSE //If TRUE, the mon sprite will have a shadow loaded behind it.
+#define MON_SHADOWS_X 3 //The X position of the shadow sprite.
+#define MON_SHADOWS_Y 2 //The Y position of the shadow sprite.
 
 //Ability Settings Settings
 #define P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION FALSE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
@@ -56,6 +58,6 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 #define P_SUMMARY_SCREEN_ITEM_ICON FALSE //If TRUE, the item icon will be shown in the summary screen, next to the name.
 
 //Page Settings
-#define P_SUMMARY_SCREEN_SHOW_CONTEST_MOVES TRUE //If FALSE, the contest moves page will be hidden in the summary screen.
+#define P_SUMMARY_SCREEN_SHOW_CONTEST_MOVES FALSE //If FALSE, the contest moves page will be hidden in the summary screen.
 
 #endif // GUARD_CONFIG_SUMMARY_SCREEN_H

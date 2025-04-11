@@ -4627,8 +4627,8 @@ static u8 CreateMonSprite(struct Pokemon *unused, bool32 isShadow)
         shadowPalette = LoadSpritePalette(&sSpritePal_MonShadow);
         gSprites[spriteId].oam.paletteNum = shadowPalette;
         gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        gSprites[spriteId].x -= 3;
-        gSprites[spriteId].y -= 2;
+        gSprites[spriteId].x -= MON_SHADOWS_X; //By Default, 3.
+        gSprites[spriteId].y -= MON_SHADOWS_Y; //By Default, 2.
         gSprites[spriteId].oam.priority = 1;
     }
 
