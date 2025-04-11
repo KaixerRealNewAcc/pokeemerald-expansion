@@ -83,9 +83,9 @@
             "encounter_rate": 20,
             "mons": [
               {
-                "min_level": 100,
-                "max_level": 100,
-                "species": "SPECIES_CORVIKNIGHT"
+                "min_level": 2,
+                "max_level": 2,
+                "species": "SPECIES_ZIGZAGOON"
               },
               {
                 "min_level": 2,

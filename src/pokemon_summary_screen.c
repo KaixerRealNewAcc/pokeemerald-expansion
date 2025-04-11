@@ -627,13 +627,12 @@ static const struct WindowTemplate sPageInfoTemplate[] =
         .paletteNum = 6,
         .baseBlock = 504,
         #else
-        .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 8,
         .width = 18,
         .height = 6,
         .paletteNum = 6,
-        .baseBlock = 504,
+        .baseBlock = 503,
         #endif
     },
     [PSS_DATA_WINDOW_INFO_MEMO] = {
@@ -724,6 +723,7 @@ static const struct WindowTemplate sPageMovesTemplate[] = // This is used for bo
         .baseBlock = 557,
     },
     [PSS_DATA_WINDOW_MOVE_DESCRIPTION] = {
+        #if SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION
         .bg = 0,
         .tilemapLeft = 10,
         .tilemapTop = 14,
@@ -731,6 +731,15 @@ static const struct WindowTemplate sPageMovesTemplate[] = // This is used for bo
         .height = 6,
         .paletteNum = 6,
         .baseBlock = 617,
+        #else
+        .bg = 0,
+        .tilemapLeft = 10,
+        .tilemapTop = 14,
+        .width = 20,
+        .height = 6,
+        .paletteNum = 6,
+        .baseBlock = 617,
+        #endif
     },
 };
 static const u8 sTextColors[][3] =
@@ -1400,7 +1409,7 @@ static bool8 LoadGraphics(void)
         break;
     case 19:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-        if(sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+        if(SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
             DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         gMain.state++;
         break;
@@ -2033,7 +2042,7 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 6:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-        if (sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+        if (SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
             DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         break;
     case 7:
@@ -3038,9 +3047,19 @@ static void DrawPokerusCuredSymbol(struct Pokemon *mon) // This checks if the mo
 static void SetMonPicBackgroundPalette(bool8 isMonShiny)
 {
     if (!isMonShiny)
-        SetBgTilemapPalette(3, 0, 2, 32, 20, 0);
+    {
+        if(SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
+            SetBgTilemapPalette(3, 0, 2, 32, 20, 0);
+        else
+            SetBgTilemapPalette(3, 1, 4, 8, 8, 0);
+    }
     else
-        SetBgTilemapPalette(3, 0, 2, 32, 20, 2);
+    {
+        if(SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
+            SetBgTilemapPalette(3, 0, 2, 32, 20, 2);
+        else
+            SetBgTilemapPalette(3, 1, 4, 8, 8, 2);
+    }
     ScheduleBgCopyTilemapToVram(3);
 }
 
@@ -3532,62 +3551,27 @@ static void PrintMonAbilityName(void)
 {
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
     u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    u16 isHiddenAbility = gSpeciesInfo[sMonSummaryScreen->summary.species].abilities[2];
-    if(SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
-        PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 2);
-    else 
-        PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
-}
-
-static void FormatTextByWidth(u8 *result, s32 maxWidth, u8 fontId, const u8 *str, s16 letterSpacing)
-{
-    u8 *end, *ptr, *curLine, *lastSpace;
-
-    end = result;
-    // copy string, replacing all space with EOS
-    while (*str != EOS)
+    u16 isHiddenAbility = sMonSummaryScreen->summary.abilityNum == 2;
+    if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
     {
-        if (*str == CHAR_SPACE)
-            *end = EOS;
+        if(SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 2);
         else
-            *end = *str;
-
-        end++;
-        str++;
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
     }
-    *end = EOS; // now end points to the true end of the string
-
-    ptr = result;
-    curLine = ptr;
-
-    while (*ptr != EOS)
-        ptr++;
-    // now ptr is the first EOS char
-
-    while (ptr != end)
+    else 
     {
-        // all the EOS chars (except *end) must be replaced by either ' ' or '\n'
-        lastSpace = ptr++; // this points at the EOS
-
-        // check that adding the next word this line still fits
-        *lastSpace = CHAR_SPACE;
-        if (GetStringWidth(fontId, curLine, letterSpacing) > maxWidth)
-        {
-            *lastSpace = CHAR_NEWLINE;
-
-            curLine = ptr;
-        }
-
-        while (*ptr != EOS)
-            ptr++;
-        // now ptr is the next EOS char
+        if(SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, 2);
+        else
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, 1);
     }
 }
 
 static void PrintMonAbilityDescription(void)
 {
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
-    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species2, sMonSummaryScreen->summary.abilityNum);
+    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
 
     if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
     {
@@ -3597,9 +3581,18 @@ static void PrintMonAbilityDescription(void)
     }
     else
     {
-        PrintTextOnWindow(windowId, gAbilitiesInfo[ability].description, 5, 22, 2, 0);
+        PrintTextOnWindow(windowId, gAbilitiesInfo[ability].description, 0, 16, 0, 0);
     }
 }
+
+static const u8 gText_XNatureMetAtYZAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, met at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1},\n{DYNAMIC 0}{DYNAMIC 4}{DYNAMIC 1}.");
+static const u8 gText_XNatureHatchedAtYZAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, hatched at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1},\n{DYNAMIC 0}{DYNAMIC 4}{DYNAMIC 1}.");
+static const u8 gText_XNatureObtainedInTradeAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, obtained in a trade.");
+static const u8 gText_XNatureFatefulEncounterAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, obtained in a fateful\nencounter at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1}.");
+static const u8 gText_XNatureProbablyMetAtAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, probably met at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1},\n{DYNAMIC 0}{DYNAMIC 4}{DYNAMIC 1}.");
+static const u8 gText_XNatureAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature");
+static const u8 gText_XNatureMetSomewhereAtAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, met somewhere at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1}.");
+static const u8 gText_XNatureHatchedSomewhereAtAbilityExpanded[] = _("{DYNAMIC 0}{DYNAMIC 2}{DYNAMIC 1}{DYNAMIC 5} nature, hatched somewhere at {LV_2}{DYNAMIC 0}{DYNAMIC 3}{DYNAMIC 1}.");
 
 static void BufferMonTrainerMemo(void)
 {
@@ -3629,22 +3622,42 @@ static void BufferMonTrainerMemo(void)
 
         if (DoesMonOTMatchOwner() == TRUE)
         {
-            if (sum->metLevel == 0)
-                text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureHatchedSomewhereAt : gText_XNatureHatchedAtYZ;
+
+            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+            {
+                if (sum->metLevel == 0)
+                    text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureHatchedSomewhereAtAbilityExpanded : gText_XNatureHatchedAtYZAbilityExpanded;
+                else
+                    text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureMetSomewhereAtAbilityExpanded : gText_XNatureMetAtYZAbilityExpanded;
+            }
             else
-                text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureMetSomewhereAt : gText_XNatureMetAtYZ;
+            {
+                if (sum->metLevel == 0)
+                    text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureHatchedSomewhereAt : gText_XNatureHatchedAtYZ;
+                else
+                    text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureMetSomewhereAt : gText_XNatureMetAtYZ;
+            }
         }
         else if (sum->metLocation == METLOC_FATEFUL_ENCOUNTER)
         {
-            text = gText_XNatureFatefulEncounter;
+            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+                text = gText_XNatureFatefulEncounterAbilityExpanded;
+            else
+                text = gText_XNatureFatefulEncounter;
         }
         else if (sum->metLocation != METLOC_IN_GAME_TRADE && DidMonComeFromGBAGames())
         {
-            text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTrade : gText_XNatureProbablyMetAt;
+            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+                text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTradeAbilityExpanded : gText_XNatureProbablyMetAtAbilityExpanded;
+            else
+                text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTrade : gText_XNatureProbablyMetAt;
         }
         else
         {
-            text = gText_XNatureObtainedInTrade;
+            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+                text = gText_XNatureObtainedInTradeAbilityExpanded;
+            else
+                text = gText_XNatureObtainedInTrade;
         }
 
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, text);
@@ -3842,7 +3855,8 @@ static void PrintHeldItemName(void)
     u32 fontId;
     int x;
 
-    CreateItemIconSprite(&sMonSummaryScreen->currentMon);
+    if(SUMMARY_SCREEN_ITEM_ICON)
+        CreateItemIconSprite(&sMonSummaryScreen->currentMon);
 
     if (sMonSummaryScreen->summary.item == ITEM_ENIGMA_BERRY_E_READER
         && IsMultiBattle() == TRUE
@@ -3861,7 +3875,7 @@ static void PrintHeldItemName(void)
     }
 
     fontId = GetFontIdToFit(text, FONT_NORMAL, 0, WindowTemplateWidthPx(&sPageSkillsTemplate[PSS_DATA_WINDOW_SKILLS_HELD_ITEM]) - 8);
-    x = GetStringCenterAlignXOffset(fontId, text, 72) + 2;
+    x = GetStringCenterAlignXOffset(fontId, text, 72) + 3;
     PrintTextOnWindowWithFont(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_HELD_ITEM), text, x, 1, 0, 0, fontId);
 }
 
@@ -3881,7 +3895,7 @@ static void PrintRibbonCount(void)
         text = gStringVar4;
     }
 
-    x = GetStringCenterAlignXOffset(FONT_NORMAL, text, 70) + 6;
+    x = GetStringCenterAlignXOffset(FONT_NORMAL, text, 70) + 8;
     PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT), text, x, 1, 0, 0);
 }
 
@@ -4248,8 +4262,16 @@ static void PrintMoveDetails(u16 move)
             if (B_SHOW_CATEGORY_ICON == TRUE)
                 ShowCategoryIcon(GetBattleMoveCategory(move));
             PrintMovePowerAndAccuracy(move);
-            FormatTextByWidth(desc, 159, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
-            PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
+            if(SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION)
+            {
+                u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
+                FormatTextByWidth(desc, 159, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
+                PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
+            }
+            else
+            {
+                PrintTextOnWindow(windowId, GetMoveDescription(move), 6, 1, 0, 0);
+            }
         }
         else
         {
