@@ -30,13 +30,13 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 //Summary Screen Expanded Branch
 
 //Shadow Settings
-#define SUMMARY_SCREEN_MON_SHADOWS TRUE //If TRUE, the mon sprite will have a shadow loaded behind it.
+#define P_SUMMARY_SCREEN_MON_SHADOWS FALSE //If TRUE, the mon sprite will have a shadow loaded behind it.
 
 //Ability Settings Settings
-#define SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION TRUE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
-#define SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION TRUE //If TRUE, the ability description will be expanded to show the full description of the move instead of just one line.
+#define P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION FALSE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
+#define P_SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION FALSE //If TRUE, the ability description will be expanded to show the full description of the move instead of just one line.
 
-//This should only be used if SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION is TRUE
+//This should only be used if P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION is TRUE
 //Don't change these values unless you know what you're doing.
 //These values i put here cause they are the ones i use in my game.
 //these are the best values i found.
@@ -44,14 +44,18 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 //96, is the max characters that i can fit in the summary screen (Otherwise it wil go off screen).
 //if you want to use more, change the tilemap to be to ur liking.
 //if you want to use less, it will leave blank spaces at the end of the string.
-#define MAX_ABILITY_DESCRIPTION_LENGTH 96 //The maximum length of the ability description string, This is used to allocate memory for the string in the summary screen.
-#define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string, This is used to allocate memory for the string in the summary screen.
-
+#define MAX_ABILITY_DESCRIPTION_LENGTH 96 //The maximum length of the ability description string.
+#define MAX_ABILITY_DESCRIPTION_WIDTH  149 //The maximum width of the ability description string.
+#define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string.
+#define MAX_MOVE_DESCRIPTION_WIDTH     159 //The maximum length of the move description string.
 //Color Settings
-#define SUMMARY_SCREEN_ABILITY_COLOR TRUE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability.
-#define SUMMARY_SCREEN_BACKGROUND_COLOR TRUE //If TRUE, the background color of the summary screen will be changed when the mon is shiny.
+#define P_SUMMARY_SCREEN_ABILITY_COLOR FALSE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability.
+#define P_SUMMARY_SCREEN_BACKGROUND_COLOR FALSE //If TRUE, the background color of the summary screen will be changed when the mon is shiny.
 
 //Item Settings
-#define SUMMARY_SCREEN_ITEM_ICON TRUE //If TRUE, the item icon will be shown in the summary screen, next to the name.
+#define P_SUMMARY_SCREEN_ITEM_ICON FALSE //If TRUE, the item icon will be shown in the summary screen, next to the name.
+
+//Page Settings
+#define P_SUMMARY_SCREEN_SHOW_CONTEST_MOVES TRUE //If FALSE, the contest moves page will be hidden in the summary screen.
 
 #endif // GUARD_CONFIG_SUMMARY_SCREEN_H

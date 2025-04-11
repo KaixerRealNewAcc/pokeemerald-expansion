@@ -619,7 +619,7 @@ static const struct WindowTemplate sPageInfoTemplate[] =
     },
     [PSS_DATA_WINDOW_INFO_ABILITY] = {    
         .bg = 0,
-        #if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
+        #if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
         .tilemapLeft = 10,
         .tilemapTop = 8,
         .width = 20,
@@ -637,7 +637,7 @@ static const struct WindowTemplate sPageInfoTemplate[] =
     },
     [PSS_DATA_WINDOW_INFO_MEMO] = {
         .bg = 0,
-        #if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
+        #if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
         .tilemapLeft = 11,
         .tilemapTop = 16,
         .width = 20,
@@ -723,7 +723,7 @@ static const struct WindowTemplate sPageMovesTemplate[] = // This is used for bo
         .baseBlock = 557,
     },
     [PSS_DATA_WINDOW_MOVE_DESCRIPTION] = {
-        #if SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION
+        #if P_SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION
         .bg = 0,
         .tilemapLeft = 10,
         .tilemapTop = 14,
@@ -1222,6 +1222,8 @@ static void DestroyCategoryIcon(void)
 
 void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, void (*callback)(void))
 {
+    u8 pageCount = P_SUMMARY_SCREEN_SHOW_CONTEST_MOVES ? PSS_PAGE_COUNT - 1 : PSS_PAGE_COUNT - 2;
+
     sMonSummaryScreen = AllocZeroed(sizeof(*sMonSummaryScreen));
     sMonSummaryScreen->mode = mode;
     sMonSummaryScreen->monList.mons = mons;
@@ -1244,16 +1246,16 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
     case SUMMARY_MODE_RELEARNER_BATTLE:
     case SUMMARY_MODE_RELEARNER_CONTEST:
         sMonSummaryScreen->minPageIndex = 0;
-        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+        sMonSummaryScreen->maxPageIndex = pageCount;
         break;
     case SUMMARY_MODE_LOCK_MOVES:
         sMonSummaryScreen->minPageIndex = 0;
-        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+        sMonSummaryScreen->maxPageIndex = pageCount;
         sMonSummaryScreen->lockMovesFlag = TRUE;
         break;
     case SUMMARY_MODE_SELECT_MOVE:
         sMonSummaryScreen->minPageIndex = PSS_PAGE_BATTLE_MOVES;
-        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+        sMonSummaryScreen->maxPageIndex = pageCount;
         sMonSummaryScreen->lockMonFlag = TRUE;
         break;
     }
@@ -1395,7 +1397,7 @@ static bool8 LoadGraphics(void)
         break;
     case 17:
         sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &sMonSummaryScreen->switchCounter, FALSE);
-        if(SUMMARY_SCREEN_MON_SHADOWS == TRUE)
+        if(P_SUMMARY_SCREEN_MON_SHADOWS == TRUE)
             sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &sMonSummaryScreen->switchCounter, TRUE);
         if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
         {
@@ -1409,7 +1411,7 @@ static bool8 LoadGraphics(void)
         break;
     case 19:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-        if(SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+        if(P_SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
             DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         gMain.state++;
         break;
@@ -2001,7 +2003,7 @@ static void Task_ChangeSummaryMon(u8 taskId)
     case 1:
         SummaryScreen_DestroyAnimDelayTask();
         DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]]);
-        if (SUMMARY_SCREEN_MON_SHADOWS == TRUE)
+        if (P_SUMMARY_SCREEN_MON_SHADOWS == TRUE)
             DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW]]);
         break;
     case 2:
@@ -2042,7 +2044,7 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 6:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-        if (SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+        if (P_SUMMARY_SCREEN_ITEM_ICON && sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
             DestroyItemIconSprite(&sMonSummaryScreen->currentMon);
         break;
     case 7:
@@ -2053,7 +2055,7 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 8:
         sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1], FALSE);
-        if (SUMMARY_SCREEN_MON_SHADOWS == TRUE)
+        if (P_SUMMARY_SCREEN_MON_SHADOWS == TRUE)
             sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1], TRUE);
         if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] == SPRITE_NONE)
             return;
@@ -3048,17 +3050,17 @@ static void SetMonPicBackgroundPalette(bool8 isMonShiny)
 {
     if (!isMonShiny)
     {
-        if(SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
+        if(P_SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
             SetBgTilemapPalette(3, 0, 2, 32, 20, 0);
         else
             SetBgTilemapPalette(3, 1, 4, 8, 8, 0);
     }
     else
     {
-        if(SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
+        if(P_SUMMARY_SCREEN_BACKGROUND_COLOR == TRUE)
             SetBgTilemapPalette(3, 0, 2, 32, 20, 2);
         else
-            SetBgTilemapPalette(3, 1, 4, 8, 8, 2);
+            SetBgTilemapPalette(3, 1, 4, 8, 8, 0);
     }
     ScheduleBgCopyTilemapToVram(3);
 }
@@ -3552,16 +3554,16 @@ static void PrintMonAbilityName(void)
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
     u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
     u16 isHiddenAbility = sMonSummaryScreen->summary.abilityNum == 2;
-    if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
+    if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
     {
-        if(SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
+        if(P_SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
             PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 2);
         else
             PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
     }
     else 
     {
-        if(SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
+        if(P_SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
             PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, 2);
         else
             PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, 1);
@@ -3573,10 +3575,10 @@ static void PrintMonAbilityDescription(void)
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
     u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
 
-    if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+    if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
     {
         u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
-        FormatTextByWidth(desc, 149, FONT_SHORT_NARROW, gAbilitiesInfo[ability].description, 0);
+        FormatTextByWidth(desc, MAX_ABILITY_DESCRIPTION_WIDTH, FONT_SHORT_NARROW, gAbilitiesInfo[ability].description, 0);
         PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
     }
     else
@@ -3623,7 +3625,7 @@ static void BufferMonTrainerMemo(void)
         if (DoesMonOTMatchOwner() == TRUE)
         {
 
-            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+            if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
             {
                 if (sum->metLevel == 0)
                     text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureHatchedSomewhereAtAbilityExpanded : gText_XNatureHatchedAtYZAbilityExpanded;
@@ -3640,21 +3642,21 @@ static void BufferMonTrainerMemo(void)
         }
         else if (sum->metLocation == METLOC_FATEFUL_ENCOUNTER)
         {
-            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+            if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
                 text = gText_XNatureFatefulEncounterAbilityExpanded;
             else
                 text = gText_XNatureFatefulEncounter;
         }
         else if (sum->metLocation != METLOC_IN_GAME_TRADE && DidMonComeFromGBAGames())
         {
-            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+            if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
                 text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTradeAbilityExpanded : gText_XNatureProbablyMetAtAbilityExpanded;
             else
                 text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTrade : gText_XNatureProbablyMetAt;
         }
         else
         {
-            if(SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
+            if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
                 text = gText_XNatureObtainedInTradeAbilityExpanded;
             else
                 text = gText_XNatureObtainedInTrade;
@@ -3855,7 +3857,7 @@ static void PrintHeldItemName(void)
     u32 fontId;
     int x;
 
-    if(SUMMARY_SCREEN_ITEM_ICON)
+    if(P_SUMMARY_SCREEN_ITEM_ICON)
         CreateItemIconSprite(&sMonSummaryScreen->currentMon);
 
     if (sMonSummaryScreen->summary.item == ITEM_ENIGMA_BERRY_E_READER
@@ -4245,7 +4247,16 @@ static void PrintContestMoveDescription(u8 moveSlot)
     if (move != MOVE_NONE)
     {
         u8 windowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_DESCRIPTION);
-        PrintTextOnWindow(windowId, gContestEffectDescriptionPointers[GetMoveContestEffect(move)], 6, 1, 0, 0);
+        if(P_SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION)
+        {
+            u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
+            FormatTextByWidth(desc, MAX_MOVE_DESCRIPTION_WIDTH, FONT_SMALL_NARROW, gContestEffectDescriptionPointers[GetMoveContestEffect(move)], 0);
+            PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
+        }
+        else
+        {
+            PrintTextOnWindow(windowId, gContestEffectDescriptionPointers[GetMoveContestEffect(move)], 6, 1, 0, 0);
+        }
     }
 }
 
@@ -4262,10 +4273,10 @@ static void PrintMoveDetails(u16 move)
             if (B_SHOW_CATEGORY_ICON == TRUE)
                 ShowCategoryIcon(GetBattleMoveCategory(move));
             PrintMovePowerAndAccuracy(move);
-            if(SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION)
+            if(P_SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION)
             {
                 u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
-                FormatTextByWidth(desc, 159, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
+                FormatTextByWidth(desc, MAX_MOVE_DESCRIPTION_WIDTH, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
                 PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
             }
             else
@@ -4275,7 +4286,16 @@ static void PrintMoveDetails(u16 move)
         }
         else
         {
-            PrintTextOnWindow(windowId, gContestEffectDescriptionPointers[GetMoveContestEffect(move)], 6, 1, 0, 0);
+            if(P_SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION)
+            {
+                u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
+                FormatTextByWidth(desc, MAX_MOVE_DESCRIPTION_WIDTH, FONT_SMALL_NARROW, GetMoveDescription(move), 0);
+                PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 6, 2, 0);
+            }
+            else
+            {
+                PrintTextOnWindow(windowId, gContestEffectDescriptionPointers[GetMoveContestEffect(move)], 6, 1, 0, 0);
+            }
         }
         PutWindowTilemap(windowId);
     }
