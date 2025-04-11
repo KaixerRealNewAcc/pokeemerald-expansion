@@ -30,11 +30,11 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 //Summary Screen Expanded Branch
 
 //Shadow Settings
-#define SUMMARY_SCREEN_MON_SHADOWS FALSE //If TRUE, the mon sprite will have a shadow loaded behind it.
+#define SUMMARY_SCREEN_MON_SHADOWS TRUE //If TRUE, the mon sprite will have a shadow loaded behind it.
 
 //Ability Settings Settings
-#define SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION FALSE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
-#define SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION FALSE //If TRUE, the ability description will be expanded to show the full description of the move instead of just one line.
+#define SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION TRUE //If TRUE, the ability description will be expanded to show the full description of the ability instead of just one line.
+#define SUMMARY_SCREEN_EXPAND_MOVE_DESCRIPTION TRUE //If TRUE, the ability description will be expanded to show the full description of the move instead of just one line.
 
 //This should only be used if SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION is TRUE
 //Don't change these values unless you know what you're doing.
@@ -48,10 +48,10 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 #define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string, This is used to allocate memory for the string in the summary screen.
 
 //Color Settings
-#define SUMMARY_SCREEN_ABILITY_COLOR FALSE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability.
-#define SUMMARY_SCREEN_BACKGROUND_COLOR FALSE //If TRUE, the background color of the summary screen will be changed when the mon is shiny.
+#define SUMMARY_SCREEN_ABILITY_COLOR TRUE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability.
+#define SUMMARY_SCREEN_BACKGROUND_COLOR TRUE //If TRUE, the background color of the summary screen will be changed when the mon is shiny.
 
 //Item Settings
-#define SUMMARY_SCREEN_ITEM_ICON FALSE //If TRUE, the item icon will be shown in the summary screen, next to the name.
+#define SUMMARY_SCREEN_ITEM_ICON TRUE //If TRUE, the item icon will be shown in the summary screen, next to the name.
 
 #endif // GUARD_CONFIG_SUMMARY_SCREEN_H
