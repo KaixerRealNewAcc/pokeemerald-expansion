@@ -50,9 +50,12 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 #define MAX_ABILITY_DESCRIPTION_WIDTH  149 //The maximum width of the ability description string.
 #define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string.
 #define MAX_MOVE_DESCRIPTION_WIDTH     159 //The maximum length of the move description string.
+
 //Color Settings
-#define P_SUMMARY_SCREEN_ABILITY_COLOR FALSE //If TRUE, the ability description will be have to its color changes if its a Hidden Ability.
+#define P_SUMMARY_SCREEN_ABILITY_COLOR FALSE //If TRUE, the ability name will be have to its color changes if its a Hidden Ability.
 #define P_SUMMARY_SCREEN_BACKGROUND_COLOR FALSE //If TRUE, the background color of the summary screen will be changed when the mon is shiny.
+#define ABILITY_COLOR_VALUE 2 //The color of the ability name. Defaults to Red.
+#define BACKGROUND_COLOR_VALUE 2 //The color of the background. Defaults to Gold.
 
 //Item Settings
 #define P_SUMMARY_SCREEN_ITEM_ICON FALSE //If TRUE, the item icon will be shown in the summary screen, next to the name.
