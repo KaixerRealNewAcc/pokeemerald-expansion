@@ -191,7 +191,9 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     u8 spriteIds[SPRITE_ARR_ID_COUNT];
     bool8 handleDeoxys;
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or Pokémon data
-    u8 unk_filler4[6];
+    u16 monAnimTimer; // tracks time between re-playing mon anims
+    u16 monAnimPlayed; // tracks if mon anim has been played
+    u8 unk_filler4[4];
     u8 categoryIconSpriteId;
     u8 itemIconSpriteId;
 } *sMonSummaryScreen = NULL;
@@ -344,6 +346,7 @@ static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 te
 static u8 IncrementSkillsStatsMode(u8 mode);
 static void ClearStatLabel(u32 length, u32 statsCoordX, u32 statsCoordY);
 static void SummaryScreen_SetShadowAnimDelayTaskId(u8 taskId);
+static void RunMonAnimTimer(void);
 
 static const struct BgTemplate sBgTemplates[] =
 {
@@ -627,8 +630,8 @@ static const struct WindowTemplate sPageInfoTemplate[] =
         .paletteNum = 6,
         .baseBlock = 504,
         #else
-        .tilemapLeft = 11,
-        .tilemapTop = 8,
+        .tilemapLeft = 10,
+        .tilemapTop = 9,
         .width = 18,
         .height = 6,
         .paletteNum = 6,
@@ -1194,11 +1197,19 @@ static const struct SpriteTemplate sSpriteTemplate_StatusCondition =
 };
 static const u16 sMarkings_Pal[] = INCBIN_U16("graphics/summary_screen/markings.gbapal");
 
-static const u16 sMonShadowPalette[] = INCBIN_U16("graphics/summary_screen/shadow.gbapal");
+static const u16 sMonShadowLightGrayPalette[] = INCBIN_U16("graphics/summary_screen/shadow_lightgray.gbapal");
+static const u16 sMonShadowBlackPalette[] = INCBIN_U16("graphics/summary_screen/shadow_black.gbapal");
+static const u16 sMonShadowDefaultPalette[] = INCBIN_U16("graphics/summary_screen/shadow.gbapal");
 
 static const struct SpritePalette sSpritePal_MonShadow =
 {
-    sMonShadowPalette, TAG_MON_SHADOW
+    #if MON_SHADOWS_PALLETE == LIGHT_GRAY_PAL
+    sMonShadowLightGrayPalette, TAG_MON_SHADOW
+    #elif MON_SHADOWS_PALLETE == BLACK_PAL
+    sMonShadowBlackPalette, TAG_MON_SHADOW
+    #elif MON_SHADOWS_PALLETE == DEFAULT_PAL
+    sMonShadowDefaultPalette, TAG_MON_SHADOW
+    #endif
 };
 
 
@@ -1303,6 +1314,10 @@ static void VBlank(void)
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
+    if (P_SUMMARY_SCREEN_MON_IDLE_ANIMS && !sMonSummaryScreen->summary.isEgg)
+    {
+        RunMonAnimTimer();
+    }
 }
 
 // Mon sprite data fields
@@ -1310,6 +1325,41 @@ static void VBlank(void)
 #define sDontFlip data[1]
 #define sDelayAnim data[2]
 #define sIsShadow data[3]
+
+static void RunMonAnimTimer(void)
+{
+    u32 i;
+
+    if (gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].callback == SpriteCallbackDummy) // mon anim is finished
+    {
+        sMonSummaryScreen->monAnimTimer++;
+    }
+
+    if (sMonSummaryScreen->monAnimTimer > P_SUMMARY_SCREEN_MON_IDLE_ANIMS_FRAMES 
+        && sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE) // time to re-run the anim
+    {
+        for (i = 1; i < 8; i++)
+        {
+            gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].data[i] = 0; // sprite data isn't always cleared after the anim finishes
+            if (P_SUMMARY_SCREEN_MON_SHADOWS)
+                gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW]].data[i] = 0;
+        }
+
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].sSpecies = sMonSummaryScreen->summary.species2;
+        if (P_SUMMARY_SCREEN_MON_SHADOWS)
+            gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW]].sSpecies = sMonSummaryScreen->summary.species2;
+
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].sIsShadow = FALSE;
+        if (P_SUMMARY_SCREEN_MON_SHADOWS)
+            gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW]].sIsShadow = TRUE;
+
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].callback = SpriteCB_Pokemon;
+        if (P_SUMMARY_SCREEN_MON_SHADOWS)
+            gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW]].callback = SpriteCB_Pokemon;
+
+        sMonSummaryScreen->monAnimTimer = 0;
+    }
+}
 
 static void CB2_InitSummaryScreen(void)
 {
@@ -1401,6 +1451,8 @@ static bool8 LoadGraphics(void)
             sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SHADOW] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &sMonSummaryScreen->switchCounter, TRUE);
         if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
         {
+            sMonSummaryScreen->monAnimTimer = 0;
+            sMonSummaryScreen->monAnimPlayed = FALSE;
             sMonSummaryScreen->switchCounter = 0;
             gMain.state++;
         }
@@ -1985,6 +2037,8 @@ static void ChangeSummaryPokemon(u8 taskId, s8 delta)
                 HandleStatusTilemap(0, 2);
             }
             sMonSummaryScreen->curMonIndex = monId;
+            sMonSummaryScreen->monAnimTimer = 0;
+            sMonSummaryScreen->monAnimPlayed = FALSE;
             gTasks[taskId].data[0] = 0;
             gTasks[taskId].func = Task_ChangeSummaryMon;
         }
@@ -3564,9 +3618,9 @@ static void PrintMonAbilityName(void)
     else 
     {
         if(P_SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
-            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, ABILITY_COLOR_VALUE);
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 1, 0, ABILITY_COLOR_VALUE);
         else
-            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 0, 1, 0, 1);
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 1, 0, 1);
     }
 }
 
@@ -3583,7 +3637,10 @@ static void PrintMonAbilityDescription(void)
     }
     else
     {
-        PrintTextOnWindow(windowId, gAbilitiesInfo[ability].description, 0, 16, 0, 0);
+        if(P_SUMMARY_SCREEN_ABILITY_DESCRIPTION_FONT_CHANGE == TRUE)
+            PrintTextOnWindowToFitPx(windowId, gAbilitiesInfo[ability].description, 5, 16, 0, 0, WindowWidthPx(windowId) - DESCRIPTION_FONT_CHANGE_VALUE);
+        else
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].description, 5, 16, 0, 0);
     }
 }
 
@@ -4616,10 +4673,7 @@ static u8 CreateMonSprite(struct Pokemon *unused, bool32 isShadow)
     gSprites[spriteId].callback = SpriteCB_Pokemon;
     gSprites[spriteId].oam.priority = 0;
 
-    if (!IsMonSpriteNotFlipped(summary->species2))
-        gSprites[spriteId].hFlip = TRUE;
-    else
-        gSprites[spriteId].hFlip = FALSE;
+    gSprites[spriteId].hFlip = TRUE;
 
     if (isShadow)
     {
@@ -4627,8 +4681,8 @@ static u8 CreateMonSprite(struct Pokemon *unused, bool32 isShadow)
         shadowPalette = LoadSpritePalette(&sSpritePal_MonShadow);
         gSprites[spriteId].oam.paletteNum = shadowPalette;
         gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        gSprites[spriteId].x -= MON_SHADOWS_X; //By Default, 3.
-        gSprites[spriteId].y -= MON_SHADOWS_Y; //By Default, 2.
+        gSprites[spriteId].x -= MON_SHADOWS_X;
+        gSprites[spriteId].y -= MON_SHADOWS_Y;
         gSprites[spriteId].oam.priority = 1;
     }
 
@@ -4642,8 +4696,10 @@ static void SpriteCB_Pokemon(struct Sprite *sprite)
     if (!gPaletteFade.active && sprite->data[2] != 1)
     {
         sprite->data[1] = IsMonSpriteNotFlipped(sprite->data[0]);
-        PlayMonCry();
-        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], summary->isEgg, FALSE);
+        if (!sMonSummaryScreen->monAnimPlayed) // only play cry on the first time mon is animated
+            PlayMonCry();
+        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], summary->isEgg);
+        sMonSummaryScreen->monAnimPlayed = TRUE;
     }
 }
 
