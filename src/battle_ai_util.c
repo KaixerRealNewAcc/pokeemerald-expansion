@@ -3164,7 +3164,8 @@ bool32 ShouldFreezeOrFrostbite(u32 battlerAtk, u32 battlerDef)
 {
     if (!B_USE_FROSTBITE)
     {
-        if (CanBeFrozen(battlerDef))
+        u32 defAbility = AI_DATA->abilities[battlerDef];
+        if (CanBeFrozen(battlerDef, defAbility))
         {
             if (battlerAtk == battlerDef) // Targeting self
                 return FALSE;
@@ -3177,7 +3178,7 @@ bool32 ShouldFreezeOrFrostbite(u32 battlerAtk, u32 battlerDef)
     {
         u32 defAbility = AI_DATA->abilities[battlerDef];
         // Battler can be frostbitten and has move/ability that synergizes with being frostbitten
-        if (CanBeFrozen(battlerDef) && 
+        if (CanBeFrozen(battlerDef, defAbility) && 
             DoesBattlerBenefitFromAllVolatileStatus(battlerDef, defAbility))
         {
             if (battlerAtk == battlerDef) // Targeting self

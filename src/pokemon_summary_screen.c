@@ -3861,7 +3861,7 @@ static void PrintEggMemo(void)
 static void PrintSkillsPageText(void)
 {
     PrintHeldItemName();
-    //PrintRibbonCount();
+    PrintRibbonCount();
     if(ShouldShowIvEvPrompt())
         ShowUtilityPrompt(SUMMARY_SKILLS_MODE_STATS);
     BufferLeftColumnStats();
@@ -3881,7 +3881,7 @@ static void Task_PrintSkillsPage(u8 taskId)
         PrintHeldItemName();
         break;
     case 2:
-        //PrintRibbonCount();
+        PrintRibbonCount();
         break;
     case 3:
         ChangeStatLabel(SUMMARY_SKILLS_MODE_STATS);
@@ -4326,7 +4326,6 @@ static void PrintMoveDetails(u16 move)
     {
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
-            u8 desc[MAX_MOVE_DESCRIPTION_LENGTH];
             if (B_SHOW_CATEGORY_ICON == TRUE)
                 ShowCategoryIcon(GetBattleMoveCategory(move));
             PrintMovePowerAndAccuracy(move);
@@ -4698,7 +4697,7 @@ static void SpriteCB_Pokemon(struct Sprite *sprite)
         sprite->data[1] = IsMonSpriteNotFlipped(sprite->data[0]);
         if (!sMonSummaryScreen->monAnimPlayed) // only play cry on the first time mon is animated
             PlayMonCry();
-        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], summary->isEgg);
+        PokemonSummaryDoMonAnimation(sprite, sprite->sSpecies, summary->isEgg, sprite->sIsShadow);
         sMonSummaryScreen->monAnimPlayed = TRUE;
     }
 }
