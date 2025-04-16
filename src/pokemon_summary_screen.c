@@ -52,6 +52,8 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "item_icon.h"
+#include "constants/species.h"
+#include "pokemon.h"
 
 // Screen titles (upper left)
 #define PSS_LABEL_WINDOW_POKEMON_INFO_TITLE 0
@@ -138,6 +140,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     {
         u16 species; // 0x0
         u16 species2; // 0x2
+        u16 isMega:1;
         u8 isEgg:1; // 0x4
         u8 isShiny:1;
         u8 padding:6;
@@ -335,6 +338,7 @@ static void ShowUtilityPrompt(s16 mode);
 static void ShowMonSkillsInfo(u8 taskId, s16 mode);
 static void WriteToStatsTilemapBuffer(u32 length, u32 block, u32 statsCoordX, u32 statsCoordY);
 void ExtractMonSkillStatsData(struct Pokemon *mon, struct PokeSummary *sum);
+void ExtractMonMegaFormStatsData(struct Pokemon *mon, struct PokeSummary *sum);
 void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum);
 void ExtractMonSkillEvData(struct Pokemon *mon, struct PokeSummary *sum);
 static void PrintTextOnWindow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
@@ -345,6 +349,8 @@ static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 te
 static u8 IncrementSkillsStatsMode(u8 mode);
 static void ClearStatLabel(u32 length, u32 statsCoordX, u32 statsCoordY);
 static void RunMonAnimTimer(void);
+static bool32 CanSpeciesMegaEvolve(struct Pokemon *mon);
+static u16 IsSpeciesMegaEvolvedElseReturnNormalMon(struct Pokemon *mon);
 
 static const struct BgTemplate sBgTemplates[] =
 {
@@ -788,6 +794,8 @@ static const u8 sStatsLeftIVEVColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYN
 static const u8 sStatsRightColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
 static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
 
+static const u8 sStatsLeftMegaColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
+
 #define TAG_MOVE_SELECTOR 30000
 #define TAG_MON_STATUS 30001
 #define TAG_MOVE_TYPES 30002
@@ -1216,6 +1224,171 @@ static const struct SpritePalette sSpritePal_MonShadow =
 
 
 // code
+
+static const u16 gMegaStones[ITEMS_COUNT] = 
+{
+    //Gen 1
+    ITEM_VENUSAURITE,
+    ITEM_CHARIZARDITE_X,
+    ITEM_CHARIZARDITE_Y,
+    ITEM_BLASTOISINITE,
+    ITEM_BEEDRILLITE,
+    ITEM_PIDGEOTITE,
+    ITEM_ALAKAZITE,
+    ITEM_SLOWBRONITE,
+    ITEM_GENGARITE,
+    ITEM_KANGASKHANITE,
+    ITEM_PINSIRITE,
+    ITEM_GYARADOSITE,
+    ITEM_AERODACTYLITE,
+    ITEM_MEWTWONITE_X,
+    ITEM_MEWTWONITE_Y,
+
+    //Gen 2
+    ITEM_AMPHAROSITE,
+    ITEM_STEELIXITE,
+    ITEM_SCIZORITE,
+    ITEM_HERACRONITE,
+    ITEM_HOUNDOOMINITE,
+    ITEM_TYRANITARITE,
+
+    //Gen 3
+    ITEM_SCEPTILITE,
+    ITEM_BLAZIKENITE,
+    ITEM_SWAMPERTITE,
+    ITEM_GARDEVOIRITE,
+    ITEM_SABLENITE,
+    ITEM_MAWILITE,
+    ITEM_AGGRONITE,
+    ITEM_MEDICHAMITE,
+    ITEM_MANECTITE,
+    ITEM_SHARPEDONITE,
+    ITEM_CAMERUPTITE,
+    ITEM_ALTARIANITE,
+    ITEM_BANETTITE,
+    ITEM_ABSOLITE,
+    ITEM_GLALITITE,
+    ITEM_SALAMENCITE,
+    ITEM_METAGROSSITE,
+    ITEM_LATIOSITE,
+    ITEM_LATIASITE,
+
+    //Gen 4
+    ITEM_LOPUNNITE,
+    ITEM_GARCHOMPITE,
+    ITEM_LUCARIONITE,
+    ITEM_ABOMASITE,
+    ITEM_GALLADITE,
+
+    //Gen 5
+    ITEM_AUDINITE,
+
+    //Gen 6
+    ITEM_DIANCITE,
+};
+
+static const u16 MegaOrPrimalAblePokemons[NUM_SPECIES] = {
+    //Gen 1
+    SPECIES_VENUSAUR,
+    SPECIES_CHARIZARD, 
+    SPECIES_BLASTOISE,
+    SPECIES_BEEDRILL,
+    SPECIES_PIDGEOT,
+    SPECIES_ALAKAZAM,
+    SPECIES_SLOWBRO,
+    SPECIES_GENGAR,
+    SPECIES_KANGASKHAN,
+    SPECIES_PINSIR,
+    SPECIES_GYARADOS,
+    SPECIES_AERODACTYL,
+    SPECIES_MEWTWO,
+
+    //Gen 2
+    SPECIES_AMPHAROS,
+    SPECIES_STEELIX,
+    SPECIES_SCIZOR,
+    SPECIES_HERACROSS,
+    SPECIES_HOUNDOOM,
+    SPECIES_TYRANITAR,
+
+    //Gen 3
+    SPECIES_SCEPTILE,
+    SPECIES_BLAZIKEN,
+    SPECIES_SWAMPERT,
+    SPECIES_GARDEVOIR,
+    SPECIES_SABLEYE,
+    SPECIES_MAWILE,
+    SPECIES_AGGRON,
+    SPECIES_MEDICHAM,
+    SPECIES_MANECTRIC,
+    SPECIES_SHARPEDO,
+    SPECIES_CAMERUPT,
+    SPECIES_ALTARIA,
+    SPECIES_BANETTE,
+    SPECIES_ABSOL,
+    SPECIES_GLALIE,
+    SPECIES_SALAMENCE,
+    SPECIES_METAGROSS,
+    SPECIES_LATIAS,
+    SPECIES_LATIOS,
+
+    //Gen 4
+    SPECIES_LOPUNNY,
+    SPECIES_GARCHOMP,
+    SPECIES_LUCARIO,
+    SPECIES_ABOMASNOW,
+    SPECIES_GALLADE,
+
+    //Gen 5
+    SPECIES_AUDINO,
+
+    //Gen 6
+    SPECIES_DIANCIE,
+};
+
+static bool32 CanSpeciesMegaEvolve(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
+
+    if(CheckBagHasItem(ITEM_MEGA_RING, 1))
+        return TRUE;
+
+    for(u16 i = 0; i < MegaOrPrimalAblePokemons[i]; i++)
+    {
+        if ((species == MegaOrPrimalAblePokemons[i])
+        || (species == SPECIES_RAYQUAZA)
+        || (species == SPECIES_GROUDON)
+        || (species == SPECIES_KYOGRE))
+            return TRUE;
+    }
+    
+    return FALSE;
+}
+
+extern u16 GetFormSpeciesId(u16 speciesId, u8 formId);
+
+static u16 IsSpeciesMegaEvolvedElseReturnNormalMon(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
+    u16 formId = GetFormIdFromFormSpeciesId(sMonSummaryScreen->curMonIndex);
+
+    for(u16 i = 0; i < MegaOrPrimalAblePokemons[i]; i++)
+    {
+        for(u16 j = 0; j < gMegaStones[j]; j++)
+        {
+            if ((species == MegaOrPrimalAblePokemons[i] && item == gMegaStones[j])
+            || (species == SPECIES_RAYQUAZA && GetMonData(mon, MON_DATA_MOVE1 + i) == MOVE_DRAGON_ASCENT)
+            || (species == SPECIES_GROUDON && item == ITEM_RED_ORB)
+            || (species == SPECIES_KYOGRE && item == ITEM_BLUE_ORB))
+                return GetFormSpeciesId(species, formId + 1);
+        }
+    }
+    
+    return species;
+}
+
 static u8 ShowCategoryIcon(u32 category)
 {
     if (sMonSummaryScreen->categoryIconSpriteId == 0xFF)
@@ -1615,7 +1788,11 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
     {
     case 0:
         sum->species = GetMonData(mon, MON_DATA_SPECIES);
-        sum->species2 = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+            if(P_SUMMARY_SCREEN_MEGA_FORMS_SHOW && CanSpeciesMegaEvolve(mon))
+                sum->species2 = IsSpeciesMegaEvolvedElseReturnNormalMon(mon);
+            else
+                sum->species2 = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+
         sum->exp = GetMonData(mon, MON_DATA_EXP);
         sum->level = GetMonData(mon, MON_DATA_LEVEL);
         sum->abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
@@ -1638,7 +1815,10 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         sum->ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
         break;
     case 2:
-        ExtractMonSkillStatsData(mon, sum);
+        /*if(P_SUMMARY_SCREEN_MEGA_FORMS_SHOW && CanSpeciesMegaEvolve(mon))
+            ExtractMonMegaFormStatsData(mon, sum);
+        else*/
+            ExtractMonSkillStatsData(mon, sum);
         break;
     case 3:
         GetMonData(mon, MON_DATA_OT_NAME, sum->OTName);
@@ -1978,6 +2158,19 @@ void ExtractMonSkillStatsData(struct Pokemon *mon, struct PokeSummary *sum)
         sum->spdef = GetMonData(mon, MON_DATA_SPDEF2);
         sum->speed = GetMonData(mon, MON_DATA_SPEED2);
     }
+}
+
+void ExtractMonMegaFormStatsData(struct Pokemon *mon, struct PokeSummary *sum)
+{
+    sum->nature = GetNature(mon);
+    sum->mintNature = GetMonData(mon, MON_DATA_HIDDEN_NATURE);
+    sum->currentHP = GetMonData(mon, MON_DATA_HP);
+    sum->maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    sum->atk = GetMonData(mon, MON_DATA_ATK);
+    sum->def = GetMonData(mon, MON_DATA_DEF);
+    sum->spatk = GetMonData(mon, MON_DATA_SPATK);
+    sum->spdef = GetMonData(mon, MON_DATA_SPDEF);
+    sum->speed = GetMonData(mon, MON_DATA_SPEED);
 }
 
 void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum)
@@ -3613,8 +3806,9 @@ static void PrintMonOTID(void)
 static void PrintMonAbilityName(void)
 {
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
-    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species2, sMonSummaryScreen->summary.abilityNum);
     u16 isHiddenAbility = sMonSummaryScreen->summary.abilityNum == 2;
+
     if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION)
     {
         if(P_SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
@@ -3634,7 +3828,7 @@ static void PrintMonAbilityName(void)
 static void PrintMonAbilityDescription(void)
 {
     u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
-    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species2, sMonSummaryScreen->summary.abilityNum);
 
     if(P_SUMMARY_SCREEN_EXPAND_ABILITY_DESCRIPTION == TRUE)
     {
