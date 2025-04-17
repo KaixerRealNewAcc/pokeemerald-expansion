@@ -55,7 +55,7 @@
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
+#define FLAG_HIDE_LEAF       0x2C // set when the player is in the same map as Leaf, and she is not visible
 #define FLAG_CAP_GRUNTS_MUSEUM 0x2D
 #define FLAG_GOOD_ROD_TECH   0x2E
 #define FLAG_SUPER_ROD_TECH  0x2F
@@ -63,7 +63,7 @@
 #define FLAG_UNUSED_0x031    0x31 // Unused Flag
 #define FLAG_UNUSED_0x032    0x32 // Unused Flag
 #define FLAG_UNUSED_0x033    0x33 // Unused Flag
-#define FLAG_HIDE_LEAF_RUSTOBRO 0x34
+#define FLAG_UNUSED_0x034    0x34 // Unused Flag
 #define FLAG_CAP_MAXIE_MT_CHIMNEY 0x35
 #define FLAG_EXP_SHARE_ENABLED 0x36
 #define FLAG_UNUSED_0x037    0x37 // Unused Flag

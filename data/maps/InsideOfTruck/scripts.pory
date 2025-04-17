@@ -249,38 +249,22 @@ script InsideOfTruck_EventScript_SaveSettingsMenu_DifficultyOptions{
 	message(format("Press {A_BUTTON} to select an Option."))
 	waitmessage
 
-	getdifficulty(VAR_DIFFICULTY)
-	if((var(VAR_RESULT) == 1))
-	{
 		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Normal Mode", 0)
-	}
-	else
-	{
-		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Normal Mode", 0)
-	}
-	if(var(VAR_RESULT) == 0)
-	{
-		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Easy Mode", 1)
-	}
-	else
-	{
-		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Easy Mode", 1)
-	}
 	if(flag(FLAG_MINIMAL_GRINDING_MODE))
 	{
-		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Minimal Grinding Mode", 2)
+		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Minimal Grinding Mode", 1)
 	}
 	else
 	{
-		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Minimal Grinding Mode", 2)
+		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Minimal Grinding Mode", 1)
 	}
 	if(flag(FLAG_VGC_MODE))
 	{
-		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Doubles Mode", 3)
+		dynmultipush("{COLOR GREEN}{SHADOW LIGHT_GREEN}Doubles Mode", 2)
 	}
 	else
 	{
-		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Doubles Mode", 3)
+		dynmultipush("{COLOR RED}{SHADOW LIGHT_RED}Doubles Mode", 2)
 	}
 		dynmultipush("Return", 127)
 
@@ -290,19 +274,13 @@ script InsideOfTruck_EventScript_SaveSettingsMenu_DifficultyOptions{
 
 	if(var(VAR_RESULT) == 0)
 	{
-		setdifficulty(DIFFICULTY_NORMAL)
-		msgbox(format("Normal Mode is {COLOR GREEN}{SHADOW LIGHT_GREEN}Enabled."))
+		//Normal mode Doesn't have a flag since its the only mode we have rn
+		//setflag(FLAG_NORMAL_MODE)
+		msgbox(format("Normal Mode is {COLOR GREEN}{SHADOW LIGHT_GREEN}Enabled{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY} by default."))
 		goto(InsideOfTruck_EventScript_SaveSettingsMenu_DifficultyOptions)
 	}
 
-	if(var(VAR_RESULT) == 1)
-	{
-		setdifficulty(DIFFICULTY_EASY) 
-		msgbox(format("Easy Mode is {COLOR GREEN}{SHADOW LIGHT_GREEN}Enabled."))
-		goto(InsideOfTruck_EventScript_SaveSettingsMenu_DifficultyOptions)
-	}
-
-	if (var(VAR_RESULT) == 2)
+	if (var(VAR_RESULT) == 1)
 	{
 		if(flag(FLAG_MINIMAL_GRINDING_MODE))
 		{
@@ -326,7 +304,7 @@ script InsideOfTruck_EventScript_SaveSettingsMenu_DifficultyOptions{
 		}
 	}
 
-	if(var(VAR_RESULT ) == 3)
+	if(var(VAR_RESULT ) == 2)
 	{
 		if(flag(FLAG_VGC_MODE))
 		{
@@ -451,7 +429,6 @@ script InsideOfTruck_EventScript_SaveSettingsDone_1_Continue{
 }
 
 script InsideOfTruck_EventScript_SaveSettingsDone_2 {
-	
 	goto(ChooseStarterSet)
 	msgbox(format("{COLOR GREEN}{SHADOW LIGHT_GREEN}Kaixer:{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY} Custom settings saved.\nVery well then. good luck and have fun!"))
 	fadescreen(FADE_FROM_BLACK)
@@ -484,4 +461,3 @@ text ModesCheck_Text_NoWeatherMode{
 text KaixerHello{
 	format("{COLOR GREEN}{SHADOW LIGHT_GREEN}Kaixer:{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY} So {COLOR GREEN}{SHADOW LIGHT_GREEN}{PLAYER}{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY} Which region would you like to use?")
 }
-

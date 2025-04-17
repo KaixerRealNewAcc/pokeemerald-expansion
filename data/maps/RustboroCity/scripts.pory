@@ -5,6 +5,7 @@ raw `
 .set LOCALID_GRUNT, 10
 .set LOCALID_RIVAL, 14
 .set LOCALID_SCIENTIST, 15
+.set LOCALID_LEAF, 17
 
 RustboroCity_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, RustboroCity_OnTransition
@@ -1299,3 +1300,46 @@ RustboroCity_Text_YouCanHave2On2Battle:
 	.string "Don't you think it'd be cool if you\n"
 	.string "could beat two TRAINERS by yourself?$"
 `
+
+script RustboroCity_Trigger_RivalLeaf_MeetsPlayer{
+	lock
+	applymovement(OBJ_EVENT_ID_PLAYER, moves(face_up))
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	playbgm (MUS_RG_ENCOUNTER_RIVAL, TRUE)
+	opendoor(27, 19)
+	waitdooranim
+	addobject(LOCALID_LEAF)
+	applymovement(LOCALID_LEAF, moves(emote_exclamation_mark))
+	waitmovement(LOCALID_LEAF)
+	delay(32)
+	message("Excuse me.")
+	waitbuttonpress
+	closemessage
+	clearflag(FLAG_SAFE_FOLLOWER_MOVEMENT)
+	applymovement(OBJ_EVENT_ID_PLAYER, moves(emote_exclamation_mark, delay_8, walk_down, face_up, lock_facing_direction))
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	applymovement(LOCALID_LEAF, moves(walk_down))
+	waitmovement(LOCALID_LEAF)
+	closedoor(27, 19)
+	waitdooranim
+	msgbox(format("Err... Hi, are you a Trainer who's looking to battle this Gym?"), MSGBOX_DEFAULT)
+	msgbox(format("Okay!\nWell, I'm Leaf.\pA Trainer from the Kanto region, and also the granddaughter of the world-famous Professor Oak.\pOh this gym?\nI just got done battling Roxanne, she was hard to defeat.\pHow about a little battle.\nI won't take no for an answer!"), MSGBOX_DEFAULT)
+	trainerbattle_no_intro(TRAINER_LEAF_RUSTBORO, RustboroCity_Text_RivalLeaf_MeetsPlayer_1)
+	msgbox(format("Well done! That was a great battle, I hope we can meet again some other time.\pHere's a little gift from me,\nto make your training sessions easier!"), MSGBOX_DEFAULT)
+	giveitem(ITEM_EXP_ALL, 1) //EXP_SHARE.
+	message(format("If you enable this, then all the Pokémon in your party will get Exp. Points after a battle, even if they didn't take part in that fight.\pDon't worry about me! I have a few more of these.\pWell, good luck for your Gym battles. Byeeee!"))
+	waitbuttonpress
+	closemessage
+	applymovement(LOCALID_LEAF, moves(walk_left *6, walk_up *6))
+	waitmovement(LOCALID_LEAF)
+	removeobject(LOCALID_LEAF)
+	setvar(VAR_BATTLED_LEAF, 2)
+	setflag(FLAG_SAFE_FOLLOWER_MOVEMENT)
+	release
+	end
+}
+
+text RustboroCity_Text_RivalLeaf_MeetsPlayer_1
+{
+	"Ugh...\nThought I had you for sure.\pWell, back to training for me, I suppose."
+}

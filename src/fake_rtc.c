@@ -81,7 +81,7 @@ void FakeRtc_ManuallySetTimeDay(u32 hour, u32 minute, u32 second)
     target.days = gLocalTime.days;
 
     CalcTimeDifference(&diff, &gLocalTime, &target);
-    FakeRtc_AdvanceTimeBy(diff.hours, diff.minutes, diff.seconds);
+    FakeRtc_AdvanceTimeBy(diff.days, diff.hours, diff.minutes, diff.seconds);
 }
 
 void FakeRtc_ManuallySetTimeNight(u32 hour, u32 minute, u32 second)
@@ -95,7 +95,7 @@ void FakeRtc_ManuallySetTimeNight(u32 hour, u32 minute, u32 second)
     target.days = gLocalTime.days;
 
     CalcTimeDifference(&diff, &gLocalTime, &target);
-    FakeRtc_AdvanceTimeBy(diff.hours, diff.minutes, diff.seconds);
+    FakeRtc_AdvanceTimeBy(diff.days, diff.hours, diff.minutes, diff.seconds);
 }
 
 void FakeRtc_ManuallySetTimeDusk(u32 hour, u32 minute, u32 second)
@@ -109,7 +109,7 @@ void FakeRtc_ManuallySetTimeDusk(u32 hour, u32 minute, u32 second)
     target.days = gLocalTime.days;
 
     CalcTimeDifference(&diff, &gLocalTime, &target);
-    FakeRtc_AdvanceTimeBy(diff.hours, diff.minutes, diff.seconds);
+    FakeRtc_AdvanceTimeBy(diff.days, diff.hours, diff.minutes, diff.seconds);
 }
 
 
