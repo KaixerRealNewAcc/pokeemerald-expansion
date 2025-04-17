@@ -345,7 +345,6 @@ static const u8 *GetLetterGrade(u32 stat);
 static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 templateId);
 static u8 IncrementSkillsStatsMode(u8 mode);
 static void ClearStatLabel(u32 length, u32 statsCoordX, u32 statsCoordY);
-static void SummaryScreen_SetShadowAnimDelayTaskId(u8 taskId);
 static void RunMonAnimTimer(void);
 
 static const struct BgTemplate sBgTemplates[] =
@@ -1004,7 +1003,11 @@ static const union AnimCmd *const sSpriteAnimTable_MoveTypes[NUMBER_OF_MON_TYPES
 
 const struct CompressedSpriteSheet gSpriteSheet_MoveTypes =
 {
+    #if P_SUMMARY_SCREEN_NEW_TYPE_ICONS
+    .data = gMoveTypes_Gfx_New,
+    #else
     .data = gMoveTypes_Gfx,
+    #endif
     .size = (NUMBER_OF_MON_TYPES + CONTEST_CATEGORIES_COUNT) * 0x100,
     .tag = TAG_MOVE_TYPES
 };
@@ -1576,7 +1579,12 @@ static bool8 DecompressGraphics(void)
         sMonSummaryScreen->switchCounter++;
         break;
     case 12:
+    #if P_SUMMARY_SCREEN_NEW_TYPE_ICONS
+        LoadCompressedPalette(gMoveTypes_Pal_New, OBJ_PLTT_ID(13), 3 * PLTT_SIZE_4BPP);
+    #else
         LoadCompressedPalette(gMoveTypes_Pal, OBJ_PLTT_ID(13), 3 * PLTT_SIZE_4BPP);
+    #endif
+
         LoadCompressedSpriteSheet(&gSpriteSheet_CategoryIcons);
         LoadSpritePalette(&gSpritePal_CategoryIcons);
         sMonSummaryScreen->switchCounter = 0;
@@ -4711,7 +4719,7 @@ void SummaryScreen_SetAnimDelayTaskId(u8 taskId)
 
 // Track and then destroy Task_PokemonSummaryAnimateAfterDelay
 // Normally destroys itself but it can be interrupted before the shadow animation starts
-static void SummaryScreen_SetShadowAnimDelayTaskId(u8 taskId)
+void SummaryScreen_SetShadowAnimDelayTaskId(u8 taskId)
 {
     sShadowAnimDelayTaskId = taskId;
 }
