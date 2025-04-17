@@ -1,3 +1,4 @@
+
 .set LOCALID_WALLACE, 1
 
 EverGrandeCity_HallOfFame_MapScripts::
@@ -96,4 +97,3 @@ EverGrandeCity_HallOfFame_Text_LetsRecordYouAndYourPartnersNames:
 	.string "name as a TRAINER who triumphed over\l"
 	.string "the POKéMON LEAGUE, and the names of\l"
 	.string "the partners who battled with you.$"
-

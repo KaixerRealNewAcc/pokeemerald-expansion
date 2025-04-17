@@ -1,3 +1,4 @@
+
 .set LOCALID_WOMAN_1, 19
 .set LOCALID_MAN_1, 20
 
@@ -758,4 +759,3 @@ LilycoveCity_Text_HoneymoonVowToSeeRarePokemon:
 	.string "So we were delighted to see a rare\n"
 	.string "POKéMON as soon as we arrived.\p"
 	.string "I mean, we are totally happy!$"
-

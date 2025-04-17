@@ -1,3 +1,4 @@
+
 .set LOCALID_WALLACE, 1
 .set LOCALID_RIVAL, 2
 .set LOCALID_BIRCH, 3
@@ -341,4 +342,3 @@ EverGrandeCity_ChampionsRoom_Text_BrendanCongratulations:
 	.string "It can't be helped if that's the rule.\p"
 	.string "{PLAYER}, way to go!\n"
 	.string "Congratulations!$"
-

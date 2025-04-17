@@ -1,3 +1,4 @@
+
 .set LOCALID_CAPT_STERN, 1
 .set LOCALID_ARCHIE, 2
 .set LOCALID_GRUNT_1, 3
@@ -76,10 +77,10 @@ SlateportCity_OceanicMuseum_2F_EventScript_CaptStern::
 	msgbox SlateportCity_OceanicMuseum_2F_Text_SternIveGotToGo, MSGBOX_DEFAULT
 	closemessage
 	fadescreen FADE_TO_BLACK
-	playfanfare MUS_HEAL
-	waitfanfare
-	special HealPlayerParty
-	callnative UpdateFollowingPokemon
+	@@playfanfare MUS_HEAL
+	@@waitfanfare
+	@@special HealPlayerParty
+	@@callnative UpdateFollowingPokemon
 	removeobject LOCALID_CAPT_STERN
 	setflag FLAG_HIDE_ROUTE_110_TEAM_AQUA
 	call_if_eq VAR_REGISTER_BIRCH_STATE, 0, SlateportCity_OceanicMuseum_2F_EventScript_ReadyRegisterBirch
@@ -87,6 +88,7 @@ SlateportCity_OceanicMuseum_2F_EventScript_CaptStern::
 	clearflag FLAG_HIDE_ROUTE_116_DEVON_EMPLOYEE
 	setflag FLAG_HIDE_RUSTBORO_CITY_DEVON_CORP_3F_EMPLOYEE
 	setvar VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 1
+	setflag FLAG_CAP_GRUNTS_MUSEUM
 	fadescreen FADE_FROM_BLACK
 	release
 	end
@@ -438,4 +440,3 @@ SlateportCity_OceanicMuseum_2F_Text_SSAnneReplica:
 	.string "“S.S. ANNE\p"
 	.string "“A replica of the luxury liner that\n"
 	.string "circles the globe.”$"
-

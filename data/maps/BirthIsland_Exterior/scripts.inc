@@ -1,3 +1,4 @@
+
 .set LOCALID_DEOXYS, 2
 
 @ Note: LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK is a local id for this map used elsewhere. It's defined in event_objects.h

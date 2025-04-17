@@ -1,3 +1,4 @@
+
 @ Objects in this room are set dynamically with OBJ_EVENT_GFX_VAR_0 and OBJ_EVENT_GFX_VAR_1
 @ Note: LOCALIDs shared with data/scripts/battle_pike.inc
 .equ LOCALID_OBJ_0, 1
@@ -848,4 +849,3 @@ BattleFrontier_BattlePikeRoomNormal_Text_WillRestoreTwoMons:
 	.string "I'm in good spirits now.\p"
 	.string "I will restore two of your POKéMON\n"
 	.string "to full health!$"
-

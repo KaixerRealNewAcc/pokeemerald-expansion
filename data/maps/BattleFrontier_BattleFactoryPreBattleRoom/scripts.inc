@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 
 BattleFrontier_BattleFactoryPreBattleRoom_MapScripts::

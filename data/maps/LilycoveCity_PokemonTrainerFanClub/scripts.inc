@@ -1,3 +1,4 @@
+
 .set LOCALID_LASS, 1
 .set LOCALID_MAN, 2
 .set LOCALID_POKEFAN_M, 3

@@ -1,3 +1,4 @@
+
 .set LOCALID_MOM, 1
 .set LOCALID_RIVAL_MOM, 4
 .set LOCALID_RIVAL, 7
@@ -69,6 +70,27 @@ LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock::
 	waitstate
 	releaseall
 	end
+
+LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock2::
+	lockall
+	applymovement LOCALID_MOM, LittlerootTown_BrendansHouse_1F_Movement_FacePlayer
+	waitmovement LOCALID_MOM
+	msgbox PlayersHouse_1F_Text_GoSetTheClock, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_BrendansHouse_1F_Movement_PushTowardStairs
+	waitmovement OBJ_EVENT_ID_PLAYER
+	applymovement LOCALID_MOM, LittlerootTown_BrendansHouse_1F_Movement_FaceAwayPlayer
+	waitmovement LOCALID_MOM
+	releaseall
+	end
+
+LittlerootTown_BrendansHouse_1F_Movement_FacePlayer:
+	face_player
+	step_end
+
+LittlerootTown_BrendansHouse_1F_Movement_FaceAwayPlayer:
+	face_original_direction
+	step_end
 
 LittlerootTown_BrendansHouse_1F_Movement_PushTowardStairs:
 	walk_up
@@ -292,7 +314,7 @@ PlayersHouse_1F_Text_IsntItNiceInHere:
 	.string "Isn't it nice in here, too?$"
 
 PlayersHouse_1F_Text_MoversPokemonGoSetClock:
-	.string "The mover's POKéMON do all the work\n"
+	.string "The mover's Pokémon do all the work\n"
 	.string "of moving us in and cleaning up after.\l"
 	.string "This is so convenient!\p"
 	.string "{PLAYER}, your room is upstairs.\n"
@@ -326,7 +348,7 @@ PlayersHouse_1F_Text_ItsOverWeMissedHim:
 PlayersHouse_1F_Text_GoIntroduceYourselfNextDoor:
 	.string "Oh, yes.\n"
 	.string "One of DAD's friends lives in town.\p"
-	.string "PROF. BIRCH is his name.\p"
+	.string "Prof. Birch is his name.\p"
 	.string "He lives right next door, so you should\n"
 	.string "go over and introduce yourself.$"
 
@@ -335,7 +357,7 @@ PlayersHouse_1F_Text_SeeYouHoney:
 
 PlayersHouse_1F_Text_DidYouMeetProfBirch:
 	.string "MOM: Did you introduce yourself to\n"
-	.string "PROF. BIRCH?$"
+	.string "Prof. Birch?$"
 
 PlayersHouse_1F_Text_YouShouldRestABit:
 	.string "MOM: How are you doing, {PLAYER}?\n"
@@ -413,7 +435,7 @@ PlayersHouse_1F_Text_BetterGetBackToGym:
 PlayersHouse_1F_Text_DadShouldStayLonger:
 	.string "MOM: That DAD of yours…\p"
 	.string "He comes home for the first time in a\n"
-	.string "while, but all he talks about is POKéMON.\p"
+	.string "while, but all he talks about is Pokémon.\p"
 	.string "He should relax and stay a little longer.$"
 
 PlayersHouse_1F_Text_IsThatABreakingStory:
@@ -424,8 +446,8 @@ PlayersHouse_1F_Text_LatiEmergencyNewsFlash:
 	.string "news flash!\p"
 	.string "In various HOENN locales, there have\n"
 	.string "been reports of a BZZT…colored\l"
-	.string "POKéMON in flight.\p"
-	.string "The identity of this POKéMON is\n"
+	.string "Pokémon in flight.\p"
+	.string "The identity of this Pokémon is\n"
 	.string "currently unknown.\p"
 	.string "We now return you to the regular\n"
 	.string "movie program.$"
@@ -433,8 +455,8 @@ PlayersHouse_1F_Text_LatiEmergencyNewsFlash:
 PlayersHouse_1F_Text_WhatColorDidTheySay:
 	.string "MOM: {PLAYER}, did you catch that?\p"
 	.string "What color did the announcer say\n"
-	.string "that POKéMON was?$"
+	.string "that Pokémon was?$"
 
 PlayersHouse_1F_Text_StillUnknownPokemon:
 	.string "MOM: Well, isn't that something!\n"
-	.string "There are still unknown POKéMON.$"
+	.string "There are still unknown Pokémon.$"

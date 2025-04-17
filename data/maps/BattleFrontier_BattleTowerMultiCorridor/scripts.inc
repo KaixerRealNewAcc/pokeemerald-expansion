@@ -1,3 +1,4 @@
+
 .set LOCALID_PLAYER, 1
 .set LOCALID_ATTENDANT_1, 2
 .set LOCALID_ATTENDANT_2, 3
@@ -171,4 +172,3 @@ BattleFrontier_BattleTowerMultiCorridor_Movement_AttendantEnterDoor:
 BattleFrontier_BattleTowerMultiCorridor_Movement_ExitElevator:
 	walk_down
 	step_end
-

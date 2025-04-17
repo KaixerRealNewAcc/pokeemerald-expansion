@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 
 BattleFrontier_BattlePikeLobby_MapScripts::
@@ -434,4 +435,3 @@ BattleFrontier_BattlePikeLobby_Text_ExplainMonOrderRules:
 	.string "changed.\p"
 	.string "The sequence must be set before\n"
 	.string "starting your challenge.$"
-

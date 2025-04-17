@@ -1,3 +1,4 @@
+
 .set LOCALID_SUDOWOODO, 14
 
 BattleFrontier_OutsideEast_MapScripts::

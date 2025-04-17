@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 
 BattleFrontier_BattleTowerMultiPartnerRoom_MapScripts::
@@ -1805,4 +1806,3 @@ BattleFrontier_BattleTowerMultiPartnerRoom_Text_SwimmerMAccept::
 BattleFrontier_BattleTowerMultiPartnerRoom_Text_SwimmerMReject::
 	.string "If we meet again, you have to team up\n"
 	.string "with me. You'll do that, right?$"
-

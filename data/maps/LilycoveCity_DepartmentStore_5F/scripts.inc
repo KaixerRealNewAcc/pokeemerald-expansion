@@ -1,3 +1,4 @@
+
 .set LOCALID_WOMAN, 7
 
 LilycoveCity_DepartmentStore_5F_MapScripts::

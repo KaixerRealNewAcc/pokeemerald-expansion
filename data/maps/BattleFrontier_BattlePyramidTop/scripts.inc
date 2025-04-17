@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 .set LOCALID_BRANDON, 2
 
@@ -331,4 +332,3 @@ BattleFrontier_BattlePyramidTop_Text_FarewellForNow:
 BattleFrontier_BattlePyramidTop_Text_StepForwardWhenReady:
 	.string "Now, when you are ready, take courage\n"
 	.string "and step forward.$"
-

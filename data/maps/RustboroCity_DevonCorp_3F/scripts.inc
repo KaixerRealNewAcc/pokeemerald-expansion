@@ -1,3 +1,4 @@
+
 .set LOCALID_DEVON_EMPLOYEE, 2
 
 RustboroCity_DevonCorp_3F_MapScripts::
@@ -305,4 +306,3 @@ RustboroCity_DevonCorp_3F_Text_RepeatAndTimerHugelyPopular:
 RustboroCity_DevonCorp_3F_Text_RareRocksDisplay:
 	.string "It's a collection of rare rocks and\n"
 	.string "stones assembled by the PRESIDENT.$"
-

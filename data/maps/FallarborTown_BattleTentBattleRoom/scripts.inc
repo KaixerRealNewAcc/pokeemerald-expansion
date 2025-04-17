@@ -1,3 +1,4 @@
+
 .set LOCALID_PLAYER, 1
 .set LOCALID_ATTENDANT, 2
 .set LOCALID_OPPONENT, 3
@@ -239,4 +240,3 @@ FallarborTown_BattleTentBattleRoom_EventScript_SetUpObjects::
 	removeobject LOCALID_OPPONENT
 	setvar VAR_TEMP_1, 1
 	end
-

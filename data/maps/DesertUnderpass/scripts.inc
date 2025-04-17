@@ -1,3 +1,4 @@
+
 .set LOCALID_FOSSIL, 1
 
 DesertUnderpass_MapScripts::
@@ -37,4 +38,3 @@ DesertUnderpass_Text_FoundRootFossil::
 @ Unused
 DesertUnderpass_Text_FoundClawFossil::
 	.string "{PLAYER} found the CLAW FOSSIL.$"
-

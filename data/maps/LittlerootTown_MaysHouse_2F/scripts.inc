@@ -1,3 +1,4 @@
+
 .set LOCALID_RIVAL, 1
 
 LittlerootTown_MaysHouse_2F_MapScripts::

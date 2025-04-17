@@ -1,3 +1,4 @@
+
 .set LOCALID_ARCHIE, 2
 .set LOCALID_OLD_LADY, 3
 .set LOCALID_GRUNT_1, 4
@@ -49,7 +50,7 @@ MtPyre_Summit_EventScript_TeamAquaExits::
 	call_if_eq VAR_0x8008, 2, MtPyre_Summit_EventScript_ArchieFacePlayer2
 	msgbox MtPyre_Summit_Text_ArchieWeGotTheOrbLetsGo, MSGBOX_DEFAULT
 	closemessage
-	fadescreenswapbuffers FADE_TO_BLACK
+	fadescreen FADE_TO_BLACK
 	removeobject LOCALID_ARCHIE
 	removeobject LOCALID_GRUNT_1
 	removeobject LOCALID_GRUNT_2
@@ -58,7 +59,7 @@ MtPyre_Summit_EventScript_TeamAquaExits::
 	setflag FLAG_HIDE_MT_PYRE_SUMMIT_ARCHIE
 	setflag FLAG_HIDE_MT_PYRE_SUMMIT_TEAM_AQUA
 	fadedefaultbgm
-	fadescreenswapbuffers FADE_FROM_BLACK
+	fadescreen FADE_FROM_BLACK
 	delay 20
 	setvar VAR_MT_PYRE_STATE, 1
 	call_if_eq VAR_0x8008, 0, MtPyre_Summit_EventScript_OldLadyApproachPlayer0
@@ -622,4 +623,3 @@ MtPyre_Summit_Text_HoennTrioTale:
 	.string "becalmed the two enraged POKéMON.\p"
 	.string "Then, its duty done, the green POKéMON\n"
 	.string "flew off into the wild blue yonder…$"
-

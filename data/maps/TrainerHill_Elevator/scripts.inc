@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 
 TrainerHill_Elevator_MapScripts::
@@ -87,4 +88,3 @@ TrainerHill_Elevator_Movement_AttendantFacePlayer:
 TrainerHill_Elevator_Movement_AttendantFaceDown:
 	face_down
 	step_end
-

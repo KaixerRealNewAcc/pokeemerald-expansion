@@ -1,3 +1,4 @@
+
 .set LOCALID_GRUNT_1, 10
 .set LOCALID_GRUNT_2, 11
 .set LOCALID_GRUNT_3, 12
@@ -432,4 +433,3 @@ MossdeepCity_Text_SootopolisNewGymLeader:
 	.string "LEADER come in.\p"
 	.string "People tell me the new LEADER once\n"
 	.string "mentored WALLACE.$"
-

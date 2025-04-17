@@ -1,3 +1,4 @@
+
 .set LOCALID_CHALLENGE_BIKER, 21
 .set LOCALID_RIVAL, 28
 .set LOCALID_RIVAL_ON_BIKE, 29
@@ -991,4 +992,3 @@ Route110_Text_KeepAnEyeOutForRival:
 	.string "… … … … … …\p"
 	.string "Well, I had better get going.\n"
 	.string "See you again, {PLAYER}{KUN}!$"
-

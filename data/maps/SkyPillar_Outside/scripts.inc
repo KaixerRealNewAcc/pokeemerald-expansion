@@ -1,3 +1,4 @@
+
 .set LOCALID_WALLACE, 1
 
 SkyPillar_Outside_MapScripts::

@@ -1,3 +1,4 @@
+
 .set LOCALID_LUGIA, 1
 
 NavelRock_Bottom_MapScripts::

@@ -1,3 +1,4 @@
+
 .set LOCALID_RIVAL_ON_BIKE, 7
 .set LOCALID_RIVAL, 8
 
@@ -406,4 +407,3 @@ LavaridgeTown_Text_GymSign:
 LavaridgeTown_Text_HerbShopSign:
 	.string "POKéMON HERB SHOP\n"
 	.string "“Bitter taste--better cure!”$"
-

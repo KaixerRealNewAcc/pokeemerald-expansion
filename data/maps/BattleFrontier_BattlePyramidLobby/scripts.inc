@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 .set LOCALID_HINT_GIVER, 2
 
@@ -904,4 +905,3 @@ BattleFrontier_BattlePyramidLobby_Text_ExplainBagRules:
 	.string "of ten kinds of items.\p"
 	.string "The contents of the BATTLE BAG are\n"
 	.string "lost if you fail in your quest.$"
-

@@ -1,3 +1,4 @@
+
 .set LOCALID_LATI, 2
 
 SouthernIsland_Interior_MapScripts::

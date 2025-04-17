@@ -1,3 +1,4 @@
+
 .set LOCALID_NURSE, 1
 
 OldaleTown_PokemonCenter_1F_MapScripts::
@@ -61,4 +62,3 @@ OldaleTown_PokemonCenter_1F_Text_TradedInWirelessClub:
 	.string "The POKéMON WIRELESS CLUB on\n"
 	.string "the second floor was built recently.\p"
 	.string "I traded POKéMON right away.$"
-

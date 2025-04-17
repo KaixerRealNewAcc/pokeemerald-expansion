@@ -1,3 +1,4 @@
+
 .set LOCALID_HO_OH, 1
 
 NavelRock_Top_MapScripts::

@@ -1,3 +1,4 @@
+
 .set LOCALID_KYOGRE, 1
 
 MarineCave_End_MapScripts::
@@ -71,4 +72,3 @@ MarineCave_End_Movement_KyogreApproach:
 	delay_16
 	walk_down_affine
 	step_end
-

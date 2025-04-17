@@ -1,3 +1,4 @@
+
 .set LOCALID_FAT_MAN, 1
 .set LOCALID_MAN_1, 2
 .set LOCALID_RICH_BOY, 3

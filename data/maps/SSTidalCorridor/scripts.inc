@@ -1,3 +1,4 @@
+
 .set LOCALID_SAILOR, 1
 .set LOCALID_SCOTT, 5
 

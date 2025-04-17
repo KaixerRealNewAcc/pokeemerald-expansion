@@ -1,3 +1,4 @@
+
 .set LOCALID_ATTENDANT, 1
 
 SafariZone_South_MapScripts::

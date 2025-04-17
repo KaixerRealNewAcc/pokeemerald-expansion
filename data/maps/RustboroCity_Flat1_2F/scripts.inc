@@ -1,3 +1,4 @@
+
 .set LOCALID_WALDAS_DAD, 6
 
 RustboroCity_Flat1_2F_MapScripts::
@@ -175,4 +176,3 @@ RustboroCity_Flat1_2F_Text_ThankYouIllGiveYouWallpaper:
 
 RustboroCity_Flat1_2F_Text_ItsAPokemonPlushDoll:
 	.string "It's a POKéMON plush DOLL!$"
-

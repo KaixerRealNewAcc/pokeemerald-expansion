@@ -1,3 +1,4 @@
+
 .set LOCALID_EXPERT_M, 4
 .set LOCALID_TWIN, 5
 .set LOCALID_SCHOOL_KID_M, 7
@@ -442,4 +443,3 @@ DewfordTown_Hall_Text_LoveSludgeBombButTrendInToo:
 	.string "But POKéMON with the move\n"
 	.string "“{STR_VAR_1}”\l"
 	.string "are in, too.$"
-

@@ -1,3 +1,4 @@
+
 .set LOCALID_NURSE, 1
 
 BattleFrontier_PokemonCenter_1F_MapScripts::
@@ -58,4 +59,3 @@ BattleFrontier_PokemonCenter_1F_Text_GoingThroughEveryChallenge:
 
 BattleFrontier_PokemonCenter_1F_Text_Skitty:
 	.string "SKITTY: Mya myaaah!$"
-

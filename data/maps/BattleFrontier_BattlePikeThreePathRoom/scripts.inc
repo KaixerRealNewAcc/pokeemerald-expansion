@@ -1,3 +1,4 @@
+
 .set LOCALID_HINT_GIVER, 2
 
 BattleFrontier_BattlePikeThreePathRoom_MapScripts::

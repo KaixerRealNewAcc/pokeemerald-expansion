@@ -1,3 +1,4 @@
+
 .set LOCALID_RIVAL, 2
 
 Route103_MapScripts::
@@ -352,4 +353,3 @@ Route103_Text_ShortcutToOldale:
 Route103_Text_RouteSign:
 	.string "ROUTE 103\n"
 	.string "{DOWN_ARROW} OLDALE TOWN$"
-

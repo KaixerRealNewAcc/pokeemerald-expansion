@@ -1,3 +1,4 @@
+
 .set LOCALID_HIDEOUT_GUARD, 5
 
 JaggedPass_MapScripts::
@@ -265,4 +266,3 @@ JaggedPass_Text_AutumnDefeat:
 JaggedPass_Text_AutumnPostBattle:
 	.string "What is that odd rock protrusion\n"
 	.string "a little up the hill from here?$"
-

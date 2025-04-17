@@ -1,3 +1,4 @@
+
 .set LOCALID_CURATOR, 2
 .set LOCALID_ARTIST_2, 8
 
@@ -291,4 +292,3 @@ LilycoveCity_LilycoveMuseum_1F_Text_MuseumTouristDestination:
 	.string "No, great for the HOENN region!\p"
 	.string "This is what I've heard--a lone TRAINER\n"
 	.string "procured all the paintings upstairs.$"
-

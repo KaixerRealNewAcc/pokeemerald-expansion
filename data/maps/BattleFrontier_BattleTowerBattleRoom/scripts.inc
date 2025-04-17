@@ -1,3 +1,4 @@
+
 .set LOCALID_OPPONENT, 1
 .set LOCALID_ATTENDANT_1, 2
 .set LOCALID_ATTENDANT_2, 3
@@ -564,4 +565,3 @@ BattleFrontier_BattleTowerBattleRoom_Text_WishICouldBattleYouAgain:
 	.string "I have never had a POKéMON battle\n"
 	.string "so enjoyable before…\p"
 	.string "I wish I could battle with you again…$"
-

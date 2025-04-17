@@ -1,9 +1,15 @@
+
 .set LOCALID_RIVAL, 1
 
 LittlerootTown_BrendansHouse_2F_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_BrendansHouse_2F_OnTransition
+	map_script MAP_SCRIPT_ON_LOAD, LittlerootTown_BrendansHouse_2F_OnLoad
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_BrendansHouse_2F_OnWarp
 	.byte 0
+
+LittlerootTown_BrendansHouse_2F_OnLoad:
+	call InsideOfTruck_EventScript_SetIntroFlagsMale
+	end
 
 LittlerootTown_BrendansHouse_2F_OnTransition:
 	call_if_lt VAR_LITTLEROOT_RIVAL_STATE, 2, LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan

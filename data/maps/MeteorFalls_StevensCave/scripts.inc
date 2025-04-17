@@ -1,3 +1,4 @@
+
 .set LOCALID_STEVEN, 1
 
 MeteorFalls_StevensCave_MapScripts::
@@ -56,4 +57,3 @@ MeteorFalls_StevensCave_Text_MyPredictionCameTrue:
 	.string "… … … … … …\n"
 	.string "… … … … … …\p"
 	.string "Fufufu, even I couldn't tell you that.$"
-

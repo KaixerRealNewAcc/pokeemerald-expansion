@@ -1,3 +1,4 @@
+
 .set LOCALID_NORMAN, 1
 .set LOCALID_WALLY, 10
 .set LOCALID_WALLYS_DAD, 11
@@ -1592,4 +1593,3 @@ PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
 	.string "capable of battle?\p"
 	.string "Sorry, but you'll have to come back\n"
 	.string "with at least two POKéMON.$"
-

@@ -1,3 +1,4 @@
+
 .set LOCALID_SS_TIDAL, 2
 .set LOCALID_FERRY_ATTENDANT, 3
 .set LOCALID_MANIAC_1, 9
@@ -523,4 +524,3 @@ BattleFrontier_OutsideWest_Text_MonWithLongTailInFrontier:
 	.string "It must be adorable. I'm sure of it…\p"
 	.string "Oh, challenges can wait. I feel driven\n"
 	.string "to find the delightful creature!$"
-
