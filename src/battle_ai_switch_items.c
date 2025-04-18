@@ -1580,6 +1580,15 @@ static u32 GetSwitchinRecurringHealing(void)
             healing = 1;
         recurringHealing += healing;
     }
+
+    if (ability == ABILITY_TRUANT)
+    {
+        u32 healing = maxHP / 8;
+        if (healing == 0)
+            healing = 1;
+        recurringHealing += healing;
+    }
+    
     return recurringHealing;
 }
 

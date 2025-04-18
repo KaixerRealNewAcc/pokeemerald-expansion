@@ -2585,7 +2585,7 @@ void UpdateLightSprite(struct Sprite *sprite)
     s16 left =   gSaveBlock1Ptr->pos.x - 2;
     s16 right =  gSaveBlock1Ptr->pos.x + 17;
     s16 top =    gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + 15;
+    s16 bottom = gSaveBlock1Ptr->pos.y + 17;
     s16 x = sprite->sLightXPos;
     s16 y = sprite->sLightYPos;
     u16 sheetTileStart;
@@ -2720,7 +2720,8 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
         if (top <= npcY && bottom >= npcY
          && left <= npcX && right >= npcX
          && !FlagGet(template->flagId)
-         && template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)  // event is light sprite instead
+         && (template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE  // event is light sprite instead
+         || template->graphicsId == OBJ_EVENT_GFX_NEON_LIGHT_SPRITE_RED))
             SpawnLightSprite(npcX, npcY, camX, camY, template->trainerRange_berryTreeId);
     }
 }

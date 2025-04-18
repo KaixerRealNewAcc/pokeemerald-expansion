@@ -29,7 +29,6 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 
 //Summary Screen Expanded Branch
 
-
 //These defines are for the MON_SHADOWS_PALLETE config.
 #define LIGHT_GRAY_PAL 0 
 #define BLACK_PAL 1

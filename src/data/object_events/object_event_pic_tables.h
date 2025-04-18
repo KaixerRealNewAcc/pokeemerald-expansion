@@ -1118,6 +1118,8 @@ static const struct SpriteFrameImage sPicTable_PokeBall[] = {
 };
 
 extern const struct SpriteFrameImage gFieldEffectObjectPicTable_BallLight[];
+extern const struct SpriteFrameImage gFieldEffectObjectPicTable_PokeCenterLight[];
+extern const struct SpriteFrameImage gFieldEffectObjectPicTable_MartLight[];
 
 #if OW_FOLLOWERS_POKEBALLS
 #define POKEBALL_PIC_FRAMES(name)                              \
