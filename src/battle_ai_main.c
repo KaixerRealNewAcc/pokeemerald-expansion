@@ -27,6 +27,8 @@
 #include "constants/items.h"
 #include "constants/trainers.h"
 
+#include "data/dynastic_shortcuts.h"
+
 #define AI_ACTION_DONE          (1 << 0)
 #define AI_ACTION_FLEE          (1 << 1)
 #define AI_ACTION_WATCH         (1 << 2)
@@ -226,7 +228,7 @@ void BattleAI_SetupFlags(void)
     {
         AI_THINKING_STRUCT->aiFlags[B_POSITION_PLAYER_RIGHT] = GetAiFlags(gPartnerTrainerId - TRAINER_PARTNER(PARTNER_NONE));
     }
-    else if (IsDoubleBattle() && IsAiVsAiBattle())
+    else if ((IsDoubleBattle() && IsAiVsAiBattle()) || ((IsDoublesOnlyMode())))
     {
         AI_THINKING_STRUCT->aiFlags[B_POSITION_PLAYER_RIGHT] = AI_THINKING_STRUCT->aiFlags[B_POSITION_PLAYER_LEFT];
     }

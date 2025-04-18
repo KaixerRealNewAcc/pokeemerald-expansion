@@ -17,9 +17,14 @@ static inline u32 IsNormalMode(void)
     return GetCurrentDifficultyLevel() == DIFFICULTY_NORMAL; //IsDifficultyLevel(DIFFICULTY_NORMAL);
 }
 
-static inline u32 IsHardMode(void)
+static inline u32 IsHardcoreMode(void)
 {
     return GetCurrentDifficultyLevel() == DIFFICULTY_HARD; //IsDifficultyLevel(DIFFICULTY_HARD);
+}
+
+static inline u32 IsDoublesOnlyMode(void)
+{
+    return FlagGet(FLAG_VGC_MODE);
 }
 
 static inline u32 IsMinimalGrindingMode(void)

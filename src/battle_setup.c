@@ -51,6 +51,8 @@
 #include "constants/weather.h"
 #include "wild_encounter.h"
 
+#include "data/dynastic_shortcuts.h"
+
 enum {
     TRANSITION_TYPE_NORMAL,
     TRANSITION_TYPE_CAVE,
@@ -1159,7 +1161,9 @@ void ClearTrainerFlag(u16 trainerId)
 
 void BattleSetup_StartTrainerBattle(void)
 {
-    if (gNoOfApproachingTrainers == 2)
+    u8 DoubleReady = GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS;
+
+    if (gNoOfApproachingTrainers == 2 || (DoubleReady && IsDoublesOnlyMode()))
         gBattleTypeFlags = (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_TRAINER);
     else
         gBattleTypeFlags = (BATTLE_TYPE_TRAINER);

@@ -1759,6 +1759,8 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
     SetMonData(mon, field, &n);                                 \
 }
 
+#include "data/dynastic_shortcuts.h"
+
 void CalculateMonStats(struct Pokemon *mon)
 {
     s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
@@ -1781,6 +1783,17 @@ void CalculateMonStats(struct Pokemon *mon)
     s32 newMaxHP;
 
     u8 nature = GetMonData(mon, MON_DATA_HIDDEN_NATURE, NULL);
+
+    if(!IsMinimalGrindingMode())
+    {
+        //Evs are Disabled, this is mostly used for Trainers.
+        hpEV 		= 0;
+		attackEV 	= 0;
+		defenseEV 	= 0;
+		spAttackEV 	= 0;
+		spDefenseEV = 0;
+		speedEV 	= 0;
+    }
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
@@ -6252,7 +6265,6 @@ void PokemonSummaryDoMonAnimation(struct Sprite *sprite, u16 species, bool8 oneF
         #endif
             SummaryScreen_SetAnimDelayTaskId(taskId);
 
-        gTasks[taskId].tIsShadow = isShadow;  // needed to track anim delay task for mon shadow in summary screen
         SetSpriteCB_MonAnimDummy(sprite);
     }
     else

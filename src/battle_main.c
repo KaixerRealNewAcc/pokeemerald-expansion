@@ -1880,10 +1880,20 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
     u8 monsCount;
     u8 isTrainerBossTrainer = trainer->isBossTrainer;
     u8 trainerClass = trainer->trainerClass;
+    u8 isDoubleBattle = trainer->doubleBattle;
+    u8 DoubleReady = GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS;
+    u8 enemyPartySize = trainer->partySize;
     if (battleTypeFlags & BATTLE_TYPE_TRAINER && !(battleTypeFlags & (BATTLE_TYPE_FRONTIER
                                                                         | BATTLE_TYPE_EREADER_TRAINER
                                                                         | BATTLE_TYPE_TRAINER_HILL)))
     {
+    //Double Battle Mode
+    isDoubleBattle = FALSE;
+    if(DoubleReady && enemyPartySize >= 2 && IsDoublesOnlyMode())
+		isDoubleBattle = TRUE;
+	else
+		isDoubleBattle = FALSE;
+
         if (firstTrainer == TRUE)
             ZeroEnemyPartyMons();
 

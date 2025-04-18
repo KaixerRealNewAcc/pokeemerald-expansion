@@ -5544,8 +5544,19 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 }
                 break;
             case ABILITY_TRUANT:
-                gDisableStructs[gBattlerAttacker].truantCounter ^= 1;
-                break;
+            if(!(IsBattlerAtMaxHp(gBattlerAttacker) && !(gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK))
+            && !gDisableStructs[gBattlerAttacker].truantCounter)
+            {
+                BattleScriptExecute(BattleScript_PoisonHealActivates);
+                gBattleStruct->moveDamage[gBattlerAttacker] = GetNonDynamaxMaxHP(gBattlerAttacker) / 8;
+                if (gBattleStruct->moveDamage[gBattlerAttacker] == 0)
+                    gBattleStruct->moveDamage[gBattlerAttacker] = 1;
+                gBattleStruct->moveDamage[gBattlerAttacker] *= -1;
+                effect++;
+            }
+
+            gDisableStructs[gBattlerAttacker].truantCounter ^= 1;
+            break;
             case ABILITY_BAD_DREAMS:
                 BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
                 effect++;
@@ -10368,6 +10379,10 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(u32 move, u32 moveType, u32 
     case ABILITY_ICE_SCALES:
         if (IsBattleMoveSpecial(move))
             return UQ_4_12(0.5);
+        break;
+    case ABILITY_MAGMA_ARMOR:
+        if (GetBattleMoveType(move) == TYPE_WATER)
+            return UQ_4_12(0.75);
         break;
     }
     return UQ_4_12(1.0);

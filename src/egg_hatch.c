@@ -924,21 +924,29 @@ static void EggHatchPrintMessage(u8 windowId, u8 *string, u8 x, u8 y, u8 speed)
     AddTextPrinterParameterized4(windowId, FONT_NORMAL, x, y, 0, 0, sEggHatchData->textColor, speed, string);
 }
 
+#include "data/dynastic_shortcuts.h"
+
 u8 GetEggCyclesToSubtract(void)
 {
     u8 count, i;
     for (count = CalculatePlayerPartyCount(), i = 0; i < count; i++)
     {
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG))
-        {
-            u16 ability = GetMonAbility(&gPlayerParty[i]);
-            if (ability == ABILITY_MAGMA_ARMOR
-             || ability == ABILITY_FLAME_BODY
-             || ability == ABILITY_STEAM_ENGINE)
-                return 2;
-        }
+        u16 ability = GetMonAbility(&gPlayerParty[i]);
+        if ((!IsMinimalGrindingMode() 
+         && (ability == ABILITY_MAGMA_ARMOR
+         || ability == ABILITY_FLAME_BODY
+         || ability == ABILITY_STEAM_ENGINE)))
+            return 4;
+        
+        if (IsMinimalGrindingMode())
+            return 5;
+        else if ((IsMinimalGrindingMode()
+              && (ability == ABILITY_MAGMA_ARMOR
+              || ability == ABILITY_FLAME_BODY
+              || ability == ABILITY_STEAM_ENGINE)))
+            return 6;
     }
-    return 1;
+    return 3;
 }
 
 u16 CountPartyAliveNonEggMons(void)
