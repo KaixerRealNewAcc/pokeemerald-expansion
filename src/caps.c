@@ -10,14 +10,20 @@ u32 GetCurrentLevelCap(void)
     static const u32 sLevelCapFlagMap[][2] =
     {
         {FLAG_BADGE01_GET, 15},
-        {FLAG_BADGE02_GET, 19},
-        {FLAG_BADGE03_GET, 24},
-        {FLAG_BADGE04_GET, 29},
-        {FLAG_BADGE05_GET, 31},
-        {FLAG_BADGE06_GET, 33},
-        {FLAG_BADGE07_GET, 42},
-        {FLAG_BADGE08_GET, 46},
-        {FLAG_IS_CHAMPION, 58},
+        {FLAG_BADGE02_GET, 25},
+        {FLAG_CAP_GRUNTS_MUSEUM, 28},
+        {FLAG_BADGE03_GET, 34},
+        {FLAG_CAP_MAXIE_MT_CHIMNEY, 44},
+        {FLAG_BADGE04_GET, 48},
+        {FLAG_BADGE05_GET, 52},
+        {FLAG_CAP_WEATHER_INSTUTE, 60},
+        {FLAG_BADGE06_GET, 68},
+        {FLAG_CAP_AQUA_HIDEOUT, 75},
+        {FLAG_BADGE07_GET, 78},
+        {FLAG_CAP_MAGMA_HIDEOUT, 80},
+        {FLAG_CAP_SEAFLOOR_CAVERN, 82},
+        {FLAG_BADGE08_GET, 84},
+        {FLAG_IS_CHAMPION, 90}, // Champion goes above the level cap, so for the champion its lvl; 92, but you can't level to lvl; 92.
     };
 
     u32 i;

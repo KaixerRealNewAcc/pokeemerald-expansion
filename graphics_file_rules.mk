@@ -401,6 +401,7 @@ $(TYPESBWGFXDIR)/move_types_bw.gbapal: $(TYPESBWGFXDIR)/move_types_bw_1.gbapal \
 	@cat $^ >$@
 
 $(TYPESBWTERAGFXDIR)/tera_types_bw.4bpp: $(types:%=$(TYPESBWTERAGFXDIR)/%.4bpp)
+	@cat $^ >$@
 
 $(TYPESNEWGFXDIR)/move_types_new.4bpp: $(types:%=$(TYPESNEWGFXDIR)/%.4bpp) $(contest_types:%=$(TYPESNEWGFXDIR)/contest_%.4bpp)
 	@cat $^ >$@

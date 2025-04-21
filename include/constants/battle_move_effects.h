@@ -337,7 +337,10 @@ enum {
     EFFECT_IVY_CUDGEL,
     EFFECT_FICKLE_BEAM,
     EFFECT_BLIZZARD,
-    EFFECT_RAIN_ALWAYS_HIT, // Unlike EFFECT_THUNDER, it doesn't get its accuracy reduced under sun.
+    EFFECT_RAIN_ALWAYS_HIT, //Rain, Wildbolt Storm
+    EFFECT_SAND_ALWAYS_HIT, //Sandstorm, Sandsear Storm.
+    EFFECT_SNOW_ALWAYS_HIT, //Snow/Hail, Bleakwind Storm.
+    EFFECT_MISTY_ALWAYS_HIT, //Misty Terrain, Springtide Storm.
     EFFECT_SHED_TAIL,
     EFFECT_UPPER_HAND,
     EFFECT_DRAGON_CHEER,

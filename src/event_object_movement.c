@@ -2720,8 +2720,7 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
         if (top <= npcY && bottom >= npcY
          && left <= npcX && right >= npcX
          && !FlagGet(template->flagId)
-         && (template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE  // event is light sprite instead
-         || template->graphicsId == OBJ_EVENT_GFX_NEON_LIGHT_SPRITE_RED))
+         && template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)  // event is light sprite instead
             SpawnLightSprite(npcX, npcY, camX, camY, template->trainerRange_berryTreeId);
     }
 }

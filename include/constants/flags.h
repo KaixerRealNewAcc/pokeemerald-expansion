@@ -60,10 +60,10 @@
 #define FLAG_GOOD_ROD_TECH   0x2E
 #define FLAG_SUPER_ROD_TECH  0x2F
 #define FLAG_UNUSED_0x030    0x30 // Unused Flag
-#define FLAG_UNUSED_0x031    0x31 // Unused Flag
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
-#define FLAG_UNUSED_0x033    0x33 // Unused Flag
-#define FLAG_UNUSED_0x034    0x34 // Unused Flag
+#define FLAG_CAP_SEAFLOOR_CAVERN  0x31
+#define FLAG_CAP_MAGMA_HIDEOUT  0x32
+#define FLAG_CAP_WEATHER_INSTUTE 0x33 
+#define FLAG_CAP_AQUA_HIDEOUT 0x34
 #define FLAG_CAP_MAXIE_MT_CHIMNEY 0x35
 #define FLAG_EXP_SHARE_ENABLED 0x36
 #define FLAG_UNUSED_0x037    0x37 // Unused Flag
