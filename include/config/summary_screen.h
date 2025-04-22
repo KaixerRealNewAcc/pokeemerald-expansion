@@ -54,8 +54,8 @@ Info taken from https://bulbapedia.bulbagarden.net/wiki/Stats_judge.
 //96, is the max characters that i can fit in the summary screen (Otherwise it wil go off screen).
 //if you want to use more, change the tilemap to be to ur liking.
 //if you want to use less, it will leave blank spaces at the end of the string.
-#define MAX_ABILITY_DESCRIPTION_LENGTH 96 //The maximum length of the ability description string.
-#define MAX_ABILITY_DESCRIPTION_WIDTH  149 //The maximum width of the ability description string.
+#define MAX_ABILITY_DESCRIPTION_LENGTH 100 //The maximum length of the ability description string.
+#define MAX_ABILITY_DESCRIPTION_WIDTH  154 //The maximum width of the ability description string.
 #define MAX_MOVE_DESCRIPTION_LENGTH    96 //The maximum length of the move description string.
 #define MAX_MOVE_DESCRIPTION_WIDTH     159 //The maximum length of the move description string.
 

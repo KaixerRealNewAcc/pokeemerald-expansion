@@ -147,6 +147,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u8 level; // 0x5
         u8 ribbonCount; // 0x6
         u8 ailment; // 0x7
+        u8 passiveAbility;
         u8 abilityNum; // 0x8
         u8 metLocation; // 0x9
         u8 metLevel; // 0xA
@@ -205,6 +206,9 @@ static EWRAM_DATA u8 sMoveSlotToReplace = 0;
 ALIGNED(4) static EWRAM_DATA u8 sAnimDelayTaskId = 0;
 ALIGNED(4) static EWRAM_DATA u8 sShadowAnimDelayTaskId = 0;
 EWRAM_DATA MainCallback gInitialSummaryScreenCallback = NULL; // stores callback from the first time the screen is opened from the party or PC menu
+
+static const u8* gTextInfoPagePassiveAbility = COMPOUND_STRING("{R_BUTTON} Passive Ability");
+static const u8* gTextInfoPageAbility = COMPOUND_STRING("{L_BUTTON} Normal Ability");
 
 // forward declarations
 static bool8 LoadGraphics(void);
@@ -269,6 +273,8 @@ static void PrintInfoPageText(void);
 static void Task_PrintInfoPage(u8);
 static void PrintMonOTName(void);
 static void PrintMonOTID(void);
+static void PrintMonPassiveAbilityName(void);
+static void PrintMonPassiveAbilityDesc(void);
 static void PrintMonAbilityName(void);
 static void PrintMonAbilityDescription(void);
 static void BufferMonTrainerMemo(void);
@@ -457,10 +463,10 @@ static const struct WindowTemplate sSummaryTemplate[] =
     },
     [PSS_LABEL_WINDOW_PROMPT_UTILITY] = {
         .bg = 0,
-        .tilemapLeft = 22,
+        .tilemapLeft = 18,
         .tilemapTop = 0,
-        .width = 8,
-        .height = 2,
+        .width = 12,
+        .height = 3,
         .paletteNum = 7,
         .baseBlock = 89,
     },
@@ -1626,6 +1632,8 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         sum->pid = GetMonData(mon, MON_DATA_PERSONALITY);
         sum->sanity = GetMonData(mon, MON_DATA_SANITY_IS_BAD_EGG);
 
+        sum->passiveAbility = GetMonData(mon, MON_DATA_PASSIVE_ABILITY);
+
         if (sum->sanity)
             sum->isEgg = TRUE;
         else
@@ -1864,16 +1872,54 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             BeginCloseSummaryScreen(taskId);
         }
-        else if (JOY_NEW(START_BUTTON)
-                && ShouldShowMoveRelearner()
-                && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
+        else if (JOY_NEW(START_BUTTON))
         {
-            sMonSummaryScreen->callback = CB2_InitLearnMove;
-            gSpecialVar_0x8004 = sMonSummaryScreen->curMonIndex;
-            gOriginSummaryScreenPage = sMonSummaryScreen->currPageIndex;
-            StopPokemonAnimations();
-            PlaySE(SE_SELECT);
-            BeginCloseSummaryScreen(taskId);
+            if(ShouldShowMoveRelearner() && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
+            {
+                sMonSummaryScreen->callback = CB2_InitLearnMove;
+                gSpecialVar_0x8004 = sMonSummaryScreen->curMonIndex;
+                gOriginSummaryScreenPage = sMonSummaryScreen->currPageIndex;
+                StopPokemonAnimations();
+                PlaySE(SE_SELECT);
+                BeginCloseSummaryScreen(taskId);
+            }
+        }
+        else if (JOY_NEW(R_BUTTON) && sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+        {
+            u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
+            u16 passiveAbility = GetPassiveAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.passiveAbility);
+            u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
+
+
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPageAbility, 62);
+            int iconXPos = stringXPos - 8;
+            if (iconXPos < 0)
+                iconXPos = 0;
+            FillWindowPixelBuffer(PSS_LABEL_WINDOW_PROMPT_UTILITY, PIXEL_FILL(0));
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPageAbility, stringXPos, 1, 0, 0);
+        
+            FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
+            PrintTextOnWindow(windowId, gAbilitiesInfo[passiveAbility].name, 5, 8, 2, 1);
+            FormatTextByWidth(desc, MAX_ABILITY_DESCRIPTION_WIDTH, FONT_SHORT_NARROW, gAbilitiesInfo[passiveAbility].description, 0);
+            PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
+        }
+        else if (JOY_NEW(L_BUTTON) && sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+        {
+            u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
+            u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+            u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
+
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPagePassiveAbility, 62);
+            int iconXPos = stringXPos - 16;
+            if (iconXPos < 0)
+                iconXPos = 0;
+            FillWindowPixelBuffer(PSS_LABEL_WINDOW_PROMPT_UTILITY, PIXEL_FILL(0));
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
+
+            FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
+            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
+            FormatTextByWidth(desc, MAX_ABILITY_DESCRIPTION_WIDTH, FONT_SHORT_NARROW, gAbilitiesInfo[ability].description, 0);
+            PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
         }
         else if (DEBUG_POKEMON_SPRITE_VISUALIZER && JOY_NEW(SELECT_BUTTON) && !gMain.inBattle)
         {
@@ -2081,7 +2127,15 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 4:
         if (P_SUMMARY_SCREEN_RENAME && sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+        {
             ShowUtilityPrompt(SUMMARY_MODE_NORMAL);
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPagePassiveAbility, 62);
+            int iconXPos = stringXPos + 18;
+            if (iconXPos < 0)
+                iconXPos = 0;
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
+        }
+        
         if (ShouldShowIvEvPrompt() && sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
         {
             sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_STATS;
@@ -4977,11 +5031,11 @@ static inline void ShowUtilityPrompt(s16 mode)
     const u8* gText_SkillPageIvs = COMPOUND_STRING("IVs");
     const u8* gText_SkillPageEvs = COMPOUND_STRING("EVs");
     const u8* gText_SkillPageStats = COMPOUND_STRING("STATS");
-
+    
     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
     {
         if (ShouldShowRename())
-            promptText = gText_Rename;
+            promptText = gTextInfoPagePassiveAbility;
         else
             promptText = gText_Cancel2;
     }
@@ -5029,12 +5083,22 @@ static inline void ShowUtilityPrompt(s16 mode)
     PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_UTILITY);
 
     int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, promptText, 62);
-    int iconXPos = stringXPos - 16;
+    int iconXPos = stringXPos + 18;
     if (iconXPos < 0)
         iconXPos = 0;
 
-    PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
+    if(sMonSummaryScreen->currPageIndex != PSS_PAGE_INFO)
+        PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
+    if(sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+        PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
+    else if (promptText == gText_SkillPageStats)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 64, 1, 0, 0);
+    else if (promptText == gText_Info)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 70, 1, 0, 0);
+    else if (promptText == gText_Switch)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 59, 1, 0, 0);
+    else
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 76, 1, 0, 0);
 }
 
 static void CB2_ReturnToSummaryScreenFromNamingScreen(void)

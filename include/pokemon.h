@@ -67,6 +67,7 @@ enum {
     MON_DATA_SPDEF_IV,
     MON_DATA_IS_EGG,
     MON_DATA_ABILITY_NUM,
+    MON_DATA_PASSIVE_ABILITY,
     MON_DATA_TOUGH,
     MON_DATA_SHEEN,
     MON_DATA_OT_GENDER,
@@ -207,7 +208,7 @@ struct PokemonSubstruct3
     u32 earthRibbon:1;    // Given to teams that have beaten Mt. Battle's 100-battle challenge in Colosseum/XD.
     u32 worldRibbon:1;    // Distributed during Pokémon Festa '04 and '05 to tournament winners.
     u32 isShadow:1;
-    u32 unused_0B:1;
+    u32 passiveAbility:1; // was u32 unused_0B:1;
     u32 abilityNum:2;
 
     // The functionality of this bit changed in FRLG:
@@ -324,6 +325,7 @@ struct BattlePokemon
     /*0x17*/ u32 abilityNum:2;
     /*0x18*/ s8 statStages[NUM_BATTLE_STATS];
     /*0x20*/ u16 ability;
+             u16 passiveAbility;
     /*0x22*/ u8 types[3];
     /*0x25*/ u8 pp[MAX_MON_MOVES];
     /*0x29*/ u16 hp;
@@ -378,7 +380,7 @@ struct SpeciesInfo /*0xC4*/
     u8 eggGroups[2];
     u16 abilities[NUM_ABILITY_SLOTS]; // 3 abilities, no longer u8 because we have over 255 abilities now.
     u8 safariZoneFleeRate;
-    u16 passiveAbility[NUM_PASSIVE_ABILITY];
+    u16 passiveAbility; //Only 1 ability can be set as passive.
 
     // Pokédex data
     u8 categoryName[13];
@@ -696,6 +698,9 @@ u8 CalculateEnemyPartyCount(void);
 u8 CalculateEnemyPartyCountInSide(u32 battler);
 u8 GetMonsStateToDoubles(void);
 u8 GetMonsStateToDoubles_2(void);
+u16 GetMonPassiveAbility(struct Pokemon *mon);
+u16 GetPassiveAbilityBySpecies(u16 species, u16 ability);
+u16 SpeciesHasPassiveAbility(u16 species, u16 ability);
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum);
 u16 GetMonAbility(struct Pokemon *mon);
 void CreateSecretBaseEnemyParty(struct SecretBase *secretBaseRecord);

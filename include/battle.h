@@ -198,6 +198,7 @@ struct SpecialStatus
     u8 stormDrainRedirected:1;
     // End of byte
     u8 switchInAbilityDone:1;
+    u8 switchInPassiveAbilityDone:1;
     u8 switchInItemDone:1;
     u8 instructedChosenTarget:3;
     u8 berryReduced:1;
@@ -949,6 +950,8 @@ struct BattleScripting
     u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;
+    u16 battlerPopupOverwrite;
+    u16 switchInBattlerOverwrite;
     u8 switchCase;  // Special switching conditions, eg. red card
     u8 overrideBerryRequirements;
     u8 stickyWebStatDrop; // To prevent Defiant activating on a Court Change'd Sticky Web

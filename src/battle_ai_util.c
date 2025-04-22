@@ -1353,9 +1353,9 @@ bool32 CanTargetFaintAiWithMod(u32 battlerDef, u32 battlerAtk, s32 hpMod, s32 dm
 
 bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability)
 {
-    if (IsBattlerAlive(battlerId) && AI_DATA->abilities[battlerId] == ability)
+    if (IsBattlerAlive(battlerId) && (AI_DATA->abilities[battlerId] == ability || BattlerHasPassiveAbility(battlerId, ability)))
         return TRUE;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && AI_DATA->abilities[BATTLE_PARTNER(battlerId)] == ability)
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && (AI_DATA->abilities[BATTLE_PARTNER(battlerId)] == ability || BattlerHasPassiveAbility(BATTLE_PARTNER(battlerId), ability)))
         return TRUE;
     else
         return FALSE;
@@ -1402,7 +1402,12 @@ s32 AI_DecideKnownAbilityForTurn(u32 battlerId)
         return AI_PARTY->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].ability;
 
     // Abilities that prevent fleeing - treat as always known
-    if (knownAbility == ABILITY_SHADOW_TAG || knownAbility == ABILITY_MAGNET_PULL || knownAbility == ABILITY_ARENA_TRAP)
+    if (knownAbility == ABILITY_SHADOW_TAG
+    || knownAbility == ABILITY_MAGNET_PULL
+    || knownAbility == ABILITY_ARENA_TRAP
+    || BattlerHasPassiveAbility(battlerId, ABILITY_SHADOW_TAG)
+    || BattlerHasPassiveAbility(battlerId, ABILITY_MAGNET_PULL)
+    || BattlerHasPassiveAbility(battlerId, ABILITY_ARENA_TRAP))
         return knownAbility;
 
     for (i = 0; i < NUM_ABILITY_SLOTS; i++)

@@ -1774,6 +1774,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD),
         .abilities = { ABILITY_FLUFFY, ABILITY_STEADFAST, ABILITY_BULLETPROOF },
+        .passiveAbility = ABILITY_FLUFFY,
         .bodyColor = BODY_COLOR_WHITE,
         .speciesName = _("Dubwool"),
         .cryId = CRY_DUBWOOL,

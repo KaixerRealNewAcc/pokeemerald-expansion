@@ -9,17 +9,17 @@
 
 static inline u32 IsEasyMode(void)
 {
-    return GetCurrentDifficultyLevel() == DIFFICULTY_EASY; //IsDifficultyLevel(DIFFICULTY_EASY);
+    return GetCurrentDifficultyLevel() == DIFFICULTY_EASY;
 }
 
 static inline u32 IsNormalMode(void)
 {
-    return GetCurrentDifficultyLevel() == DIFFICULTY_NORMAL; //IsDifficultyLevel(DIFFICULTY_NORMAL);
+    return GetCurrentDifficultyLevel() == DIFFICULTY_NORMAL; 
 }
 
 static inline u32 IsHardcoreMode(void)
 {
-    return GetCurrentDifficultyLevel() == DIFFICULTY_HARD; //IsDifficultyLevel(DIFFICULTY_HARD);
+    return GetCurrentDifficultyLevel() == DIFFICULTY_HARD; 
 }
 
 static inline u32 IsDoublesOnlyMode(void)

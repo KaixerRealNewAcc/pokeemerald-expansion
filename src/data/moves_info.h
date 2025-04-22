@@ -19156,8 +19156,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
             .moveEffect = MOVE_EFFECT_AROMATHERAPY,
             .self = TRUE,
             .chance = 30,
-        }),
-        .additionalEffects = ADDITIONAL_EFFECTS({
+        },
+        {
             .moveEffect = MOVE_EFFECT_ATK_MINUS_1,
             .chance = 20,
         }),
@@ -19485,8 +19485,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
         .additionalEffects = ADDITIONAL_EFFECTS({
             .moveEffect = MOVE_EFFECT_FROSTBITE,
             .chance = 20,
-        }),
-        .additionalEffects = ADDITIONAL_EFFECTS({
+        },
+        {
             .moveEffect = MOVE_EFFECT_SPD_MINUS_1,
             .chance = 20,
         }),
@@ -19511,8 +19511,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
         .additionalEffects = ADDITIONAL_EFFECTS({
             .moveEffect = MOVE_EFFECT_PARALYSIS,
             .chance = 20,
-        }),
-        .additionalEffects = ADDITIONAL_EFFECTS({
+        },
+        {
             .moveEffect = MOVE_EFFECT_SPD_MINUS_1,
             .chance = 20,
         }),
@@ -19537,8 +19537,8 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
         .additionalEffects = ADDITIONAL_EFFECTS({
             .moveEffect = MOVE_EFFECT_BURN,
             .chance = 20,
-        }),
-        .additionalEffects = ADDITIONAL_EFFECTS({
+        },
+        {
             .moveEffect = MOVE_EFFECT_SPD_MINUS_1,
             .chance = 20,
         }),

@@ -2656,6 +2656,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_ABILITY_NUM:
             retVal = substruct3->abilityNum;
             break;
+        case MON_DATA_PASSIVE_ABILITY:
+            retVal = substruct3->passiveAbility;
+            break;
         case MON_DATA_COOL_RIBBON:
             retVal = substruct3->coolRibbon;
             break;
@@ -3155,6 +3158,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_ABILITY_NUM:
             SET8(substruct3->abilityNum);
             break;
+        case MON_DATA_PASSIVE_ABILITY:
+            SET8(substruct3->passiveAbility);
+            break;
         case MON_DATA_COOL_RIBBON:
             SET8(substruct3->coolRibbon);
             break;
@@ -3519,6 +3525,29 @@ u16 GetMonAbility(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
     return GetAbilityBySpecies(species, abilityNum);
+}
+
+u16 SpeciesHasPassiveAbility(u16 species, u16 ability)
+{
+    if (gSpeciesInfo[species].passiveAbility == ability)
+        gLastUsedAbility = gSpeciesInfo[species].passiveAbility;
+    else
+        gLastUsedAbility = ABILITY_NONE;
+
+    return gLastUsedAbility;
+}
+
+u16 GetPassiveAbilityBySpecies(u16 species, u16 passiveAbility)
+{
+    u16 speciesAndAbility = species + passiveAbility;
+    return gSpeciesInfo[speciesAndAbility].passiveAbility;
+}
+
+u16 GetMonPassiveAbility(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u16 ability = GetMonData(mon, MON_DATA_PASSIVE_ABILITY, NULL);
+    return SpeciesHasPassiveAbility(species, ability);
 }
 
 void CreateSecretBaseEnemyParty(struct SecretBase *secretBaseRecord)

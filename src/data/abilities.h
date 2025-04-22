@@ -2,7 +2,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
 {
     [ABILITY_NONE] =
     {
-        .name = _("-------"),
+        .name = _("No Passive Ability"),
         .description = COMPOUND_STRING("No special ability."),
         .aiRating = 0,
         .cantBeSwapped = TRUE,
@@ -2490,6 +2490,20 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .name = _("Nullify"),
         .description = COMPOUND_STRING("Status-Moves hit through Immunities, but has negative priority."),
         .aiRating = 7,
+    },
+
+    [ABILITY_CORV_SLAYER] =
+    {
+        .name = _("Corviknight Slayer"),
+        .description = COMPOUND_STRING("Tinkaton it uses its anger towards Corviknight to deal super effective damage to it."),
+        .aiRating = 6,
+    },
+
+    [ABILITY_SELF_SUFFICIENT] =
+    {
+        .name = _("Self Sufficient"),
+        .description = COMPOUND_STRING("Heals 1/8 of its max Health every turn."),
+        .aiRating = 8,
     },
 
 };
