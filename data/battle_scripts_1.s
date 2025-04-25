@@ -3647,10 +3647,17 @@ BattleScript_PowerHerbActivation:
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
+	jumpifability BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_EffectTwoTurnsAttackSkipSolarBeam
 	tryfiretwoturnmovewithoutcharging BS_ATTACKER, BattleScript_EffectHit @ e.g. Solar Beam
+BattleScript_EffectTwoTurnsAttackElectroShot::
 	call BattleScript_FirstChargingTurn
 	tryfiretwoturnmoveaftercharging BS_ATTACKER, BattleScript_TwoTurnMovesSecondTurn @ e.g. Electro Shot
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_TwoTurnMovesSecondPowerHerbActivates
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectTwoTurnsAttackSkipSolarBeam::
+	jumpifmove MOVE_SOLAR_BEAM, BattleScript_EffectHit  @ Solar Beam
+	jumpifmove MOVE_ELECTRO_SHOT, BattleScript_EffectTwoTurnsAttackElectroShot  @ Electro Shot
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectGeomancy::
@@ -7492,6 +7499,13 @@ BattleScript_SpeedBoostActivates::
 	printstring STRINGID_PKMNRAISEDSPEED
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_SpeedBoostActivatesEnd:
+	end3
+
+BattleScript_BattlerAddedTheType::
+	copybyte gBattlerAbility, gBattlerAttacker
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_BATTLERADDEDTHETYPE
+	waitmessage B_WAIT_TIME_LONG
 	end3
 
 @ Can't compare directly to a value, have to compare to value at pointer

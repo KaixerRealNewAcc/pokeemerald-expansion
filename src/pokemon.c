@@ -3529,6 +3529,7 @@ u16 GetMonAbility(struct Pokemon *mon)
 
 u16 SpeciesHasPassiveAbility(u16 species, u16 ability)
 {
+    //gSpeciesInfo[species].passiveAbility == ABILITY_TRUANT
     if (gSpeciesInfo[species].passiveAbility == ability)
         gLastUsedAbility = gSpeciesInfo[species].passiveAbility;
     else

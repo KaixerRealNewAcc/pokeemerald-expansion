@@ -2227,12 +2227,11 @@ static void Cmd_adjustdamage(void)
             gLastUsedItem = gBattleMons[battlerDef].item;
             gBattleStruct->moveResultFlags[battlerDef] |= MOVE_RESULT_FOE_HUNG_ON;
         }
-        else if (B_STURDY >= GEN_5 && BATTLER_HAS_ABILITY(battlerDef, ABILITY_STURDY)/*GetBattlerAbility(battlerDef) == ABILITY_STURDY*/ && IsBattlerAtMaxHp(battlerDef))
+        else if (B_STURDY >= GEN_5 && (GetBattlerAbility(battlerDef) == ABILITY_STURDY || BattlerHasPassiveAbility(battlerDef, PASSIVE_ABILITY_STURDY)) && IsBattlerAtMaxHp(battlerDef))
         {
+            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STURDY;
             enduredHit = TRUE;
             RecordAbilityBattle(battlerDef, ABILITY_STURDY);
-            gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
-            gLastUsedAbility = ABILITY_STURDY;
             gBattleStruct->moveResultFlags[battlerDef] |= MOVE_RESULT_STURDIED;
         }
         else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && IsBattlerAtMaxHp(battlerDef))
@@ -4950,6 +4949,8 @@ static void Cmd_jumpifability(void)
     default:
         battler = GetBattlerForBattleScript(cmd->battler);
         if (GetBattlerAbility(battler) == ability)
+            hasAbility = TRUE;
+        if (BattlerHasPassiveAbility(battler, ability))
             hasAbility = TRUE;
         break;
     case BS_ATTACKER_SIDE:
@@ -13197,10 +13198,10 @@ static void Cmd_tryKO(void)
             endured = AFFECTION_ENDURED;
     }
 
-    if (targetAbility == ABILITY_STURDY)
+    if (targetAbility == ABILITY_STURDY || BattlerHasPassiveAbility(gBattlerTarget, PASSIVE_ABILITY_STURDY))
     {
         gBattleStruct->moveResultFlags[gBattlerTarget] |= MOVE_RESULT_MISSED;
-        gLastUsedAbility = ABILITY_STURDY;
+        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STURDY;
         gBattlescriptCurrInstr = BattleScript_SturdyPreventsOHKO;
         gBattlerAbility = gBattlerTarget;
     }

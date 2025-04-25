@@ -3042,11 +3042,11 @@ static s32 AI_DoubleBattle(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 if (aiData->abilities[battlerAtk] != aiData->abilities[BATTLE_PARTNER(battlerAtk)] && !attackerHasBadAbility)
                 {
                     // Partner abilities
-                    if (aiData->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_TRUANT)
+                    if (aiData->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_TRUANT || BattlerHasPassiveAbility(BATTLE_PARTNER(battlerAtk), ABILITY_TRUANT))
                     {
                         ADJUST_SCORE(10);
                     }
-                    else if (aiData->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_INTIMIDATE)
+                    else if (aiData->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_INTIMIDATE || BattlerHasPassiveAbility(BATTLE_PARTNER(battlerAtk), ABILITY_INTIMIDATE))
                     {
                         ADJUST_SCORE(DECENT_EFFECT);
                     }

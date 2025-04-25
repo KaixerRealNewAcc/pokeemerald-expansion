@@ -4817,38 +4817,36 @@ u32 GetBattlerTotalSpeedStatArgs(u32 battler, u32 ability, u32 holdEffect)
     // weather abilities
     if (HasWeatherEffect())
     {
-        if (ability == ABILITY_SWIFT_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN)
+        if ((ability == ABILITY_SWIFT_SWIM || BattlerHasPassiveAbility(battler, ABILITY_PROTOSYNTHESIS))       && (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN))
             speed *= 2;
-        else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_SUN)
+        else if ((ability == ABILITY_CHLOROPHYLL || BattlerHasPassiveAbility(battler, ABILITY_CHLOROPHYLL)) && (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_SUN))
             speed *= 2;
-        else if (ability == ABILITY_SAND_RUSH   && gBattleWeather & B_WEATHER_SANDSTORM)
+        else if ((ability == ABILITY_SAND_RUSH || BattlerHasPassiveAbility(battler, ABILITY_SAND_RUSH))   && (gBattleWeather & B_WEATHER_SANDSTORM))
             speed *= 2;
-        else if (ability == ABILITY_SLUSH_RUSH  && (gBattleWeather & (B_WEATHER_HAIL | B_WEATHER_SNOW)))
+        else if ((ability == ABILITY_SLUSH_RUSH || BattlerHasPassiveAbility(battler, ABILITY_SLUSH_RUSH)) && ((gBattleWeather & (B_WEATHER_HAIL | B_WEATHER_SNOW))))
             speed *= 2;
     }
 
     // other abilities
     if (ability == ABILITY_QUICK_FEET && gBattleMons[battler].status1 & STATUS1_ANY)
         speed = (speed * 150) / 100;
-    else if (ability == ABILITY_SURGE_SURFER && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+    else if ((ability == ABILITY_SURGE_SURFER || BattlerHasPassiveAbility(battler, ABILITY_SURGE_SURFER)) && ((gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)))
         speed *= 2;
     else if (ability == ABILITY_SLOW_START && gDisableStructs[battler].slowStartTimer != 0)
         speed /= 2;
-    else if (ability == ABILITY_PROTOSYNTHESIS && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) && ((gBattleWeather & B_WEATHER_SUN && HasWeatherEffect()) || gDisableStructs[battler].boosterEnergyActivates))
+    else if ((ability == ABILITY_PROTOSYNTHESIS || BattlerHasPassiveAbility(battler, ABILITY_PROTOSYNTHESIS)) && (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) && ((gBattleWeather & B_WEATHER_SUN && HasWeatherEffect()) || gDisableStructs[battler].boosterEnergyActivates)))
         speed = (GetHighestStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
-    else if (ability == ABILITY_QUARK_DRIVE && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) && (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN || gDisableStructs[battler].boosterEnergyActivates))
+    else if ((ability == ABILITY_QUARK_DRIVE || BattlerHasPassiveAbility(battler, ABILITY_QUARK_DRIVE)) && (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) && (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN || gDisableStructs[battler].boosterEnergyActivates)))
         speed = (GetHighestStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
-    else if (ability == ABILITY_FLOWER_GIFT && IsBattlerWeatherAffected(battler, B_WEATHER_SUN))
+    else if ((ability == ABILITY_FLOWER_GIFT || BattlerHasPassiveAbility(battler, ABILITY_FLOWER_GIFT)) && ((IsBattlerWeatherAffected(battler, B_WEATHER_SUN))))
         speed = (speed * 150) / 100;
-    else if(ability == ABILITY_MYCELIUM_MIGHT)
+    else if(ability == ABILITY_MYCELIUM_MIGHT || BattlerHasPassiveAbility(battler, ABILITY_MYCELIUM_MIGHT))
     {
         for (i = 0; i < 4; i++)
         {
             move = gBattleMons[battler].moves[i];
             if (IsBattleMoveStatus(move))
                 speed /= (speed * 125) / 100;
-            else
-                speed = 1;
         }
     }
 
@@ -4924,16 +4922,27 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
         return GetMovePriority(MOVE_MAX_GUARD);
 
-    if (((ability == ABILITY_GALE_WINGS
+    if ((ability == ABILITY_GALE_WINGS
         || BattlerHasPassiveAbility(battler, ABILITY_GALE_WINGS))
-        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FLYING)
-        || ((ability == ABILITY_FLAMING_SOUL
-        || BattlerHasPassiveAbility(battler, ABILITY_FLAMING_SOUL))
-        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FIRE))
+    && (GetMoveType(move) == TYPE_FLYING)
+    && IsBattlerAtMaxHp(battler))
     {
         priority++;
+    }
+    else if ((ability == ABILITY_FLAMING_SOUL
+    || BattlerHasPassiveAbility(battler, ABILITY_FLAMING_SOUL))
+    && (GetMoveType(move) == TYPE_FIRE)
+    && IsBattlerAtMaxHp(battler))
+    {
+        priority++;
+    }
+    else if((move == MOVE_ERUPTION
+        && (ability == PASSIVE_ABILITY_ERUPTIVE_BACK
+        || BattlerHasPassiveAbility(battler, PASSIVE_ABILITY_ERUPTIVE_BACK))
+        && (IsBattlerAtMaxHp(battler))))
+    {
+        if(gDisableStructs[battler].isFirstTurn != 2)
+            priority++;
     }
     else if ((ability == ABILITY_PRANKSTER || BattlerHasPassiveAbility(battler, ABILITY_PRANKSTER)) && IsBattleMoveStatus(move))
     {
@@ -4945,10 +4954,14 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
         priority++;
     }
     else if (ability == ABILITY_TRIAGE && IsHealingMove(move))
+    {
         priority += 3;
+    }
 
     if (gProtectStructs[battler].quash)
+    {
         priority = -8;
+    }
 
     return priority;
 }

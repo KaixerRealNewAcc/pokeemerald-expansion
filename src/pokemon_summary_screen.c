@@ -273,8 +273,6 @@ static void PrintInfoPageText(void);
 static void Task_PrintInfoPage(u8);
 static void PrintMonOTName(void);
 static void PrintMonOTID(void);
-static void PrintMonPassiveAbilityName(void);
-static void PrintMonPassiveAbilityDesc(void);
 static void PrintMonAbilityName(void);
 static void PrintMonAbilityDescription(void);
 static void BufferMonTrainerMemo(void);
@@ -4561,6 +4559,8 @@ void SetTypeSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId)
     SetSpriteInvisibility(spriteArrayId, FALSE);
 }
 
+#include "constants/abilities.h"
+
 static void SetMonTypeIcons(void)
 {
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
@@ -4576,6 +4576,11 @@ static void SetMonTypeIcons(void)
         {
             SetTypeSpritePosAndPal(gSpeciesInfo[summary->species2].types[1], 160, 48, SPRITE_ARR_ID_TYPE + 1);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);
+        }
+        else if(GetPassiveAbilityBySpecies(summary->species2, summary->passiveAbility) == PASSIVE_ABILITY_PSYCHIC)
+        {
+            SetTypeSpritePosAndPal(TYPE_PSYCHIC, 200, 48, SPRITE_ARR_ID_TYPE + 1);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);  
         }
         else
         {

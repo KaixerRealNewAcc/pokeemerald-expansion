@@ -47,6 +47,8 @@
    (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)           \
  && !(gDisableStructs[battler].mimickedMoves & (1u << moveSlot)))
 
+#define AI_HAS_ABILITY_FAST ()
+
 // Battle Actions
 // These determine what each battler will do in a turn
 #define B_ACTION_USE_MOVE               0
@@ -890,6 +892,11 @@ static inline bool32 IsBattleMoveRecoil(u32 move)
     gBattleMons[battlerId].types[0] = type;            \
     gBattleMons[battlerId].types[1] = type;            \
     gBattleMons[battlerId].types[2] = TYPE_MYSTERY;    \
+}
+
+#define ADD_A_BATTLER_TYPE(battlerId, type)            \
+{                                                      \
+    gBattleMons[battlerId].types[2] = type;            \
 }
 
 #define RESTORE_BATTLER_TYPE(battlerId)                                                        \

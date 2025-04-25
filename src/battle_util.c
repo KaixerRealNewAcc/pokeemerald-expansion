@@ -1136,8 +1136,8 @@ void PrepareStringBattle(enum StringID stringId, u32 battler)
             gLastUsedAbility = ABILITY_COMPETITIVE;
             SET_STATCHANGER(STAT_SPATK, 2, FALSE);
         }
-		else
-        { //if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_RUN_AWAY))
+		else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_RUN_AWAY))
+        {
 			gBattleScripting.abilityPopupOverwrite = ABILITY_RUN_AWAY;
 			gLastUsedAbility = ABILITY_RUN_AWAY;
             SET_STATCHANGER(STAT_SPEED, 2, FALSE);
@@ -5335,6 +5335,22 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
 
         if(abilityEffect && caseID == ABILITYEFFECT_ON_SWITCHIN)
         {
+
+            //Calm Mind (Not the Move)
+            if(BATTLER_HAS_ABILITY(battler, PASSIVE_ABILITY_PSYCHIC))
+            {
+                if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = PASSIVE_ABILITY_PSYCHIC;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    gBattlerAttacker = battler;
+                    ADD_A_BATTLER_TYPE(battler, TYPE_PSYCHIC);
+                    PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].types[2]);
+                    BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                    effect++;
+                }
+            }
+
             if(BATTLER_HAS_ABILITY(battler, ABILITY_MOLD_BREAKER))
             {
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
@@ -5793,14 +5809,15 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
 
         if(abilityEffect && caseID == ABILITYEFFECT_ENDTURN)
         {
-            // Self Sufficient
-            if(BATTLER_HAS_ABILITY(battler, ABILITY_SELF_SUFFICIENT))
+            //Passives
+            //Self Sufficient
+            if(BATTLER_HAS_ABILITY(battler, PASSIVE_ABILITY_SELF_SUFFICIENT))
             {
                 if(!IsBattlerAtMaxHp(battler) && 
                 !(gStatuses3[battler] & STATUS3_HEAL_BLOCK) && 
                 gDisableStructs[battler].isFirstTurn != 2)
                 {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SELF_SUFFICIENT;
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = PASSIVE_ABILITY_SELF_SUFFICIENT;
                     gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 16;
                     if (gBattleStruct->moveDamage[battler] == 0)
                         gBattleStruct->moveDamage[battler] = 1;
@@ -5810,6 +5827,7 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 }
             }
 
+            //Normal Abilities.
             if(BATTLER_HAS_ABILITY(battler, ABILITY_DRY_SKIN))
             {
                 if (IsBattlerWeatherAffected(battler, B_WEATHER_SUN))
@@ -6850,21 +6868,40 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
         }
         break;
     case ABILITYEFFECT_ON_TERRAIN:  // For ability effects that activate when the field terrain changes.
-        gLastUsedAbility = (GetBattlerAbility(battler) || GetBattlerPassiveAbility(battler));
-        switch (gLastUsedAbility)
+    {
+    }
+
+    if(abilityEffect && caseID == ABILITYEFFECT_ON_WEATHER)
+    {
+        if(BATTLER_HAS_ABILITY(battler, ABILITY_MIMICRY))
         {
-        case ABILITY_MIMICRY:
             if (!gDisableStructs[battler].terrainAbilityDone && ChangeTypeBasedOnTerrain(battler))
             {
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MIMICRY;
                 gDisableStructs[battler].terrainAbilityDone = TRUE;
                 ChangeTypeBasedOnTerrain(battler);
                 gBattlerAbility = gBattleScripting.battler = battler;
                 BattleScriptPushCursorAndCallback(BattleScript_MimicryActivates);
                 effect++;
             }
-            break;
         }
-        break;
+        if(BATTLER_HAS_ABILITY(battler, ABILITY_QUARK_DRIVE))
+        {
+            if (!gDisableStructs[battler].terrainAbilityDone
+                && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN
+                && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+                && !gDisableStructs[battler].boosterEnergyActivates)
+                {
+                   gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_QUARK_DRIVE;
+                   gDisableStructs[battler].terrainAbilityDone = TRUE;
+                   PREPARE_STAT_BUFFER(gBattleTextBuff1, GetHighestStatId(battler));
+                   gBattlerAbility = gBattleScripting.battler = battler;
+                   BattleScriptPushCursorAndCallback(BattleScript_QuarkDriveActivates);
+                   effect++;
+                }
+        }
+    }
+    break;
     }
 
     if(abilityEffect && caseID == ABILITYEFFECT_NEUTRALIZINGGAS)
@@ -6896,37 +6933,6 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 BattleScriptPushCursorAndCallback(BattleScript_ProtosynthesisActivates);
                 effect++;
             }
-        }
-    }
-
-    if(abilityEffect && caseID == ABILITYEFFECT_ON_WEATHER)
-    {
-        if(BATTLER_HAS_ABILITY(battler, ABILITY_MIMICRY))
-        {
-            if (!gDisableStructs[battler].terrainAbilityDone && ChangeTypeBasedOnTerrain(battler))
-            {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MIMICRY;
-                gDisableStructs[battler].terrainAbilityDone = TRUE;
-                ChangeTypeBasedOnTerrain(battler);
-                gBattlerAbility = gBattleScripting.battler = battler;
-                BattleScriptPushCursorAndCallback(BattleScript_MimicryActivates);
-                effect++;
-            }
-        }
-        if(BATTLER_HAS_ABILITY(battler, ABILITY_QUARK_DRIVE))
-        {
-            if (!gDisableStructs[battler].terrainAbilityDone
-                && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN
-                && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-                && !gDisableStructs[battler].boosterEnergyActivates)
-                {
-                   gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_QUARK_DRIVE;
-                   gDisableStructs[battler].terrainAbilityDone = TRUE;
-                   PREPARE_STAT_BUFFER(gBattleTextBuff1, GetHighestStatId(battler));
-                   gBattlerAbility = gBattleScripting.battler = battler;
-                   BattleScriptPushCursorAndCallback(BattleScript_QuarkDriveActivates);
-                   effect++;
-                }
         }
     }
 
@@ -9770,7 +9776,9 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
             modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
         break;
     case EFFECT_SOLAR_BEAM:
-        if (IsBattlerWeatherAffected(battlerAtk, (B_WEATHER_HAIL | B_WEATHER_SANDSTORM | B_WEATHER_RAIN | B_WEATHER_SNOW | B_WEATHER_FOG)))
+        if (IsBattlerWeatherAffected(battlerAtk, (B_WEATHER_HAIL | B_WEATHER_SANDSTORM | B_WEATHER_RAIN | B_WEATHER_SNOW | B_WEATHER_FOG))
+        && GetBattlerAbility(battlerAtk) != ABILITY_CHLOROPLAST 
+        && !BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_CHLOROPLAST))
             modifier = uq4_12_multiply(modifier, UQ_4_12(0.5));
         break;
     case EFFECT_STOMPING_TANTRUM:
@@ -11122,7 +11130,7 @@ static inline void MulByTypeEffectiveness(uq4_12_t *modifier, u32 move, u32 move
         mod = UQ_4_12(1.0);
     if (moveEffect == EFFECT_SUPER_EFFECTIVE_ON_ARG && defType == GetMoveArgType(move))
         mod = UQ_4_12(2.0);
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORV_SLAYER) && species == SPECIES_CORVIKNIGHT && mod == UQ_4_12(0.5))
+    if (BATTLER_HAS_ABILITY(battlerAtk, PASSIVE_ABILITY_CORV_SLAYER) && species == SPECIES_CORVIKNIGHT && mod == UQ_4_12(0.5))
         mod = UQ_4_12(2.0);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
@@ -12363,6 +12371,9 @@ bool32 IsBattlerWeatherAffected(u32 battler, u32 weatherFlags)
         // given weather is active -> check if its sun, rain against utility umbrella (since only 1 weather can be active at once)
         if (gBattleWeather & (B_WEATHER_SUN | B_WEATHER_RAIN) && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
             return FALSE; // utility umbrella blocks sun, rain effects
+
+        if (gBattleWeather & (B_WEATHER_SUN) && gBattleMons[battler].ability == ABILITY_CHLOROPLAST || BattlerHasPassiveAbility(battler, ABILITY_CHLOROPLAST))
+            return FALSE;
 
         return TRUE;
     }

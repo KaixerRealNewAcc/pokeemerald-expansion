@@ -2492,17 +2492,38 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 7,
     },
 
-    [ABILITY_CORV_SLAYER] =
+    [ABILITY_CHLOROPLAST] = 
+    {
+        .name = _("Chloropast"),
+        .description = COMPOUND_STRING("Can use Solar Blade or Solar Beam without recharge."),
+        .aiRating = 7,     
+    },
+
+    [PASSIVE_ABILITY_CORV_SLAYER] =
     {
         .name = _("Corviknight Slayer"),
         .description = COMPOUND_STRING("Tinkaton it uses its anger towards Corviknight to deal super effective damage to it."),
         .aiRating = 6,
     },
 
-    [ABILITY_SELF_SUFFICIENT] =
+    [PASSIVE_ABILITY_SELF_SUFFICIENT] =
     {
         .name = _("Self Sufficient"),
         .description = COMPOUND_STRING("Heals 1/8 of its max Health every turn."),
+        .aiRating = 8,
+    },
+
+    [PASSIVE_ABILITY_ERUPTIVE_BACK] =
+    {
+        .name = _("Eruptive Back"),
+        .description = COMPOUND_STRING("The use erupts with +1 Priority when at full HP.\nTakes Turns to power up."),
+        .aiRating = 8,
+    },
+
+    [PASSIVE_ABILITY_PSYCHIC] =
+    {
+        .name = _("Psychic"),
+        .description = COMPOUND_STRING("The users Psychic Abilities, lets it add the psychic typing to itself."),
         .aiRating = 8,
     },
 

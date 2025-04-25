@@ -334,7 +334,7 @@ Music: Hiker
 Double Battle: No
 AI: Basic Trainer 
 
-Geodude-Alola   
+Bonsly  
 Level: 8 
 
 Nacli  
@@ -5140,7 +5140,7 @@ Boss Trainer: Yes
 AI: Smart Trainer
 
 Geodude-Alola @ Custap Berry
-Ability: Sturdy
+Ability: Galvanize
 Level: 13   
 Tera Type: Dark 
 Adamant Nature  
@@ -12316,7 +12316,7 @@ Roggenrola
 Level: 8
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
-Geodude-Alola
+Geodude
 Level: 8
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
