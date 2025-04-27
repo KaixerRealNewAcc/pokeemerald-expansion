@@ -177,6 +177,8 @@ enum SleepClauseBlock
 #define BATTLER_ABILITY    1
 #define BATTLER_PASSIVE    2
 
+u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather);
+
 void HandleAction_ThrowBall(void);
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move);
 bool32 HandleMoveTargetRedirection(void);

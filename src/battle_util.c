@@ -9730,7 +9730,7 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
     return basePower;
 }
 
-static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather)
+u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather)
 {
     u32 i;
     u32 holdEffectParamAtk;
@@ -9927,21 +9927,18 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         break;
     }
 
-    switch(BattlerHasPassiveAbility(battlerAtk, atkAbility))
-    {
-        case PASSIVE_ABILITY_ERUPTIVE_BACK:
-            if (IsEruptiveMove(move))
-                modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
-        case PASSIVE_ABILITY_FIGHTING_SPIRIT:
-            if (GetMoveType(move) == TYPE_FIGHTING)
-                modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
-    }
     //No point in putting the passive abilities in the switch so, put it here.
-    /*if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_ERUPTIVE_BACK))
+    if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_ERUPTIVE_BACK))
     {
         if (IsEruptiveMove(move))
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
-    }*/
+    }
+
+    if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_FIGHTING_SPIRIT))
+    {
+        if (GetMoveType(move) == TYPE_FIGHTING)
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+    }
 
 
 
