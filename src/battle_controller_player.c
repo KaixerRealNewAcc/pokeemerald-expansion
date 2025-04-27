@@ -1809,6 +1809,8 @@ static u8 GetAccuracyWindowId(u16 accuracy, u16 baseAccuracy)
         return B_WIN_MOVE_ACC;
 }
 
+#include "battle_ai_main.h"
+
 static void MoveSelectionDisplayMoveDescription(u32 battler)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[battler][4]);
@@ -1869,7 +1871,7 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
     StringAppend(gDisplayedStringBattle, acc_start);
     StringAppend(gDisplayedStringBattle, acc_desc);
     StringAppend(gDisplayedStringBattle, gText_NewLine);
-    
+
     if (gMovesInfo[move].effect == EFFECT_PLACEHOLDER)
         StringAppend(gDisplayedStringBattle, gNotDoneYetDescription);
     else

@@ -4354,89 +4354,55 @@ bool32 CanAbilityAbsorbMove(u32 battlerAtk, u32 battlerDef, u32 abilityDef, u32 
     const u8 *battleScript = NULL;
     u32 statId = 0;
     u32 statAmount = 1;
-
-    effect = MOVE_ABSORBED_BY_NO_ABILITY;
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_VOLT_ABSORB))
+    
+    //switch (abilityDef)
+    switch (abilityDef)
     {
-        if (moveType == TYPE_ELECTRIC && GetBattlerMoveTargetType(battlerAtk, move) != MOVE_TARGET_ALL_BATTLERS)
-        effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
-    }
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_WATER_ABSORB)
-    || BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRY_SKIN))
-    {
+    default:
+        effect = MOVE_ABSORBED_BY_NO_ABILITY;
+        break;
+    case ABILITY_VOLT_ABSORB:
+        if (moveType == TYPE_ELECTRIC && gMovesInfo[move].target != MOVE_TARGET_ALL_BATTLERS)
+            effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
+        break;
+    case ABILITY_WATER_ABSORB:
+    case ABILITY_DRY_SKIN:
         if (moveType == TYPE_WATER)
             effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_EARTH_EATER))
-    {
+        break;
+    case ABILITY_EARTH_EATER:
         if (moveType == TYPE_GROUND)
             effect = MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_MOTOR_DRIVE))
-    {
-        if (moveType == TYPE_ELECTRIC && GetBattlerMoveTargetType(battlerAtk, move) != MOVE_TARGET_ALL_BATTLERS)
-        {
+        break;
+    case ABILITY_MOTOR_DRIVE:
+        if (moveType == TYPE_ELECTRIC && gMovesInfo[move].target != MOVE_TARGET_ALL_BATTLERS) // Potential bug in singles (might be solved with simu hp reudction)
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statId = STAT_SPEED;
-        }
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_LIGHTNING_ROD))
-    {
-        if (B_REDIRECT_ABILITY_IMMUNITY >= GEN_5 && moveType == TYPE_ELECTRIC && GetBattlerMoveTargetType(battlerAtk, move) != MOVE_TARGET_ALL_BATTLERS)
-        {
+        break;
+    case ABILITY_LIGHTNING_ROD:
+        if (B_REDIRECT_ABILITY_IMMUNITY >= GEN_5 && moveType == TYPE_ELECTRIC && gMovesInfo[move].target != MOVE_TARGET_ALL_BATTLERS) // Potential bug in singles (might be solved with simu hp reudction)
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statId = STAT_SPATK;
-        }
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_STORM_DRAIN))
-    {
+        break;
+    case ABILITY_STORM_DRAIN:
         if (B_REDIRECT_ABILITY_IMMUNITY >= GEN_5 && moveType == TYPE_WATER)
-        {
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statId = STAT_SPATK;
-        }
-    }
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_SAP_SIPPER))
-    {
+        break;
+    case ABILITY_SAP_SIPPER:
         if (moveType == TYPE_GRASS)
-        {
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statId = STAT_ATK;
-        }
-    }
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_WELL_BAKED_BODY))
-    {
+        break;
+    case ABILITY_WELL_BAKED_BODY:
         if (moveType == TYPE_FIRE)
-        {
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statAmount = 2;
-            statId = STAT_DEF;
-        }
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_WIND_RIDER))
-    {
-        if (IsWindMove(move) && !(GetBattlerMoveTargetType(battlerAtk, move) & MOVE_TARGET_USER))
-        {
+        break;
+    case ABILITY_WIND_RIDER:
+        if (gMovesInfo[move].windMove && !(GetBattlerMoveTargetType(battlerAtk, move) & MOVE_TARGET_USER))
             effect = MOVE_ABSORBED_BY_STAT_INCREASE_ABILITY;
-            statId = STAT_ATK;
-        }
-    }
-
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FLASH_FIRE))
-    {
+        break;
+    case ABILITY_FLASH_FIRE:
         if (moveType == TYPE_FIRE && (B_FLASH_FIRE_FROZEN >= GEN_5 || !(gBattleMons[battlerDef].status1 & STATUS1_FREEZE)))
             effect = MOVE_ABSORBED_BY_BOOST_FLASH_FIRE;
-    }
-    
-
-    //switch (abilityDef)
+        break;
+    }  
 
     if (effect == MOVE_ABSORBED_BY_NO_ABILITY || option != ABILITY_RUN_SCRIPT)
         return effect;
@@ -7009,7 +6975,7 @@ u32 GetBattlerAbility(u32 battler)
      && IsNeutralizingGasOnField()
      && gBattleMons[battler].ability != ABILITY_NEUTRALIZING_GAS)
         return ABILITY_NONE;
-
+    
     if (CanBreakThroughAbility(gBattlerAttacker, battler, gBattleMons[gBattlerAttacker].ability, hasAbilityShield))
         return ABILITY_NONE;
 
@@ -9730,6 +9696,10 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
     return basePower;
 }
 
+#define ABILITY_BOOST(abilityCheck, condition, mult) \
+    if ((abilityCheck) && (condition)) \
+        modifier = uq4_12_multiply(modifier, UQ_4_12(mult))
+
 u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather)
 {
     u32 i;
@@ -9808,10 +9778,8 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     || AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, ABILITYEFFECT_WATER_SPORT, 0, 0)))
         modifier = uq4_12_multiply(modifier, UQ_4_12(B_SPORT_DMG_REDUCTION >= GEN_5 ? 0.33 : 0.5));
 
-    u32 abilityAtk = BATTLER_HAS_ABILITY(battlerAtk, atkAbility);
-
     // attacker's abilities
-    switch (abilityAtk)
+    switch (GetBattlerAbility(battlerAtk))
     {
     case ABILITY_TECHNICIAN:
         if (basePower <= 60)
@@ -9928,6 +9896,12 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     }
 
     //No point in putting the passive abilities in the switch so, put it here.
+    if(BattlerHasPassiveAbility(battlerAtk, ABILITY_IRON_FIST))
+    {
+        if (IsPunchingMove(move))
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+    }
+
     if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_ERUPTIVE_BACK))
     {
         if (IsEruptiveMove(move))
