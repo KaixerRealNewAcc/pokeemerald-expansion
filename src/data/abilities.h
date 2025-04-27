@@ -2516,14 +2516,21 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [PASSIVE_ABILITY_ERUPTIVE_BACK] =
     {
         .name = _("Eruptive Back"),
-        .description = COMPOUND_STRING("The use erupts with +1 Priority when at full HP.\nTakes Turns to power up."),
+        .description = COMPOUND_STRING("Boosts the power of Eruptive moves by 20%"),
         .aiRating = 8,
     },
 
-    [PASSIVE_ABILITY_PSYCHIC] =
+    [PASSIVE_ABILITY_FIGHTING_SPIRIT] =
     {
-        .name = _("Psychic"),
-        .description = COMPOUND_STRING("The users Psychic Abilities, lets it add the psychic typing to itself."),
+        .name = _("Fighting Spirit"),
+        .description = COMPOUND_STRING("The users fighting spirit boosts Fighting-Type Moves by 20%"),
+        .aiRating = 6,
+    },
+
+    [PASSIVE_ABILITY_NOISE_CANCEL] =
+    {
+        .name = _("Noise Cancelation"),
+        .description = COMPOUND_STRING("Protect the user and its party members from Sound-Based moves."),
         .aiRating = 8,
     },
 

@@ -207,8 +207,8 @@ ALIGNED(4) static EWRAM_DATA u8 sAnimDelayTaskId = 0;
 ALIGNED(4) static EWRAM_DATA u8 sShadowAnimDelayTaskId = 0;
 EWRAM_DATA MainCallback gInitialSummaryScreenCallback = NULL; // stores callback from the first time the screen is opened from the party or PC menu
 
-static const u8* gTextInfoPagePassiveAbility = COMPOUND_STRING("{R_BUTTON} Passive Ability");
-static const u8* gTextInfoPageAbility = COMPOUND_STRING("{L_BUTTON} Normal Ability");
+static const u8* gTextInfoPagePassiveAbility = COMPOUND_STRING("{L_BUTTON} Passive Ability");
+static const u8* gTextInfoPageAbility = COMPOUND_STRING("Normal Ability {R_BUTTON}");
 
 // forward declarations
 static bool8 LoadGraphics(void);
@@ -1889,12 +1889,12 @@ static void Task_HandleInput(u8 taskId)
             u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
 
 
-            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPageAbility, 62);
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPagePassiveAbility, 62);
             int iconXPos = stringXPos - 8;
             if (iconXPos < 0)
                 iconXPos = 0;
             FillWindowPixelBuffer(PSS_LABEL_WINDOW_PROMPT_UTILITY, PIXEL_FILL(0));
-            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPageAbility, stringXPos, 1, 0, 0);
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
         
             FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
             PrintTextOnWindow(windowId, gAbilitiesInfo[passiveAbility].name, 5, 8, 2, 1);
@@ -1907,12 +1907,12 @@ static void Task_HandleInput(u8 taskId)
             u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
             u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
 
-            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPagePassiveAbility, 62);
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPageAbility, 62);
             int iconXPos = stringXPos - 16;
             if (iconXPos < 0)
                 iconXPos = 0;
             FillWindowPixelBuffer(PSS_LABEL_WINDOW_PROMPT_UTILITY, PIXEL_FILL(0));
-            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPageAbility, stringXPos, 1, 0, 0);
 
             FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
             PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
@@ -2127,11 +2127,11 @@ static void Task_ChangeSummaryMon(u8 taskId)
         if (P_SUMMARY_SCREEN_RENAME && sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
         {
             ShowUtilityPrompt(SUMMARY_MODE_NORMAL);
-            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPagePassiveAbility, 62);
+            int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPageAbility, 62);
             int iconXPos = stringXPos + 18;
             if (iconXPos < 0)
                 iconXPos = 0;
-            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
+            PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPageAbility, stringXPos, 1, 0, 0);
         }
         
         if (ShouldShowIvEvPrompt() && sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
@@ -4577,10 +4577,10 @@ static void SetMonTypeIcons(void)
             SetTypeSpritePosAndPal(gSpeciesInfo[summary->species2].types[1], 160, 48, SPRITE_ARR_ID_TYPE + 1);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);
         }
-        else if(GetPassiveAbilityBySpecies(summary->species2, summary->passiveAbility) == PASSIVE_ABILITY_PSYCHIC)
+        else if(GetPassiveAbilityBySpecies(summary->species2, summary->passiveAbility) != PASSIVE_ABILITY_NOISE_CANCEL)
         {
-            SetTypeSpritePosAndPal(TYPE_PSYCHIC, 200, 48, SPRITE_ARR_ID_TYPE + 1);
-            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);  
+            SetTypeSpritePosAndPal(TYPE_MYSTERY, 200, 48, SPRITE_ARR_ID_TYPE + 1);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);  
         }
         else
         {
@@ -5040,9 +5040,9 @@ static inline void ShowUtilityPrompt(s16 mode)
     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
     {
         if (ShouldShowRename())
-            promptText = gTextInfoPagePassiveAbility;
+            promptText = gTextInfoPageAbility;
         else
-            promptText = gText_Cancel2;
+            promptText = gTextInfoPageAbility;
     }
     else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
     {

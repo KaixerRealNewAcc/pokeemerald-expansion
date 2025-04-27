@@ -5336,21 +5336,6 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
         if(abilityEffect && caseID == ABILITYEFFECT_ON_SWITCHIN)
         {
 
-            //Calm Mind (Not the Move)
-            if(BATTLER_HAS_ABILITY(battler, PASSIVE_ABILITY_PSYCHIC))
-            {
-                if (!gSpecialStatuses[battler].switchInAbilityDone)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = PASSIVE_ABILITY_PSYCHIC;
-                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                    gBattlerAttacker = battler;
-                    ADD_A_BATTLER_TYPE(battler, TYPE_PSYCHIC);
-                    PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].types[2]);
-                    BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                    effect++;
-                }
-            }
-
             if(BATTLER_HAS_ABILITY(battler, ABILITY_MOLD_BREAKER))
             {
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
@@ -7028,7 +7013,7 @@ u32 GetBattlerAbility(u32 battler)
     if (CanBreakThroughAbility(gBattlerAttacker, battler, gBattleMons[gBattlerAttacker].ability, hasAbilityShield))
         return ABILITY_NONE;
 
-    return gBattleMons[battler].ability;
+    return (gBattleMons[battler].ability || BattlerHasPassiveAbility(battler, gBattleMons[battler].ability));
 }
 
 u32 GetBattlerPassiveAbility(u32 battler)
@@ -9942,6 +9927,24 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         break;
     }
 
+    switch(BattlerHasPassiveAbility(battlerAtk, atkAbility))
+    {
+        case PASSIVE_ABILITY_ERUPTIVE_BACK:
+            if (IsEruptiveMove(move))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+        case PASSIVE_ABILITY_FIGHTING_SPIRIT:
+            if (GetMoveType(move) == TYPE_FIGHTING)
+                modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+    }
+    //No point in putting the passive abilities in the switch so, put it here.
+    /*if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_ERUPTIVE_BACK))
+    {
+        if (IsEruptiveMove(move))
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
+    }*/
+
+
+
     // field abilities
     if ((IsAbilityOnField(ABILITY_DARK_AURA) && moveType == TYPE_DARK)
      || (IsAbilityOnField(ABILITY_FAIRY_AURA) && moveType == TYPE_FAIRY))
@@ -10178,9 +10181,10 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
     modifier = UQ_4_12(1.0);
 
     u32 boostsSameTypeAttackZoroark = IS_BATTLER_OF_TYPE(battlerAtk, moveType);
+    u32 abilityAtk = BATTLER_HAS_ABILITY(battlerAtk, atkAbility);
 
     // attacker's abilities
-    switch (atkAbility)
+    switch (abilityAtk)
     {
     case ABILITY_HUGE_POWER:
     case ABILITY_PURE_POWER:
@@ -10204,20 +10208,49 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case ABILITY_SWARM:
-        if (moveType == TYPE_BUG && gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_BUG)
+        {
+            if(gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+            else
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.2));
+        }
         break;
     case ABILITY_TORRENT:
-        if (moveType == TYPE_WATER && gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_WATER)
+        {
+            if(gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+            else
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.2));
+        }
         break;
     case ABILITY_BLAZE:
-        if (moveType == TYPE_FIRE && gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_FIRE)
+        {
+            if(gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+            else
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.2));
+        }
         break;
     case ABILITY_OVERGROW:
-        if (moveType == TYPE_GRASS && gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
-            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+        if (moveType == TYPE_GRASS)
+        {
+            if(gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+            else
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.2));
+        }
+        break;
+    case ABILITY_SHORT_CIRCUIT:
+        if (moveType == TYPE_ELECTRIC)
+        {
+            if(gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
+            else
+                modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.2));
+        }
         break;
     case ABILITY_PLUS:
         if (IsBattleMoveSpecial(move) && IsBattlerAlive(BATTLE_PARTNER(battlerAtk)))
@@ -12372,7 +12405,7 @@ bool32 IsBattlerWeatherAffected(u32 battler, u32 weatherFlags)
         if (gBattleWeather & (B_WEATHER_SUN | B_WEATHER_RAIN) && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
             return FALSE; // utility umbrella blocks sun, rain effects
 
-        if (gBattleWeather & (B_WEATHER_SUN) && gBattleMons[battler].ability == ABILITY_CHLOROPLAST || BattlerHasPassiveAbility(battler, ABILITY_CHLOROPLAST))
+        if ((gBattleWeather & (B_WEATHER_SUN)) && (gBattleMons[battler].ability == ABILITY_CHLOROPLAST || BattlerHasPassiveAbility(battler, ABILITY_CHLOROPLAST)))
             return FALSE;
 
         return TRUE;

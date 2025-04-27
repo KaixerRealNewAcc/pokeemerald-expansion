@@ -4936,14 +4936,6 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
     {
         priority++;
     }
-    else if((move == MOVE_ERUPTION
-        && (ability == PASSIVE_ABILITY_ERUPTIVE_BACK
-        || BattlerHasPassiveAbility(battler, PASSIVE_ABILITY_ERUPTIVE_BACK))
-        && (IsBattlerAtMaxHp(battler))))
-    {
-        if(gDisableStructs[battler].isFirstTurn != 2)
-            priority++;
-    }
     else if ((ability == ABILITY_PRANKSTER || BattlerHasPassiveAbility(battler, ABILITY_PRANKSTER)) && IsBattleMoveStatus(move))
     {
         gProtectStructs[battler].pranksterElevated = 1;
