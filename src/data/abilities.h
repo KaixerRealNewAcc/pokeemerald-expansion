@@ -2,7 +2,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
 {
     [ABILITY_NONE] =
     {
-        .name = _("No Passive Ability"),
+        .name = _("-------"),
         .description = COMPOUND_STRING("No special ability."),
         .aiRating = 0,
         .cantBeSwapped = TRUE,

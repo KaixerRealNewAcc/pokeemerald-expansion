@@ -7437,7 +7437,6 @@ BattleScript_ItemSteal::
 
 BattleScript_DrizzleActivates::
 	pause B_WAIT_TIME_SHORT
-	sethword sABILITY_OVERWRITE, ABILITY_DRIZZLE
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNMADEITRAIN
 	waitstate
@@ -7481,15 +7480,6 @@ BattleScript_AbilityPopUpOverwriteThenNormal:
 	destroyabilitypopup
 	pause 40
 	return
-
-BattleScript_SelfSufficientActivates::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_PKMNSABILITYRESTOREDHPALITTLE
-	waitmessage B_WAIT_TIME_LONG
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	end3
 
 BattleScript_SpeedBoostActivates::
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_SpeedBoostActivatesEnd
@@ -7698,7 +7688,6 @@ BattleScript_TryIntimidateHoldEffectsRet:
 BattleScript_IntimidateActivates::
 	savetarget
 .if B_ABILITY_POP_UP == TRUE
-	sethword sABILITY_OVERWRITE, ABILITY_INTIMIDATE
 	showabilitypopup BS_ATTACKER
 	pause B_WAIT_TIME_LONG
 	destroyabilitypopup
@@ -7711,13 +7700,9 @@ BattleScript_IntimidateLoop:
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateLoopIncrement
 .if B_UPDATED_INTIMIDATE >= GEN_8 @These abilties specifically prevent just intimidate, without blocking stat decreases
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS, BattleScript_IntimidatePrevented
-	jumpifpassiveability BS_TARGET, ABILITY_INNER_FOCUS, BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY, BattleScript_IntimidatePrevented
-	jumpifpassiveability BS_TARGET, ABILITY_SCRAPPY, BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidatePrevented
-	jumpifpassiveability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidatePrevented
-	jumpifpassiveability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidatePrevented
 .endif
 	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_IntimidateInReverse
 BattleScript_IntimidateEffect:
@@ -7748,7 +7733,6 @@ BattleScript_IntimidateLoopIncrement:
 
 BattleScript_IntimidatePrevented:
 	copybyte sBATTLER, gBattlerTarget
-	copyhword sABILITY_OVERWRITE, gLastUsedAbility
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNPREVENTSSTATLOSSWITH
 	goto BattleScript_IntimidateEffect_WaitString

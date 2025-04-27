@@ -23,8 +23,6 @@
 #define MOVE_LIMITATION_PLACEHOLDER             (1 << 15)
 #define MOVE_LIMITATIONS_ALL                    0xFFFF
 
-#define BATTLER_HAS_ABILITY(battler, ability) ((GetBattlerAbility(battler) == ability || BattlerHasPassiveAbility(battler, ability)) && IsBattlerAlive(battler))
-
 enum AbilityEffectOptions
 {
     ABILITY_CHECK_TRIGGER,
@@ -173,12 +171,6 @@ enum SleepClauseBlock
     BLOCKED_BY_SLEEP_CLAUSE,
 };
 
-#define BATTLER_NONE       0
-#define BATTLER_ABILITY    1
-#define BATTLER_PASSIVE    2
-
-u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather);
-
 void HandleAction_ThrowBall(void);
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move);
 bool32 HandleMoveTargetRedirection(void);
@@ -226,16 +218,13 @@ bool32 HasNoMonsToSwitch(u32 battler, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u32 battler, u32 battleWeatherId, bool32 viaAbility);
 bool32 CanAbilityBlockMove(u32 battlerAtk, u32 battlerDef, u32 abilityAtk, u32 abilityDef, u32 move, enum AbilityEffectOptions option);
 bool32 CanAbilityAbsorbMove(u32 battlerAtk, u32 battlerDef, u32 abilityDef, u32 move, u32 moveType, enum AbilityEffectOptions option);
-u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 moveArg, u32 passiveAbility);
+u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 moveArg);
 bool32 TryPrimalReversion(u32 battler);
 bool32 IsNeutralizingGasOnField(void);
 bool32 IsMoldBreakerTypeAbility(u32 battler, u32 ability);
 u32 GetBattlerAbility(u32 battler);
-u32 GetBattlerPassiveAbility(u32 battler);
 u32 IsAbilityOnSide(u32 battler, u32 ability);
 u32 IsAbilityOnOpposingSide(u32 battler, u32 ability);
-u32 IsPassiveAbilityOnSide(u32 battler, u32 passiveAbility);
-u32 IsPassiveAbilityOnOpposingSide(u32 battler, u32 passiveAbility);
 u32 IsAbilityOnField(u32 ability);
 u32 IsAbilityOnFieldExcept(u32 battler, u32 ability);
 u32 IsAbilityPreventingEscape(u32 battler);
@@ -250,7 +239,6 @@ void HandleAction_RunBattleScript(void);
 u32 SetRandomTarget(u32 battler);
 u32 GetBattleMoveTarget(u16 move, u8 setTarget);
 u8 GetAttackerObedienceForAction();
-u8 BattlerHasPassiveOrNormalAbility(u8 battler, u16 ability);
 u32 GetBattlerHoldEffect(u32 battler, bool32 checkNegating);
 u32 GetBattlerHoldEffectIgnoreAbility(u32 battler, bool32 checkNegating);
 u32 GetBattlerHoldEffectInternal(u32 battler, bool32 checkNegating, bool32 checkAbility);
@@ -266,7 +254,7 @@ s32 CalculateMoveDamageVars(struct DamageCalculationData *damageCalcData, u32 fi
                             u32 weather, u32 holdEffectAtk, u32 holdEffectDef, u32 abilityAtk, u32 abilityDef);
 s32 ApplyModifiersAfterDmgRoll(s32 dmg, struct DamageCalculationData *damageCalcData, uq4_12_t typeEffectivenessModifier, u32 abilityAtk, u32 abilityDef, u32 holdEffectAtk, u32 holdEffectDef);
 uq4_12_t CalcTypeEffectivenessMultiplier(u32 move, u32 moveType, u32 battlerAtk, u32 battlerDef, u32 defAbility, bool32 recordAbilities);
-uq4_12_t CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u32 battlerDef);
+uq4_12_t CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef);
 uq4_12_t GetTypeModifier(u32 atkType, u32 defType);
 uq4_12_t GetOverworldTypeEffectiveness(struct Pokemon *mon, u8 moveType);
 void UpdateMoveResultFlags(uq4_12_t modifier, u16 *resultFlags);

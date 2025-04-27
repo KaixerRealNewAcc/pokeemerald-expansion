@@ -1202,7 +1202,7 @@ static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildM
 {
     if (GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
         return FALSE;
-    else if (GetMonAbility(&gPlayerParty[0]) != ability || GetMonPassiveAbility(&gPlayerParty[0]) != ability)
+    else if (GetMonAbility(&gPlayerParty[0]) != ability)
         return FALSE;
     else if (Random() % 2 != 0)
         return FALSE;

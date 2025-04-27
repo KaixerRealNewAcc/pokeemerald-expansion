@@ -1912,7 +1912,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
         u32 monIndices[monsCount];
         DoTrainerPartyPool(trainer, monIndices, monsCount, battleTypeFlags);
         bool8 decidedLevel = FALSE;
-        u8 maxLevel = 0;
+        u8 maxLevel = 100;
         u8 playerLevelMinus;
         u8 finalLevel;
 
@@ -1962,8 +1962,8 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                     decidedLevel = TRUE;
                 }
                 finalLevel = maxLevel - playerLevelMinus;
-                //if(isTrainerBossTrainer && IsEasyMode())
-                //    finalLevel -=2;
+                if(isTrainerBossTrainer && IsEasyMode())
+                    finalLevel -=2;
 
                 if(partyData[monIndex].lvl == PLAYER_MAX)
                     finalLevel = finalLevel;
@@ -1983,16 +1983,16 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             }
             else
             {
-                //if(isTrainerBossTrainer && IsEasyMode())
-                //{
-                //    CreateMon(&party[monIndex], species, partyData[monIndex].lvl-2, 0, TRUE, personalityValue, otIdType, fixedOtId);
-                //    SetMonData(&party[monIndex], MON_DATA_HELD_ITEM, &partyData[monIndex].heldItem);
-                //}
-                //else
-                //{
+                if(isTrainerBossTrainer && IsEasyMode())
+                {
+                    CreateMon(&party[monIndex], species, partyData[monIndex].lvl-2, 0, TRUE, personalityValue, otIdType, fixedOtId);
+                    SetMonData(&party[monIndex], MON_DATA_HELD_ITEM, &partyData[monIndex].heldItem);
+                }
+                else
+                {
                     CreateMon(&party[monIndex], species, partyData[monIndex].lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
                     SetMonData(&party[monIndex], MON_DATA_HELD_ITEM, &partyData[monIndex].heldItem);
-                //}
+                }
             }
 
             CustomTrainerPartyAssignMoves(&party[i], &partyData[monIndex]);
@@ -3259,12 +3259,6 @@ void SwitchInClearSetData(u32 battler)
     gLastPrintedMoves[battler] = MOVE_NONE;
     gLastHitBy[battler] = 0xFF;
 
-    gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle;
-    gBattleScripting.battlerPopupOverwrite = MAX_BATTLERS_COUNT;
-    gBattleScripting.switchInBattlerOverwrite = MAX_BATTLERS_COUNT;
-    gBattleScripting.expOnCatch = (B_EXP_CATCH >= GEN_6);
-    gBattleScripting.monCaught = FALSE;
-
     gBattleStruct->lastTakenMove[battler] = 0;
     gBattleStruct->sameMoveTurns[battler] = 0;
     gBattleStruct->lastTakenMoveFrom[battler][0] = 0;
@@ -3859,7 +3853,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         break;
     case FIRST_TURN_EVENTS_OVERWORLD_WEATHER:
         if (!gBattleStruct->overworldWeatherDone
-         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_WEATHER, 0, 0, ABILITYEFFECT_SWITCH_IN_WEATHER, 0, 0) != 0)
+         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_WEATHER, 0, 0, ABILITYEFFECT_SWITCH_IN_WEATHER, 0) != 0)
         {
             gBattleStruct->overworldWeatherDone = TRUE;
             return;
@@ -3868,7 +3862,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         break;
     case FIRST_TURN_EVENTS_TERRAIN:
         if (!gBattleStruct->terrainDone
-         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_TERRAIN, 0, 0, ABILITYEFFECT_SWITCH_IN_TERRAIN, 0, 0) != 0)
+         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_TERRAIN, 0, 0, ABILITYEFFECT_SWITCH_IN_TERRAIN, 0) != 0)
         {
             gBattleStruct->terrainDone = TRUE;
             return;
@@ -3878,7 +3872,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     case FIRST_TURN_EVENTS_STARTING_STATUS:
         if (!gBattleStruct->startingStatusDone
          && gBattleStruct->startingStatus
-         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_STATUSES, 0, 0, ABILITYEFFECT_SWITCH_IN_STATUSES, 0, 0) != 0)
+         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_STATUSES, 0, 0, ABILITYEFFECT_SWITCH_IN_STATUSES, 0) != 0)
         {
             gBattleStruct->startingStatusDone = TRUE;
             return;
@@ -3899,7 +3893,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
     case FIRST_TURN_EVENTS_NEUTRALIZING_GAS:
-        if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0, 0) != 0)
+        if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
             return;
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
@@ -3910,14 +3904,14 @@ static void TryDoEventsBeforeFirstTurn(void)
 
             if (TryPrimalReversion(i))
                 return;
-            if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, i, 0, 0, 0, 0) != 0)
+            if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, i, 0, 0, 0) != 0)
                 return;
         }
         gBattleStruct->switchInBattlerCounter = 0;
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
     case FIRST_TURN_EVENTS_OPPORTUNIST_1:
-        if (AbilityBattleEffects(ABILITYEFFECT_OPPORTUNIST, 0, 0, 0, 0, 0))
+        if (AbilityBattleEffects(ABILITYEFFECT_OPPORTUNIST, 0, 0, 0, 0))
             return;
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
@@ -3931,7 +3925,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
     case FIRST_TURN_EVENTS_OPPORTUNIST_2:
-        if (AbilityBattleEffects(ABILITYEFFECT_OPPORTUNIST, 0, 0, 0, 0, 0))
+        if (AbilityBattleEffects(ABILITYEFFECT_OPPORTUNIST, 0, 0, 0, 0))
             return;
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
@@ -4923,20 +4917,15 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
         return GetMovePriority(MOVE_MAX_GUARD);
 
     if ((ability == ABILITY_GALE_WINGS
-        || BattlerHasPassiveAbility(battler, ABILITY_GALE_WINGS))
-    && (GetMoveType(move) == TYPE_FLYING)
-    && IsBattlerAtMaxHp(battler))
+        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
+        && GetMoveType(move) == TYPE_FLYING)
+        || (ability == ABILITY_FLAMING_SOUL
+        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
+        && GetMoveType(move) == TYPE_FIRE))
     {
         priority++;
     }
-    else if ((ability == ABILITY_FLAMING_SOUL
-    || BattlerHasPassiveAbility(battler, ABILITY_FLAMING_SOUL))
-    && (GetMoveType(move) == TYPE_FIRE)
-    && IsBattlerAtMaxHp(battler))
-    {
-        priority++;
-    }
-    else if ((ability == ABILITY_PRANKSTER || BattlerHasPassiveAbility(battler, ABILITY_PRANKSTER)) && IsBattleMoveStatus(move))
+    else if (ability == ABILITY_PRANKSTER && IsBattleMoveStatus(move))
     {
         gProtectStructs[battler].pranksterElevated = 1;
         priority++;

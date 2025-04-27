@@ -147,7 +147,6 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u8 level; // 0x5
         u8 ribbonCount; // 0x6
         u8 ailment; // 0x7
-        u8 passiveAbility;
         u8 abilityNum; // 0x8
         u8 metLocation; // 0x9
         u8 metLevel; // 0xA
@@ -461,10 +460,10 @@ static const struct WindowTemplate sSummaryTemplate[] =
     },
     [PSS_LABEL_WINDOW_PROMPT_UTILITY] = {
         .bg = 0,
-        .tilemapLeft = 18,
+        .tilemapLeft = 22,
         .tilemapTop = 0,
-        .width = 12,
-        .height = 3,
+        .width = 8,
+        .height = 2,
         .paletteNum = 7,
         .baseBlock = 89,
     },
@@ -1630,8 +1629,6 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         sum->pid = GetMonData(mon, MON_DATA_PERSONALITY);
         sum->sanity = GetMonData(mon, MON_DATA_SANITY_IS_BAD_EGG);
 
-        sum->passiveAbility = GetMonData(mon, MON_DATA_PASSIVE_ABILITY);
-
         if (sum->sanity)
             sum->isEgg = TRUE;
         else
@@ -1870,7 +1867,9 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             BeginCloseSummaryScreen(taskId);
         }
-        else if (JOY_NEW(START_BUTTON))
+        else if (JOY_NEW(START_BUTTON)
+                && ShouldShowMoveRelearner()
+                && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
         {
             if(ShouldShowMoveRelearner() && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
             {
@@ -5036,7 +5035,7 @@ static inline void ShowUtilityPrompt(s16 mode)
     const u8* gText_SkillPageIvs = COMPOUND_STRING("IVs");
     const u8* gText_SkillPageEvs = COMPOUND_STRING("EVs");
     const u8* gText_SkillPageStats = COMPOUND_STRING("STATS");
-    
+
     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
     {
         if (ShouldShowRename())
@@ -5088,22 +5087,12 @@ static inline void ShowUtilityPrompt(s16 mode)
     PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_UTILITY);
 
     int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, promptText, 62);
-    int iconXPos = stringXPos + 18;
+    int iconXPos = stringXPos - 16;
     if (iconXPos < 0)
         iconXPos = 0;
 
-    if(sMonSummaryScreen->currPageIndex != PSS_PAGE_INFO)
-        PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
-    if(sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
-        PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
-    else if (promptText == gText_SkillPageStats)
-        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 64, 1, 0, 0);
-    else if (promptText == gText_Info)
-        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 70, 1, 0, 0);
-    else if (promptText == gText_Switch)
-        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 59, 1, 0, 0);
-    else
-        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 76, 1, 0, 0);
+    PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
+    PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
 }
 
 static void CB2_ReturnToSummaryScreenFromNamingScreen(void)

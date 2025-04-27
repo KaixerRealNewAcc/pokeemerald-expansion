@@ -12809,7 +12809,7 @@ F_TRAINER_FEMALE |
             },
             {
 #line 5162
-            .species = SPECIES_WOOPER_PALDEA,
+            .species = SPECIES_WOOPER,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5162
             .heldItem = ITEM_EVIOLITE,

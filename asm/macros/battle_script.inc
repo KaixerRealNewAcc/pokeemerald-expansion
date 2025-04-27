@@ -1232,11 +1232,8 @@
 	.byte 0xe5
 	.endm
 
-	.macro jumpifpassiveability battler:req, passiveability:req, jumpInstr:req
-	.byte 0x1e
-	.byte \battler
-	.2byte \passiveability
-	.4byte \jumpInstr
+	.macro unused_0xE6
+	.byte 0xe6
 	.endm
 
 	.macro unused_0xE7

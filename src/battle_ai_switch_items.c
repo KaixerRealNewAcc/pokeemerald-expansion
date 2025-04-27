@@ -561,7 +561,7 @@ static bool32 FindMonThatAbsorbsOpponentsMove(u32 battler)
         if (IsAceMon(battler, i))
             continue;
 
-        monAbility = (GetMonAbility(&party[i]) && GetMonPassiveAbility(&party[i]));
+        monAbility = GetMonAbility(&party[i]);
 
         for (j = 0; j < numAbsorbingAbilities; j++)
         {
@@ -881,7 +881,7 @@ static bool32 FindMonWithFlagsAndSuperEffective(u32 battler, u16 flags, u32 perc
 
         species = GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG);
         monAbility = GetMonAbility(&party[i]);
-        typeMultiplier = CalcPartyMonTypeEffectivenessMultiplier(gLastLandedMoves[battler], species, monAbility, battler);
+        typeMultiplier = CalcPartyMonTypeEffectivenessMultiplier(gLastLandedMoves[battler], species, monAbility);
         UpdateMoveResultFlags(typeMultiplier, &moveFlags);
         if (moveFlags & flags)
         {
