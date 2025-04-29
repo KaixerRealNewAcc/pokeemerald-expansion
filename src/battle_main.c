@@ -4822,7 +4822,7 @@ u32 GetBattlerTotalSpeedStatArgs(u32 battler, u32 ability, u32 holdEffect)
     }
 
     // other abilities
-    if (ability == ABILITY_QUICK_FEET && gBattleMons[battler].status1 & STATUS1_ANY)
+    if ((ability == ABILITY_QUICK_FEET || BattlerHasPassiveAbility(battler, ABILITY_QUICK_FEET)) && (gBattleMons[battler].status1 & STATUS1_ANY))
         speed = (speed * 150) / 100;
     else if ((ability == ABILITY_SURGE_SURFER || BattlerHasPassiveAbility(battler, ABILITY_SURGE_SURFER)) && ((gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)))
         speed *= 2;
@@ -4916,7 +4916,18 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS)
         return GetMovePriority(MOVE_MAX_GUARD);
 
-    if ((ability == ABILITY_GALE_WINGS
+    if (((ability == ABILITY_GALE_WINGS
+        || BattlerHasPassiveAbility(battler, ABILITY_GALE_WINGS))
+        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
+        && GetMoveType(move) == TYPE_FLYING)
+        || (ability == ABILITY_FLAMING_SOUL
+        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
+        && GetMoveType(move) == TYPE_FIRE))
+    {
+        priority++;
+    }
+    else if (((ability == ABILITY_FLAMING_SOUL
+        || BattlerHasPassiveAbility(battler, ABILITY_FLAMING_SOUL))
         && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
         && GetMoveType(move) == TYPE_FLYING)
         || (ability == ABILITY_FLAMING_SOUL
@@ -6128,11 +6139,11 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
         break;
     }
 
-    if (IsSoundMove(move) && ability == ABILITY_LIQUID_VOICE)
+    if (IsSoundMove(move) && (ability == ABILITY_LIQUID_VOICE || BattlerHasPassiveAbility(battler, ABILITY_LIQUID_VOICE)))
     {
         return TYPE_WATER;
     }
-    else if (IsSoundMove(move) && ability == ABILITY_SAND_SONG)
+    else if (IsSoundMove(move) && (ability == ABILITY_SAND_SONG || BattlerHasPassiveAbility(battler, ABILITY_SAND_SONG)))
     {
         return TYPE_GROUND;
     }

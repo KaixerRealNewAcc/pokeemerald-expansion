@@ -12809,16 +12809,16 @@ F_TRAINER_FEMALE |
             },
             {
 #line 5162
-            .species = SPECIES_WOOPER,
+            .species = SPECIES_WOOPER_PALDEA,
             .gender = TRAINER_MON_RANDOM_GENDER,
 #line 5162
-            .heldItem = ITEM_EVIOLITE,
+            .heldItem = ITEM_LEFTOVERS,
 #line 5167
             .iv = TRAINER_PARTY_IVS(31, 0, 31, 31, 31, 31),
 #line 5163
             .ability = ABILITY_WATER_ABSORB,
 #line 5164
-            .lvl = 12,
+            .lvl = 14,
 #line 5166
             .nature = NATURE_CAREFUL,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,

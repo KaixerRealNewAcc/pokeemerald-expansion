@@ -2656,6 +2656,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_ABILITY_NUM:
             retVal = substruct3->abilityNum;
             break;
+        case MON_DATA_PASSIVE_ABILITY:
+            retVal = substruct3->passiveAbility;
+            break;
         case MON_DATA_COOL_RIBBON:
             retVal = substruct3->coolRibbon;
             break;
@@ -3155,6 +3158,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_ABILITY_NUM:
             SET8(substruct3->abilityNum);
             break;
+        case MON_DATA_PASSIVE_ABILITY:
+            SET8(substruct3->passiveAbility);
+            break;
         case MON_DATA_COOL_RIBBON:
             SET8(substruct3->coolRibbon);
             break;
@@ -3523,7 +3529,6 @@ u16 GetMonAbility(struct Pokemon *mon)
 
 u16 SpeciesHasPassiveAbility(u16 species, u16 ability)
 {
-    //gSpeciesInfo[species].passiveAbility == ABILITY_TRUANT
     if (gSpeciesInfo[species].passiveAbility == ability)
         gLastUsedAbility = gSpeciesInfo[species].passiveAbility;
     else

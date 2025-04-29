@@ -6795,6 +6795,7 @@ BattleScript_EnduredMsg::
 
 BattleScript_SturdiedMsg::
 	pause B_WAIT_TIME_SHORTEST
+	sethword sABILITY_OVERWRITE, ABILITY_STURDY
 	call BattleScript_AbilityPopUpTarget
 	printstring STRINGID_ENDUREDSTURDY
 	waitmessage B_WAIT_TIME_LONG

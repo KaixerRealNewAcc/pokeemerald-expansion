@@ -1811,6 +1811,8 @@ static u8 GetAccuracyWindowId(u16 accuracy, u16 baseAccuracy)
 
 #include "battle_ai_main.h"
 
+extern u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData, u32 atkAbility, u32 defAbility, u32 holdEffectAtk, u32 weather);
+
 static void MoveSelectionDisplayMoveDescription(u32 battler)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[battler][4]);
@@ -1833,8 +1835,8 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
         .padding = 0  // Zero padding for safety
     };
 
-    if (move != MOVE_NONE && move != 0xFFFF && moveEffect != EFFECT_KNOCK_OFF 
-        && moveEffect != EFFECT_BRINE && moveEffect != EFFECT_LOW_KICK)
+    if (move != MOVE_NONE && move != 0xFFFF
+     && moveEffect != EFFECT_BRINE && moveEffect != EFFECT_LOW_KICK)
     {
         if (GetMoveCategory(move) == DAMAGE_CATEGORY_STATUS) 
         {

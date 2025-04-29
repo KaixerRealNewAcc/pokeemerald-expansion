@@ -1405,6 +1405,7 @@ static void Cmd_attackcanceler(void)
     if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)
     {
         gSpecialStatuses[gBattlerTarget].lightningRodRedirected = FALSE;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_LIGHTNING_ROD;
         gLastUsedAbility = ABILITY_LIGHTNING_ROD;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_TookAttack;
@@ -1413,6 +1414,7 @@ static void Cmd_attackcanceler(void)
     else if (gSpecialStatuses[gBattlerTarget].stormDrainRedirected)
     {
         gSpecialStatuses[gBattlerTarget].stormDrainRedirected = FALSE;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_STORM_DRAIN;
         gLastUsedAbility = ABILITY_STORM_DRAIN;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_TookAttack;
@@ -1958,7 +1960,11 @@ s32 CalcCritChanceStage(u32 battlerAtk, u32 battlerDef, u32 move, bool32 recordA
             critChance = ARRAY_COUNT(sCriticalHitOdds) - 1;
     }
 
-    if (critChance != CRITICAL_HIT_BLOCKED && (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR))
+    if ((critChance != CRITICAL_HIT_BLOCKED) && 
+       (abilityDef == ABILITY_BATTLE_ARMOR || 
+       abilityDef == ABILITY_SHELL_ARMOR ||
+       BattlerHasPassiveAbility(battlerDef, ABILITY_BATTLE_ARMOR) ||
+       BattlerHasPassiveAbility(battlerDef, ABILITY_SHELL_ARMOR)))
     {
         // Record ability only if move had 100% chance to get a crit
         if (recordAbility)
@@ -2013,7 +2019,10 @@ s32 CalcCritChanceStageGen1(u32 battlerAtk, u32 battlerDef, u32 move, bool32 rec
     // Prevented crits
     if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT)
         critChance = CRITICAL_HIT_BLOCKED;
-    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR)
+    else if (abilityDef == ABILITY_BATTLE_ARMOR || 
+             abilityDef == ABILITY_SHELL_ARMOR ||
+             BattlerHasPassiveAbility(battlerDef, ABILITY_BATTLE_ARMOR) ||
+             BattlerHasPassiveAbility(battlerDef, ABILITY_SHELL_ARMOR) )
     {
         if (recordAbility)
             RecordAbilityBattle(battlerDef, abilityDef);
@@ -2232,12 +2241,11 @@ static void Cmd_adjustdamage(void)
             gLastUsedItem = gBattleMons[battlerDef].item;
             gBattleStruct->moveResultFlags[battlerDef] |= MOVE_RESULT_FOE_HUNG_ON;
         }
-        else if (B_STURDY >= GEN_5 && GetBattlerAbility(battlerDef) == ABILITY_STURDY && IsBattlerAtMaxHp(battlerDef))
+        else if (B_STURDY >= GEN_5 && (GetBattlerAbility(battlerDef) == ABILITY_STURDY || BattlerHasPassiveAbility(battlerDef, PASSIVE_ABILITY_STURDY)) && IsBattlerAtMaxHp(battlerDef))
         {
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STURDY;
             enduredHit = TRUE;
             RecordAbilityBattle(battlerDef, ABILITY_STURDY);
-            gLastUsedAbility = ABILITY_STURDY;
             gBattleStruct->moveResultFlags[battlerDef] |= MOVE_RESULT_STURDIED;
         }
         else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && IsBattlerAtMaxHp(battlerDef))
@@ -8383,7 +8391,8 @@ static bool32 DoSwitchInEffectsForBattler(u32 battler)
     else if (!(gDisableStructs[battler].stealthRockDone)
         && (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         && IsBattlerAffectedByHazards(battler, FALSE)
-        && GetBattlerAbility(battler) != ABILITY_MAGIC_GUARD)
+        && (GetBattlerAbility(battler) != ABILITY_MAGIC_GUARD
+        || !BattlerHasPassiveAbility(battler, ABILITY_MAGIC_GUARD)))
     {
         gDisableStructs[battler].stealthRockDone = TRUE;
         gBattleStruct->moveDamage[battler] = GetStealthHazardDamage(TYPE_SIDE_HAZARD_POINTED_STONES, battler);
@@ -10034,7 +10043,8 @@ static bool32 IsElectricAbilityAffected(u32 battler, u32 ability)
 
     if (moveType == TYPE_ELECTRIC
      && (ability != ABILITY_LIGHTNING_ROD || B_REDIRECT_ABILITY_IMMUNITY >= GEN_5)
-     && GetBattlerAbility(battler) == ability)
+     && (GetBattlerAbility(battler) == ability
+     || BattlerHasPassiveAbility(battler, ability)))
         return TRUE;
     else
         return FALSE;
@@ -12683,6 +12693,7 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
                 {
                     gProtectStructs[index].activateOpportunist = 2;      // set stats to copy
                 }
+
                 if (GetBattlerHoldEffect(index, TRUE) == HOLD_EFFECT_MIRROR_HERB)
                 {
                     gProtectStructs[index].eatMirrorHerb = 1;

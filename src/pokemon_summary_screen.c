@@ -148,6 +148,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u8 ribbonCount; // 0x6
         u8 ailment; // 0x7
         u8 abilityNum; // 0x8
+        u16 passiveAbility;
         u8 metLocation; // 0x9
         u8 metLevel; // 0xA
         u8 metGame; // 0xB
@@ -460,10 +461,10 @@ static const struct WindowTemplate sSummaryTemplate[] =
     },
     [PSS_LABEL_WINDOW_PROMPT_UTILITY] = {
         .bg = 0,
-        .tilemapLeft = 22,
+        .tilemapLeft = 18,
         .tilemapTop = 0,
-        .width = 8,
-        .height = 2,
+        .width = 12,
+        .height = 3,
         .paletteNum = 7,
         .baseBlock = 89,
     },
@@ -1896,7 +1897,10 @@ static void Task_HandleInput(u8 taskId)
             PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPagePassiveAbility, stringXPos, 1, 0, 0);
         
             FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
-            PrintTextOnWindow(windowId, gAbilitiesInfo[passiveAbility].name, 5, 8, 2, 1);
+            if(P_SUMMARY_SCREEN_ABILITY_COLOR)
+                PrintTextOnWindow(windowId, gAbilitiesInfo[passiveAbility].name, 5, 8, 2, PASSIVE_ABILITY_COLOR_VALUE);
+            else
+                PrintTextOnWindow(windowId, gAbilitiesInfo[passiveAbility].name, 5, 8, 2, 1);
             FormatTextByWidth(desc, MAX_ABILITY_DESCRIPTION_WIDTH, FONT_SHORT_NARROW, gAbilitiesInfo[passiveAbility].description, 0);
             PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
         }
@@ -1905,6 +1909,7 @@ static void Task_HandleInput(u8 taskId)
             u8 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY);
             u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
             u8 desc[MAX_ABILITY_DESCRIPTION_LENGTH];
+            u16 isHiddenAbility = sMonSummaryScreen->summary.abilityNum == 2;
 
             int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, gTextInfoPageAbility, 62);
             int iconXPos = stringXPos - 16;
@@ -1914,7 +1919,10 @@ static void Task_HandleInput(u8 taskId)
             PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, gTextInfoPageAbility, stringXPos, 1, 0, 0);
 
             FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_INFO_ABILITY], 0);
-            PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
+            if(P_SUMMARY_SCREEN_ABILITY_COLOR && isHiddenAbility)
+                PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, ABILITY_COLOR_VALUE);
+            else
+                PrintTextOnWindow(windowId, gAbilitiesInfo[ability].name, 5, 8, 2, 1);
             FormatTextByWidth(desc, MAX_ABILITY_DESCRIPTION_WIDTH, FONT_SHORT_NARROW, gAbilitiesInfo[ability].description, 0);
             PrintTextOnWindow_SmallNarrow(windowId, desc, 5, 22, 2, 0);
         }
@@ -5087,12 +5095,22 @@ static inline void ShowUtilityPrompt(s16 mode)
     PutWindowTilemap(PSS_LABEL_WINDOW_PROMPT_UTILITY);
 
     int stringXPos = GetStringRightAlignXOffset(FONT_NORMAL, promptText, 62);
-    int iconXPos = stringXPos - 16;
+    int iconXPos = stringXPos + 18;
     if (iconXPos < 0)
         iconXPos = 0;
 
-    PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
+    if(sMonSummaryScreen->currPageIndex != PSS_PAGE_INFO)
+        PrintAOrBButtonIcon(PSS_LABEL_WINDOW_PROMPT_UTILITY, FALSE, iconXPos);
+    if(sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+        PrintTextOnWindow_SmallNarrow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, stringXPos, 1, 0, 0);
+    else if (promptText == gText_SkillPageStats)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 64, 1, 0, 0);
+    else if (promptText == gText_Info)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 70, 1, 0, 0);
+    else if (promptText == gText_Switch)
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 59, 1, 0, 0);
+    else
+        PrintTextOnWindow(PSS_LABEL_WINDOW_PROMPT_UTILITY, promptText, 76, 1, 0, 0);
 }
 
 static void CB2_ReturnToSummaryScreenFromNamingScreen(void)

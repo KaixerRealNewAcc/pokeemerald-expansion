@@ -1120,7 +1120,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_ILLUSION] =
     {
         .name = _("Illusion"),
-        .description = COMPOUND_STRING("Disguises as the last member of your team. 33% boost to its STAB moves when disguised."),
+        .description = COMPOUND_STRING("Disguises as the last member of your team, 33% boost to its STAB moves when disguised."),
         .aiRating = 8,
         .cantBeCopied = TRUE,
         .cantBeSwapped = TRUE,
@@ -1759,7 +1759,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_SHADOW_SHIELD] =
     {
         .name = _("Shadow Shield"),
-        .description = COMPOUND_STRING("Reduces the damage taken by the user while its HP is full by 50%"),
+        .description = COMPOUND_STRING("Reduces the damage taken by the user while its HP is full by 50%."),
         .aiRating = 8,
     },
 
@@ -2233,8 +2233,8 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_OPPORTUNIST] =
     {
         .name = _("Opportunist"),
-        .description = COMPOUND_STRING("Copies foe's stat change."),
-        .aiRating = 5,
+        .description = COMPOUND_STRING("If the target has less 1/2 HP, Single target-moves get +1 Priority."),
+        .aiRating = 6,
     },
 
     [ABILITY_CUD_CHEW] =
@@ -2247,7 +2247,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_SHARPNESS] =
     {
         .name = _("Sharpness"),
-        .description = COMPOUND_STRING("Strengthens slicing moves."),
+        .description = COMPOUND_STRING("Boosts slicing moves by 50%."),
         .aiRating = 7,
     },
 
@@ -2415,14 +2415,14 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_STRIKER] =
     {
         .name = _("Striker"),
-        .description = COMPOUND_STRING("Boosts Kicking moves by 30%"),
+        .description = COMPOUND_STRING("Boosts Kicking moves by 30%."),
         .aiRating = 6,
     },
 
     [ABILITY_SAND_SONG] =
     {
         .name = _("Sand Song"),
-        .description = COMPOUND_STRING("Sounds moves become Ground-Type.\nBoosts Sound moves by 20%"),
+        .description = COMPOUND_STRING("Sounds moves become Ground-Type.\nBoosts Sound moves by 20%."),
         .aiRating = 6,
     },
 
@@ -2499,6 +2499,14 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 7,     
     },
 
+    [ABILITY_POISON_ABSORB] =
+    {
+        .name = _("Poison Absorb"),
+        .description = COMPOUND_STRING("The user restores up to 25% of its max HP when hit with Poison-\ntype moves."),
+        .aiRating = 7,
+        .breakable = TRUE,
+    },
+
     [PASSIVE_ABILITY_CORV_SLAYER] =
     {
         .name = _("Corviknight Slayer"),
@@ -2525,6 +2533,14 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .name = _("Fighting Spirit"),
         .description = COMPOUND_STRING("The users fighting spirit boosts Fighting-Type Moves by 20%"),
         .aiRating = 6,
+    },
+
+    [PASSIVE_ABILITY_DAZZLING_FEATHERS] =
+    {
+        .name = _("Dazzling Feathers"),
+        .description = COMPOUND_STRING("Protects itself and its party from Priority-Moves."),
+        .aiRating = 5,
+        .breakable = TRUE,
     },
 
     [PASSIVE_ABILITY_NOISE_CANCEL] =
