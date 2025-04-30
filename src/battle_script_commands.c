@@ -6725,10 +6725,17 @@ static void Cmd_moveend(void)
                   && !(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_FAILED)
                   && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
             {
+                if(BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_MAGIC_GUARD))
+                {
+                    break;
+                }
+                else
+                {
                 gBattleStruct->moveDamage[gBattlerAttacker] = (GetNonDynamaxMaxHP(gBattlerAttacker) + 1) / 2; // Half of Max HP Rounded UP
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_MaxHp50Recoil;
                 effect = TRUE;
+                }
             }
             gBattleScripting.moveendState++;
             break;

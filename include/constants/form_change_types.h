@@ -151,4 +151,6 @@
 // Form change that activates when the Pokémon is deposited into the PC or Daycare.
 #define FORM_CHANGE_DEPOSIT                     27
 
+#define FORM_CHANGE_OVERWORLD_BATTLE_BOND       28
+
 #endif // GUARD_CONSTANTS_FORM_CHANGE_TYPES_H

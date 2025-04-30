@@ -2218,8 +2218,8 @@ bool32 IsMagicGuardProtected(u32 battler, u32 ability)
     if (ability != ABILITY_MAGIC_GUARD)
         return FALSE;
 
-    if (BattlerHasPassiveAbilityTest(battler) != ABILITY_MAGIC_GUARD)
-        return FALSE;
+    if (BattlerHasPassiveAbility(battler, ABILITY_MAGIC_GUARD))
+        return TRUE;
 
     RecordAbilityBattle(battler, ability);
     return TRUE;
@@ -2244,7 +2244,8 @@ u8 DoBattlerEndTurnEffects(void)
         {
         case ENDTURN_WEATHER_DAMAGE:
             ability = GetBattlerAbility(battler);
-            if (!IsBattlerAlive(battler) || !HasWeatherEffect() || ability == ABILITY_MAGIC_GUARD)
+            if (!IsBattlerAlive(battler) || !HasWeatherEffect() || 
+            (ability == ABILITY_MAGIC_GUARD || BattlerHasPassiveAbility(battler, ABILITY_MAGIC_GUARD)))
             {
                 gBattleStruct->turnEffectsTracker++;
                 break;
@@ -5581,7 +5582,11 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 }
                 else 
                 {
-                    goto SOLAR_POWER_HP_DROP;
+                    BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
+                    gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 8;
+                    if (gBattleStruct->moveDamage[battler] == 0)
+                        gBattleStruct->moveDamage[battler] = 1;
+                    effect++;
                 }
                 break;
             // Dry Skin works similarly to Rain Dish in Rain
@@ -5700,17 +5705,6 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
             case ABILITY_BAD_DREAMS:
                 BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
                 effect++;
-                break;
-            case ABILITY_SOLAR_POWER:
-                if (IsBattlerWeatherAffected(battler, B_WEATHER_SUN))
-                {
-                SOLAR_POWER_HP_DROP:
-                    BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
-                    gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 8;
-                    if (gBattleStruct->moveDamage[battler] == 0)
-                        gBattleStruct->moveDamage[battler] = 1;
-                    effect++;
-                }
                 break;
             case ABILITY_HEALER:
                 gBattleScripting.battler = BATTLE_PARTNER(battler);
@@ -8352,13 +8346,20 @@ u32 ItemBattleEffects(enum ItemCaseId caseID, u32 battler, bool32 moveTurn)
                 }
                 else if (GetBattlerAbility(battler) != ABILITY_MAGIC_GUARD && !moveTurn)
                 {
-                    gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 8;
-                    if (gBattleStruct->moveDamage[battler] == 0)
-                        gBattleStruct->moveDamage[battler] = 1;
-                    BattleScriptExecute(BattleScript_ItemHurtEnd2);
-                    effect = ITEM_HP_CHANGE;
-                    RecordItemEffectBattle(battler, battlerHoldEffect);
-                    PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
+                    if(BattlerHasPassiveAbility(battler, ABILITY_MAGIC_GUARD))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 8;
+                        if (gBattleStruct->moveDamage[battler] == 0)
+                            gBattleStruct->moveDamage[battler] = 1;
+                        BattleScriptExecute(BattleScript_ItemHurtEnd2);
+                        effect = ITEM_HP_CHANGE;
+                        RecordItemEffectBattle(battler, battlerHoldEffect);
+                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
+                    }
                 }
                 break;
             case HOLD_EFFECT_LEFTOVERS:
@@ -8637,13 +8638,20 @@ u32 ItemBattleEffects(enum ItemCaseId caseID, u32 battler, bool32 moveTurn)
                 && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                 && !gSpecialStatuses[gBattlerAttacker].preventLifeOrbDamage)
             {
-                gBattleStruct->moveDamage[gBattlerAttacker] = GetNonDynamaxMaxHP(gBattlerAttacker) / 10;
-                if (gBattleStruct->moveDamage[gBattlerAttacker] == 0)
-                    gBattleStruct->moveDamage[gBattlerAttacker] = 1;
-                effect = ITEM_HP_CHANGE;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ItemHurtRet;
-                gLastUsedItem = atkItem;
+                if(BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_MAGIC_GUARD))
+                {
+                    gSpecialStatuses[gBattlerAttacker].preventLifeOrbDamage;
+                }
+                else
+                {
+                    gBattleStruct->moveDamage[gBattlerAttacker] = GetNonDynamaxMaxHP(gBattlerAttacker) / 10;
+                    if (gBattleStruct->moveDamage[gBattlerAttacker] == 0)
+                        gBattleStruct->moveDamage[gBattlerAttacker] = 1;
+                    effect = ITEM_HP_CHANGE;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ItemHurtRet;
+                    gLastUsedItem = atkItem;
+                }
             }
             break;
         case HOLD_EFFECT_THROAT_SPRAY:  // Does NOT need to be a damaging move
@@ -9974,7 +9982,7 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
         break;
     case ABILITY_SUPREME_OVERLORD:
-        modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
+            modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
         break;
     case ABILITY_LIQUID_VOICE:
     case ABILITY_SAND_SONG:
@@ -9983,7 +9991,19 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
         break;
     case ABILITY_BIG_PECKS:
         if (GetMoveType(move) == TYPE_FLYING)
-           modifier = uq4_12_multiply(modifier, UQ_4_12(1.1));
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.1));
+        break;
+    case ABILITY_ROCKY_PAYLOAD:
+        if (moveType == TYPE_ROCK)
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_TRANSISTOR:
+        if (moveType == TYPE_ELECTRIC)
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_DRAGONS_MAW:
+        if (moveType == TYPE_DRAGON)
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
         break;
     }
 
@@ -10094,6 +10114,12 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     {
         if (GetMoveType(move) == TYPE_FLYING)
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.1));
+    }
+
+    if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_MONKEY_HANDS))
+    {
+        if(moveEffect != EFFECT_MULTI_HIT && GetMoveStrikeCount(move) == 2)
+            modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
     }
 
     if(BattlerHasPassiveAbility(battlerAtk, PASSIVE_ABILITY_ERUPTIVE_BACK))
@@ -10444,25 +10470,8 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
         if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IsBattleMovePhysical(move))
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
-    case ABILITY_TRANSISTOR:
-        if (moveType == TYPE_ELECTRIC)
-        {
-            if (B_TRANSISTOR_BOOST >= GEN_9)
-                modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
-            else
-                modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
-        }
-        break;
-    case ABILITY_DRAGONS_MAW:
-        if (moveType == TYPE_DRAGON)
-            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
-        break;
     case ABILITY_GORILLA_TACTICS:
         if (IsBattleMovePhysical(move))
-            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
-        break;
-    case ABILITY_ROCKY_PAYLOAD:
-        if (moveType == TYPE_ROCK)
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
         break;
     case ABILITY_PROTOSYNTHESIS:
@@ -10499,7 +10508,7 @@ static inline u32 CalcAttackStat(struct DamageCalculationData *damageCalcData, u
         if (ZOROARK_FAM(atkBaseSpeciesId) && boostsSameTypeAttackZoroark)
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.3333));
     }
-
+    
     // target's abilities
     switch (defAbility)
     {

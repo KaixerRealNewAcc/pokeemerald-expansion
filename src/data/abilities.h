@@ -2543,6 +2543,13 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .breakable = TRUE,
     },
 
+    [PASSIVE_ABILITY_MONKEY_HANDS] =
+    {
+        .name = _("Monkey Hands"),
+        .description = COMPOUND_STRING("Increases the damage done by 2 times multi strike moves by 20%."),
+        .aiRating = 6,
+    },
+
     [PASSIVE_ABILITY_NOISE_CANCEL] =
     {
         .name = _("Noise Cancelation"),

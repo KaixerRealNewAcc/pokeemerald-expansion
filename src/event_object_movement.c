@@ -5488,12 +5488,23 @@ static bool32 EndFollowerTransformEffect(struct ObjectEvent *objectEvent, struct
 static bool32 TryStartFollowerTransformEffect(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
     u32 multi;
-    struct Pokemon *mon;
-    u32 ability;
+    struct Pokemon *mon = 0;
+    u32 ability = GetMonAbility(mon);
+    u32 species = OW_SPECIES(objectEvent);
+
     if (DoesSpeciesHaveFormChangeMethod(OW_SPECIES(objectEvent), FORM_CHANGE_OVERWORLD_WEATHER)
         && OW_SPECIES(objectEvent) != (multi = GetOverworldWeatherSpecies(OW_SPECIES(objectEvent))))
     {
         sprite->data[7] = TRANSFORM_TYPE_WEATHER << 8;
+        PlaySE(SE_M_MINIMIZE);
+        return TRUE;
+    }
+
+    if ((DoesSpeciesHaveFormChangeMethod(OW_SPECIES(objectEvent), FORM_CHANGE_OVERWORLD_BATTLE_BOND) && 
+      (ability == ABILITY_BATTLE_BOND || SpeciesHasPassiveAbility(species, ABILITY_BATTLE_BOND)))
+      && (OW_SPECIES(objectEvent) == SPECIES_GRENINJA))
+    {
+        sprite->data[7] = TRANSFORM_TYPE_PERMANENT << 8;
         PlaySE(SE_M_MINIMIZE);
         return TRUE;
     }

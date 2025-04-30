@@ -7532,11 +7532,11 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
 #if P_FAMILY_REGIDRAGO
     [SPECIES_REGIDRAGO] =
     {
-        .baseHP        = 200,
-        .baseAttack    = 100,
+        .baseHP        = 200 - 20,
+        .baseAttack    = 100 - 10,
         .baseDefense   = 50,
-        .baseSpeed     = 80,
-        .baseSpAttack  = 100,
+        .baseSpeed     = 80 + 40,
+        .baseSpAttack  = 100 - 10,
         .baseSpDefense = 50,
         .types = MON_TYPES(TYPE_DRAGON),
         .catchRate = 3,
