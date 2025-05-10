@@ -3666,13 +3666,14 @@ static void CancellerMultihitMoves(u32 *effect)
     {
         u32 ability = GetBattlerAbility(gBattlerAttacker);
 
-        if (ability == ABILITY_SKILL_LINK)
+        if (ability == ABILITY_SKILL_LINK || BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_SKILL_LINK))
         {
             gMultiHitCounter = 5;
         }
-        else if (ability == ABILITY_BATTLE_BOND
-              && gCurrentMove == MOVE_WATER_SHURIKEN
-              && gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_ASH)
+        else if ((ability == ABILITY_BATTLE_BOND
+              || BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_BATTLE_BOND))
+              && (gCurrentMove == MOVE_WATER_SHURIKEN
+              && gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_ASH))
         {
             gMultiHitCounter = 3;
         }
@@ -5126,15 +5127,6 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 effect++;
             }
             break;
-        case ABILITY_COMATOSE:
-            if (!gSpecialStatuses[battler].switchInAbilityDone)
-            {
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
-                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
-            }
-            break;
         case ABILITY_SCREEN_CLEANER:
             if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
             {
@@ -5539,23 +5531,25 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                     effect++;
                 }
             }
+
+            if(GetBattlerAbility(battler) == ABILITY_COMATOSE ||
+            BattlerHasPassiveAbility(battler, ABILITY_COMATOSE))
+            {
+                if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_COMATOSE;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    effect++;
+                }
+            }
         }
         break;
     case ABILITYEFFECT_ENDTURN:
             gBattlerAttacker = battler;
             switch (gLastUsedAbility)
             {
-            case ABILITY_PICKUP:
-                if (gBattleMons[battler].item == ITEM_NONE
-                 && gBattleStruct->changedItems[battler] == ITEM_NONE   // Will not inherit an item
-                 && PickupHasValidTarget(battler))
-                {
-                    gBattlerTarget = RandomUniformExcept(RNG_PICKUP, 0, gBattlersCount - 1, CantPickupItem);
-                    gLastUsedItem = GetUsedHeldItem(gBattlerTarget);
-                    BattleScriptPushCursorAndCallback(BattleScript_PickupActivates);
-                    effect++;
-                }
-                break;
             case ABILITY_HARVEST:
                 if ((IsBattlerWeatherAffected(battler, B_WEATHER_SUN) || RandomPercentage(RNG_HARVEST, 50))
                  && gBattleMons[battler].item == ITEM_NONE
@@ -6960,6 +6954,23 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
             }
         }
 
+        if(abilityEffect && caseID == ABILITYEFFECT_ENDTURN)
+        {
+            if (GetBattlerAbility(battler) == ABILITY_PICKUP
+             || BattlerHasPassiveAbility(battler, ABILITY_PICKUP))
+            {
+                if (gBattleMons[battler].item == ITEM_NONE
+                 && gBattleStruct->changedItems[battler] == ITEM_NONE   // Will not inherit an item
+                 && PickupHasValidTarget(battler))
+                {
+                    gBattlerTarget = RandomUniformExcept(RNG_PICKUP, 0, gBattlersCount - 1, CantPickupItem);
+                    gLastUsedItem = GetUsedHeldItem(gBattlerTarget);
+                    BattleScriptPushCursorAndCallback(BattleScript_PickupActivates);
+                    effect++;
+                }
+            }
+        }
+
         if(abilityEffect && caseID == ABILITYEFFECT_NEUTRALIZINGGAS)
         {
             if (BattlerHasPassiveAbility(battler, ABILITY_NEUTRALIZING_GAS) && !gDisableStructs[i].neutralizingGas)
@@ -7231,9 +7242,13 @@ bool32 CanBeSlept(u32 battler, u32 ability, enum SleepClauseBlock isBlockedBySle
         return FALSE;
 
     if (ability == ABILITY_INSOMNIA
+     || BattlerHasPassiveAbility(battler, ABILITY_INSOMNIA)
      || ability == ABILITY_VITAL_SPIRIT
+     || BattlerHasPassiveAbility(battler, ABILITY_VITAL_SPIRIT)
      || ability == ABILITY_COMATOSE
+     || BattlerHasPassiveAbility(battler, ABILITY_COMATOSE)
      || ability == ABILITY_PURIFYING_SALT
+     || BattlerHasPassiveAbility(battler, ABILITY_PURIFYING_SALT)
      || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
      || gBattleMons[battler].status1 & STATUS1_ANY
      || IsAbilityOnSide(battler, ABILITY_SWEET_VEIL)
@@ -7249,8 +7264,11 @@ bool32 CanBePoisoned(u32 battlerAtk, u32 battlerDef, u32 defAbility)
      || gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_SAFEGUARD
      || gBattleMons[battlerDef].status1 & STATUS1_ANY
      || defAbility == ABILITY_IMMUNITY
+     || BattlerHasPassiveAbility(battlerDef, ABILITY_IMMUNITY)
      || defAbility == ABILITY_COMATOSE
+     || BattlerHasPassiveAbility(battlerDef, ABILITY_COMATOSE)
      || defAbility == ABILITY_PURIFYING_SALT
+     || BattlerHasPassiveAbility(battlerDef, ABILITY_PURIFYING_SALT)
      || IsAbilityOnSide(battlerDef, ABILITY_PASTEL_VEIL)
      || IsAbilityStatusProtected(battlerDef, defAbility)
      || IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_MISTY_TERRAIN))
@@ -7264,10 +7282,15 @@ bool32 CanBeBurned(u32 battler, u32 ability)
      || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
      || gBattleMons[battler].status1 & STATUS1_ANY
      || ability == ABILITY_WATER_VEIL
+     || BattlerHasPassiveAbility(battler, ABILITY_WATER_VEIL)
      || ability == ABILITY_WATER_BUBBLE
+     || BattlerHasPassiveAbility(battler, ABILITY_WATER_BUBBLE)
      || ability == ABILITY_COMATOSE
+     || BattlerHasPassiveAbility(battler, ABILITY_COMATOSE)
      || ability == ABILITY_THERMAL_EXCHANGE
+     || BattlerHasPassiveAbility(battler, ABILITY_THERMAL_EXCHANGE)
      || ability == ABILITY_PURIFYING_SALT
+     || BattlerHasPassiveAbility(battler, ABILITY_PURIFYING_SALT)
      || IsAbilityStatusProtected(battler, ability)
      || IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
@@ -7280,7 +7303,9 @@ bool32 CanBeParalyzed(u32 battler, u32 ability)
       || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
       || ability == ABILITY_LIMBER
       || ability == ABILITY_COMATOSE
+      || BattlerHasPassiveAbility(battler, ABILITY_COMATOSE)
       || ability == ABILITY_PURIFYING_SALT
+      || BattlerHasPassiveAbility(battler, ABILITY_PURIFYING_SALT)
       || gBattleMons[battler].status1 & STATUS1_ANY
       || IsAbilityStatusProtected(battler, ability)
       || IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
@@ -7294,8 +7319,11 @@ bool32 CanBeFrozen(u32 battler, u32 ability)
      || IsBattlerWeatherAffected(battler, B_WEATHER_SUN)
      || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
      || ability == ABILITY_MAGMA_ARMOR
+     || BattlerHasPassiveAbility(battler, ABILITY_MAGMA_ARMOR)
      || ability == ABILITY_COMATOSE
+     || BattlerHasPassiveAbility(battler, ABILITY_COMATOSE)
      || ability == ABILITY_PURIFYING_SALT
+     || BattlerHasPassiveAbility(battler, ABILITY_PURIFYING_SALT)
      || gBattleMons[battler].status1 & STATUS1_ANY
      || IsAbilityStatusProtected(battler, ability)
      || IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
@@ -7308,8 +7336,11 @@ bool32 CanGetFrostbite(u32 battler, u32 ability)
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
       || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
       || ability == ABILITY_MAGMA_ARMOR
+      || BattlerHasPassiveAbility(battler, ABILITY_MAGMA_ARMOR)
       || ability == ABILITY_COMATOSE
+      || BattlerHasPassiveAbility(battler, ABILITY_COMATOSE)
       || ability == ABILITY_PURIFYING_SALT
+      || BattlerHasPassiveAbility(battler, ABILITY_PURIFYING_SALT)
       || gBattleMons[battler].status1 & STATUS1_ANY
       || IsAbilityStatusProtected(battler, ability)
       || IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
@@ -9813,7 +9844,8 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     switch (moveEffect)
     {
     case EFFECT_FACADE:
-        if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE))
+        if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE) 
+               || atkAbility == ABILITY_COMATOSE || BattlerHasPassiveAbility(battlerAtk, ABILITY_COMATOSE))
             modifier = uq4_12_multiply(modifier, UQ_4_12(2.0));
         break;
     case EFFECT_BRINE:
@@ -9981,11 +10013,16 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
         if (IsSlicingMove(move))
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
         break;
+    case ABILITY_KEEN_EDGE:
+        if (IsSlicingMove(move))
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
+        break;
     case ABILITY_SUPREME_OVERLORD:
             modifier = uq4_12_multiply(modifier, GetSupremeOverlordModifier(battlerAtk));
         break;
     case ABILITY_LIQUID_VOICE:
     case ABILITY_SAND_SONG:
+    case ABILITY_FREEZING_MELODY:
         if(IsSoundMove(move))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
         break;
@@ -10098,7 +10135,8 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     }
 
     if(BattlerHasPassiveAbility(battlerAtk, ABILITY_LIQUID_VOICE) ||
-    BattlerHasPassiveAbility(battlerAtk, ABILITY_SAND_SONG))
+    BattlerHasPassiveAbility(battlerAtk, ABILITY_SAND_SONG) ||
+    BattlerHasPassiveAbility(battlerAtk, ABILITY_FREEZING_MELODY))
     {
         if(IsSoundMove(move))
             modifier = uq4_12_multiply(modifier, UQ_4_12(1.2));
@@ -10108,6 +10146,12 @@ u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *damageCalcData
     {
         if (IsSlicingMove(move))
            modifier = uq4_12_multiply(modifier, UQ_4_12(1.5));
+    }
+
+    if(BattlerHasPassiveAbility(battlerAtk,  PASSIVE_ABILITY_KEEN_EDGE))
+    {
+        if (IsSlicingMove(move))
+           modifier = uq4_12_multiply(modifier, UQ_4_12(1.3));
     }
 
     if(BattlerHasPassiveAbility(battlerAtk, ABILITY_BIG_PECKS))
@@ -10683,6 +10727,13 @@ static inline u32 CalcDefenseStat(struct DamageCalculationData *damageCalcData, 
         if (moveType == TYPE_GHOST)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         break;
+    }
+
+    if(BattlerHasPassiveAbility(battlerDef, ABILITY_FUR_COAT)
+    || BattlerHasPassiveAbility(battlerDef, ABILITY_METAL_FUR))
+    {
+        if (usesDefStat)
+            modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
     }
 
     // ally's abilities

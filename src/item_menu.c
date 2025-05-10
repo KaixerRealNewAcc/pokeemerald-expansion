@@ -952,6 +952,10 @@ static void LoadBagItemListBuffers(u8 pocketId)
     gMultiuseListMenuTemplate.maxShowed = gBagMenu->numShownItems[pocketId];
 }
 
+static const u8 gText_NumberItem_Berry[] = _("No{STR_VAR_1}{CLEAR 0x07}{STR_VAR_2}");
+static const u8 gText_NumberItem_TM[] = _("TM{STR_VAR_1}{CLEAR 0x04}{STR_VAR_2}");
+const u8 gText_NumberItem_HM[] = _("HM{STR_VAR_1}{CLEAR 0x04}{STR_VAR_2}");
+
 static void GetItemName(u8 *dest, u16 itemId)
 {
     u8 *end;
@@ -970,14 +974,14 @@ static void GetItemName(u8 *dest, u16 itemId)
         {
             // Get TM number
             ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_TM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
-            StringExpandPlaceholders(dest, gText_NumberItem_TMBerry);
+            StringExpandPlaceholders(dest, gText_NumberItem_TM);
         }
         break;
     case BERRIES_POCKET:
         ConvertIntToDecimalStringN(gStringVar1, itemId - FIRST_BERRY_INDEX + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
         end = CopyItemName(itemId, gStringVar2);
         PrependFontIdToFit(gStringVar2, end, FONT_NARROW, 61);
-        StringExpandPlaceholders(dest, gText_NumberItem_TMBerry);
+        StringExpandPlaceholders(dest, gText_NumberItem_Berry);
         break;
     default:
         end = CopyItemName(itemId, dest);

@@ -1108,6 +1108,10 @@ static const struct SpriteFrameImage sPicTable_Brandon[] = {
     overworld_ascending_frames(gObjectEventPic_Brandon, 2, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_MegaStones[] = {
+    overworld_ascending_frames(gObjectEventPic_MegaStones, 2, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_PokeBall[] = {
     overworld_frame(gObjectEventPic_PokeBall, 2, 4, 0),
     overworld_frame(gObjectEventPic_PokeBall, 2, 4, 1),

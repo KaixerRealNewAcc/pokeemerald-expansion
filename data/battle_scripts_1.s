@@ -8572,7 +8572,6 @@ BattleScript_AbilityStatusEffect::
 
 BattleScript_BattleBondActivatesOnMoveEndAttacker::
 	pause 5
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ATTACKERBECAMEFULLYCHARGED
 	handleformchange BS_ATTACKER, 0

@@ -1730,7 +1730,8 @@ static void AccuracyCheck(bool32 recalcDragonDarts, const u8 *nextInstr, const u
     }
     else if (gSpecialStatuses[gBattlerAttacker].parentalBondState == PARENTAL_BOND_2ND_HIT
         || (gSpecialStatuses[gBattlerAttacker].multiHitOn
-        && (abilityAtk == ABILITY_SKILL_LINK || holdEffectAtk == HOLD_EFFECT_LOADED_DICE
+        && (abilityAtk == ABILITY_SKILL_LINK || BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_SKILL_LINK)
+        || holdEffectAtk == HOLD_EFFECT_LOADED_DICE
         || !(effect == EFFECT_TRIPLE_KICK || effect == EFFECT_POPULATION_BOMB))))
     {
         // No acc checks for second hit of Parental Bond or multi hit moves, except Triple Kick/Triple Axel/Population Bomb
@@ -6327,6 +6328,8 @@ static bool32 HandleMoveEndAbilityBlock(u32 battlerAtk, u32 battlerDef, u32 move
 {
     u32 effect = FALSE;
     u32 abilityAtk = GetBattlerAbility(battlerAtk);
+    u32 side = GetBattlerSide(battlerAtk);
+    u32 species = gBattleMons[battlerAtk].species;
 
     switch (abilityAtk)
     {
@@ -6393,19 +6396,17 @@ static bool32 HandleMoveEndAbilityBlock(u32 battlerAtk, u32 battlerDef, u32 move
              || NumFaintedBattlersByAttacker(battlerAtk) == 0)
                 break;
 
-            u32 side = GetBattlerSide(battlerAtk);
-
             if (gBattleStruct->battleBondBoost[side] & (1u << gBattlerPartyIndexes[battlerAtk]))
                 break;
 
-
-            if (GetGenConfig(GEN_CONFIG_BATTLE_BOND) < GEN_9 && gBattleMons[battlerAtk].species == SPECIES_GRENINJA_BATTLE_BOND)
+            if ((GetGenConfig(GEN_CONFIG_BATTLE_BOND) < GEN_9) && (species == SPECIES_GRENINJA_BATTLE_BOND || species == SPECIES_GRENINJA))
             {
                 // TODO: Convert this to a proper FORM_CHANGE type.
-                gLastUsedAbility = abilityAtk;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_BATTLE_BOND;
+                gLastUsedAbility = ABILITY_BATTLE_BOND;
                 gBattleStruct->battleBondBoost[side] |= 1u << gBattlerPartyIndexes[battlerAtk];
                 PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battlerAtk].species);
-                gBattleStruct->changedSpecies[side][gBattlerPartyIndexes[battlerAtk]] = gBattleMons[battlerAtk].species;
+                gBattleStruct->changedSpecies[side][gBattlerPartyIndexes[battlerAtk]] = species;
                 gBattleMons[battlerAtk].species = SPECIES_GRENINJA_ASH;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_BattleBondActivatesOnMoveEndAttacker;
@@ -15618,11 +15619,12 @@ static void Cmd_pickup(void)
 
             ability = gSpeciesInfo[species].abilities[GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM)];
 
-            if (ability == ABILITY_PICKUP
-                && species != SPECIES_NONE
+            if ((ability == ABILITY_PICKUP
+                || SpeciesHasPassiveAbility(species, ABILITY_PICKUP))
+                && (species != SPECIES_NONE
                 && species != SPECIES_EGG
                 && heldItem == ITEM_NONE
-                && (Random() % 10) == 0)
+                && (Random() % 10) == 0))
             {
                 if (isInPyramid)
                 {
@@ -15776,7 +15778,8 @@ static void Cmd_tryrecycleitem(void)
 
     u16 *usedHeldItem;
 
-    if (gCurrentMove == MOVE_NONE && GetBattlerAbility(gBattlerAttacker) == ABILITY_PICKUP)
+    if ((gCurrentMove == MOVE_NONE) && (GetBattlerAbility(gBattlerAttacker) == ABILITY_PICKUP 
+                                     || BattlerHasPassiveAbility(gBattlerAttacker, ABILITY_PICKUP)))
         usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gBattlerTarget]][GetBattlerSide(gBattlerTarget)];
     else
         usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gBattlerAttacker]][GetBattlerSide(gBattlerAttacker)];
@@ -16115,7 +16118,7 @@ static void Cmd_handleballthrow(void)
                 }
                 break;
             case BALL_DREAM:
-                if (B_DREAM_BALL_MODIFIER >= GEN_8 && (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE))
+                if (B_DREAM_BALL_MODIFIER >= GEN_8 && (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE || BattlerHasPassiveAbility(gBattlerTarget, ABILITY_COMATOSE)))
                     ballMultiplier = 400;
                 break;
             case BALL_BEAST:

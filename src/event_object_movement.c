@@ -553,6 +553,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPaletteLight2,             OBJ_EVENT_PAL_TAG_LIGHT_2},
     {gObjectEventPaletteEmotes,             OBJ_EVENT_PAL_TAG_EMOTES},
     {gObjectEventPaletteNeonLight,          OBJ_EVENT_PAL_TAG_NEON_LIGHT},
+
+    //Mega Stones
+    //{gObjectEventPal_Scizorite,             OBJ_EVENT_PAL_TAG_SCIZORITE},
 #ifdef BUGFIX
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
 #else
@@ -5496,15 +5499,6 @@ static bool32 TryStartFollowerTransformEffect(struct ObjectEvent *objectEvent, s
         && OW_SPECIES(objectEvent) != (multi = GetOverworldWeatherSpecies(OW_SPECIES(objectEvent))))
     {
         sprite->data[7] = TRANSFORM_TYPE_WEATHER << 8;
-        PlaySE(SE_M_MINIMIZE);
-        return TRUE;
-    }
-
-    if ((DoesSpeciesHaveFormChangeMethod(OW_SPECIES(objectEvent), FORM_CHANGE_OVERWORLD_BATTLE_BOND) && 
-      (ability == ABILITY_BATTLE_BOND || SpeciesHasPassiveAbility(species, ABILITY_BATTLE_BOND)))
-      && (OW_SPECIES(objectEvent) == SPECIES_GRENINJA))
-    {
-        sprite->data[7] = TRANSFORM_TYPE_PERMANENT << 8;
         PlaySE(SE_M_MINIMIZE);
         return TRUE;
     }

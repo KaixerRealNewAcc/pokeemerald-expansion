@@ -1710,6 +1710,14 @@
       "y": 4,
       "width": 1,
       "height": 1
+    },
+    {
+      "map_section": "MAPSEC_PETALBURG_WOODS_CAVE",
+      "name": "Noibat Cave",
+      "x": 6,
+      "y": 14,
+      "width": 1,
+      "height": 1
     }
   ]
 }

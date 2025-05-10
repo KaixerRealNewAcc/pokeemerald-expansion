@@ -411,7 +411,6 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 1,
     },
 
-    //TODO: Buff this ability to also heal 1/8 of the user's max HP every turn.
     [ABILITY_TRUANT] =
     {
         .name = _("Truant"),
@@ -1531,7 +1530,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_LIQUID_VOICE] =
     {
         .name = _("Liquid Voice"),
-        .description = COMPOUND_STRING("Makes sound moves Water."),
+        .description = COMPOUND_STRING("Turns Sound-Moves into Water-Type while Boosting Sound-Moves by 20%."),
         .aiRating = 5,
     },
 
@@ -2422,7 +2421,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_SAND_SONG] =
     {
         .name = _("Sand Song"),
-        .description = COMPOUND_STRING("Sounds moves become Ground-Type.\nBoosts Sound moves by 20%."),
+        .description = COMPOUND_STRING("Turns Sound-Moves into Ground-Type while Boosting Sound-Moves by 20%."),
         .aiRating = 6,
     },
 
@@ -2505,6 +2504,28 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("The user restores up to 25% of its max HP when hit with Poison-\ntype moves."),
         .aiRating = 7,
         .breakable = TRUE,
+    },
+
+    [ABILITY_METAL_FUR] =
+    {
+        .name = _("Metal Fur"),
+        .description = COMPOUND_STRING("Reduces damage from Physical-Moves by 2x."),
+        .aiRating = 7,
+        .breakable = TRUE,
+    },
+
+    [ABILITY_KEEN_EDGE] =
+    {
+        .name = _("Keen Edge"),
+        .description = COMPOUND_STRING("Boosts slicing moves by 30%."),
+        .aiRating = 7,
+    },
+
+    [ABILITY_FREEZING_MELODY] =
+    {
+        .name = _("Freezing Melody"),
+        .description = COMPOUND_STRING("Turns Sound-Moves into Ice-Type while Boosting Sound-Moves by 20%."),
+        .aiRating = 7,
     },
 
     [PASSIVE_ABILITY_CORV_SLAYER] =

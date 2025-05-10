@@ -6147,6 +6147,10 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
     {
         return TYPE_GROUND;
     }
+    else if (IsSoundMove(move) && (ability == ABILITY_FREEZING_MELODY || BattlerHasPassiveAbility(battler, ABILITY_FREEZING_MELODY)))
+    {
+        return TYPE_ICE;
+    }
     else if (moveEffect == EFFECT_AURA_WHEEL && species == SPECIES_MORPEKO_HANGRY)
     {
         return TYPE_DARK;

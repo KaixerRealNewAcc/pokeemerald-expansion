@@ -242,6 +242,8 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallLight;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeCenterSignLight;
 
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MegaStones;
+
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Bard;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Hipster;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Trader;
