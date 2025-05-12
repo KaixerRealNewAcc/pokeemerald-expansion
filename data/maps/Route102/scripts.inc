@@ -1,4 +1,7 @@
 
+.set LOCALID_RIVAL_DEXNAV_MAY, 11
+.set LOCALID_RIVAL_DEXNAV_BRENDAN, 12
+
 Route102_MapScripts::
 	.byte 0
 
@@ -108,3 +111,230 @@ Route102_Text_RouteSignOldale:
 Route102_Text_RouteSignPetalburg:
 	.string "ROUTE 102\n"
 	.string "{LEFT_ARROW} PETALBURG CITY$"
+
+Route104_Trigger_RivalApproachPlayer_1::
+	lock
+	checkplayergender
+	switch VAR_RESULT
+	case MALE, Route104_Trigger_RivalApproachPlayer_1_3
+	case FEMALE, Route104_Trigger_RivalApproachPlayer_1_4
+Route104_Trigger_RivalApproachPlayer_1_1:
+	release
+	end
+
+Route104_Trigger_RivalApproachPlayer_1_3:
+	goto Route104_EventScript_RivalApproachPlayer_May_1
+	goto Route104_Trigger_RivalApproachPlayer_1_1
+
+Route104_Trigger_RivalApproachPlayer_1_4:
+	goto Route104_EventScript_RivalApproachPlayer_Brendan_1
+	goto Route104_Trigger_RivalApproachPlayer_1_1
+
+
+Route104_Trigger_RivalApproachPlayer_2::
+	lock
+	checkplayergender
+	switch VAR_RESULT
+	case MALE, Route104_Trigger_RivalApproachPlayer_2_3
+	case FEMALE, Route104_Trigger_RivalApproachPlayer_2_4
+Route104_Trigger_RivalApproachPlayer_2_1:
+	release
+	end
+
+Route104_Trigger_RivalApproachPlayer_2_3:
+	goto Route104_EventScript_RivalApproachPlayer_May_2
+	goto Route104_Trigger_RivalApproachPlayer_2_1
+
+Route104_Trigger_RivalApproachPlayer_2_4:
+	goto Route104_EventScript_RivalApproachPlayer_Brendan_2
+	goto Route104_Trigger_RivalApproachPlayer_2_1
+
+
+Route104_EventScript_RivalApproachPlayer_May_1::
+	lock
+	addobject LOCALID_RIVAL_DEXNAV_MAY
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_0
+	waitmovement 0
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_0
+	waitmessage
+	waitbuttonpress
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Route104_EventScript_RivalApproachPlayer_May_1_Movement_1
+	waitmovement 0
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_2
+	waitmovement 0
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_1
+	waitmessage
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_2
+	waitmessage
+	waitbuttonpress
+	closemessage
+	setflag FLAG_DEXNAV_GET
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_3
+	waitbuttonpress
+	closemessage
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_3
+	waitmovement 0
+	setvar VAR_RIVAL_GIVES_DEXNAV, 1
+	end
+
+
+Route104_EventScript_RivalApproachPlayer_May_2::
+	lock
+	addobject LOCALID_RIVAL_DEXNAV_MAY
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_0
+	waitmovement 0
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_0
+	waitmessage
+	waitbuttonpress
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Route104_EventScript_RivalApproachPlayer_May_1_Movement_1
+	waitmovement 0
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_2
+	waitmovement 0
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_1
+	waitmessage
+	message Route104_EventScript_RivalApproachPlayer_May_1_Text_2
+	waitmessage
+	waitbuttonpress
+	closemessage
+	setflag FLAG_DEXNAV_GET
+	msgbox Route104_EventScript_RivalApproachPlayer_May_1_Text_3
+	waitbuttonpress
+	closemessage
+	applymovement LOCALID_RIVAL_DEXNAV_MAY, Route104_EventScript_RivalApproachPlayer_May_1_Movement_3
+	waitmovement 0
+	setvar VAR_RIVAL_GIVES_DEXNAV, 1
+	end
+
+
+Route104_EventScript_RivalApproachPlayer_Brendan_1::
+	lock
+	addobject LOCALID_RIVAL_DEXNAV_BRENDAN
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_May_1_Movement_0
+	waitmovement 0
+	msgbox Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_0
+	waitbuttonpress
+	closemessage
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_May_1_Movement_2
+	waitmovement 0
+	msgbox Route104_EventScript_RivalApproachPlayer_May_1_Text_1
+	waitbuttonpress
+	closemessage
+	msgbox Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_1
+	waitbuttonpress
+	closemessage
+	setflag FLAG_DEXNAV_GET
+	msgbox Route104_EventScript_RivalApproachPlayer_May_1_Text_3
+	waitbuttonpress
+	closemessage
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_Brendan_1_Movement_0
+	waitmovement 0
+	setvar VAR_RIVAL_GIVES_DEXNAV, 1
+	end
+
+
+Route104_EventScript_RivalApproachPlayer_Brendan_2::
+	lock
+	addobject LOCALID_RIVAL_DEXNAV_BRENDAN
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_May_1_Movement_0
+	waitmovement 0
+	msgbox Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_0
+	waitbuttonpress
+	closemessage
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_Brendan_2_Movement_0
+	waitmovement 0
+	msgbox Route104_EventScript_RivalApproachPlayer_May_1_Text_1
+	waitbuttonpress
+	closemessage
+	msgbox Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_1
+	waitbuttonpress
+	closemessage
+	setflag FLAG_DEXNAV_GET
+	msgbox Route104_EventScript_RivalApproachPlayer_May_1_Text_3
+	applymovement LOCALID_RIVAL_DEXNAV_BRENDAN, Route104_EventScript_RivalApproachPlayer_May_1_Movement_3
+	waitmovement 0
+	setvar VAR_RIVAL_GIVES_DEXNAV, 1
+	end
+
+
+Route104_EventScript_RivalApproachPlayer_May_1_Movement_0:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	face_down
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_May_1_Movement_1:
+	emote_question_mark
+	delay_2
+	face_right
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_May_1_Movement_2:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_May_1_Movement_3:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_Brendan_1_Movement_0:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_Brendan_2_Movement_0:
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+Route104_EventScript_RivalApproachPlayer_May_1_Text_0:
+	.string "Heyyyyy {PLAYER}!$"
+
+Route104_EventScript_RivalApproachPlayer_May_1_Text_1:
+	.string "I was just looking for you!\n"
+	.string "Have you found any rare Pokémon with\l"
+	.string "the DexNav yet?$"
+
+Route104_EventScript_RivalApproachPlayer_May_1_Text_2:
+	.string "Whattttt, you haven't gotten your\n"
+	.string "DexNav yet?\n"
+	.string "Here have mine!\p"
+	.string "I'm sure my dad has one more for me,\n"
+	.string "since he didn't give you one.$"
+
+Route104_EventScript_RivalApproachPlayer_May_1_Text_3:
+	.string "anyways, I have to go find my dad.\n"
+	.string "See you later!$"
+
+Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_0:
+	.string "Whatsup, {PLAYER}!$"
+
+Route104_EventScript_RivalApproachPlayer_Brendan_1_Text_1:
+	.string "Oh, you haven't gotten your DexNav\n"
+	.string "yet?\n"
+	.string "Here have mine!\p"
+	.string "I'm sure my dad has one more for me,\n"
+	.string "since he didn't give you one.$"

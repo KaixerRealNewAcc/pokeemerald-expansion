@@ -278,4 +278,5 @@ EventScript_ResetAllMapFlags::
 
 EventScript_ResetAllMapFlagsDynastic::
 	setflag FLAG_HIDE_LEAF
+	setflag FLAG_HIDE_RIVAL_DEXNAV
 	end

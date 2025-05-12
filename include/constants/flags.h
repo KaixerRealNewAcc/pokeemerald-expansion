@@ -43,9 +43,9 @@
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 #define NUM_TEMP_FLAGS   (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
 
-#define FLAG_UNUSED_0x020    0x20 // Unused Flag
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
+#define FLAG_DETECTOR_MODE   0x20
+#define FLAG_DEXNAV_GET      0x21
+#define FLAG_SEARCH_MODE     0x22
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
@@ -54,7 +54,7 @@
 #define FLAG_UNUSED_0x028    0x28 // Unused Flag
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
+#define FLAG_HIDE_RIVAL_DEXNAV 0x2B
 #define FLAG_HIDE_LEAF       0x2C // set when the player is in the same map as Leaf, and she is not visible
 #define FLAG_CAP_GRUNTS_MUSEUM 0x2D
 #define FLAG_GOOD_ROD_TECH   0x2E

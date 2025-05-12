@@ -1,4 +1,7 @@
 raw `
+.set LOCALID_RIVAL_DEXNAV_MAY, 11
+.set LOCALID_RIVAL_DEXNAV_BRENDAN, 12
+
 Route102_MapScripts::
 	.byte 0
 
@@ -109,3 +112,141 @@ Route102_Text_RouteSignPetalburg:
 	.string "ROUTE 102\n"
 	.string "{LEFT_ARROW} PETALBURG CITY$"
 `
+
+script Route104_Trigger_RivalApproachPlayer_1
+{
+	lock
+	checkplayergender
+	switch(var(VAR_RESULT))
+	{
+		case MALE: goto ( Route104_EventScript_RivalApproachPlayer_May_1 )
+		case FEMALE: goto ( Route104_EventScript_RivalApproachPlayer_Brendan_1 )
+	}
+	release
+	end
+}
+
+script Route104_Trigger_RivalApproachPlayer_2
+{
+	lock
+	checkplayergender
+	switch(var(VAR_RESULT))
+	{
+		case MALE: goto ( Route104_EventScript_RivalApproachPlayer_May_2 )
+		case FEMALE: goto ( Route104_EventScript_RivalApproachPlayer_Brendan_2 )
+	}
+	release
+	end
+}
+
+script Route104_EventScript_RivalApproachPlayer_May_1
+{
+	lock
+	addobject (LOCALID_RIVAL_DEXNAV_MAY) 
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_left *4, face_down)) 
+	waitmovement(0) 
+	message ("Heyyyyy {PLAYER}!")
+	waitmessage
+	waitbuttonpress
+	closemessage
+	applymovement (OBJ_EVENT_ID_PLAYER, moves(emote_question_mark, delay_2, face_right))
+	waitmovement(0)
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_down *1, walk_left *3))
+	waitmovement(0)
+	message (format("I was just looking for you!\nHave you found any rare Pokémon with the DexNav yet?"))
+	waitmessage
+	message (format("Whattttt, you haven't gotten your DexNav yet?\nHere have mine!\pI'm sure my dad has one more for me, since he didn't give you one."))
+	waitmessage
+	waitbuttonpress
+	closemessage
+	setflag(FLAG_DEXNAV_GET)
+	message (format("anyways, I have to go find my dad.\nSee you later!"))
+	waitbuttonpress
+	closemessage
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_right *7, walk_up *2))
+	waitmovement(0)
+	setvar (VAR_RIVAL_GIVES_DEXNAV, 1)
+	end
+}
+
+script Route104_EventScript_RivalApproachPlayer_May_2
+{
+	lock
+	addobject (LOCALID_RIVAL_DEXNAV_MAY) 
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_left *4, face_down)) 
+	waitmovement(0) 
+	message ("Heyyyyy {PLAYER}!")
+	waitmessage
+	waitbuttonpress
+	closemessage
+	applymovement (OBJ_EVENT_ID_PLAYER, moves(emote_question_mark, delay_2, face_right))
+	waitmovement(0)
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_down *1, walk_left *3))
+	waitmovement(0)
+	message (format("I was just looking for you!\nHave you found any rare Pokémon with the DexNav yet?"))
+	waitmessage
+	message (format("Whattttt, you haven't gotten your DexNav yet?\nHere have mine!\pI'm sure my dad has one more for me, since he didn't give you one."))
+	waitmessage
+	waitbuttonpress
+	closemessage
+	setflag(FLAG_DEXNAV_GET)
+	msgbox (format("anyways, I have to go find my dad.\nSee you later!"))
+	waitbuttonpress
+	closemessage
+	applymovement (LOCALID_RIVAL_DEXNAV_MAY, moves(walk_right *7, walk_up *2))
+	waitmovement(0)
+	setvar (VAR_RIVAL_GIVES_DEXNAV, 1)
+	end
+}
+
+script Route104_EventScript_RivalApproachPlayer_Brendan_1
+{
+	lock
+	addobject (LOCALID_RIVAL_DEXNAV_BRENDAN) 
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_left *4, face_down)) 
+	waitmovement(0) 
+	msgbox ("Whatsup, {PLAYER}!")
+	waitbuttonpress
+	closemessage
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_down *1, walk_left *3))
+	waitmovement(0)
+	msgbox (format("I was just looking for you!\nHave you found any rare Pokémon with the DexNav yet?"))
+	waitbuttonpress
+	closemessage
+	msgbox (format("Oh, you haven't gotten your DexNav yet?\nHere have mine!\pI'm sure my dad has one more for me, since he didn't give you one."))
+	waitbuttonpress
+	closemessage
+	setflag(FLAG_DEXNAV_GET)
+	msgbox (format("anyways, I have to go find my dad.\nSee you later!"))
+	waitbuttonpress
+	closemessage
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_right *7, walk_up *1))
+	waitmovement(0)
+	setvar (VAR_RIVAL_GIVES_DEXNAV, 1)
+	end
+}
+
+script Route104_EventScript_RivalApproachPlayer_Brendan_2
+{
+	lock
+	addobject (LOCALID_RIVAL_DEXNAV_BRENDAN) 
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_left *4, face_down)) 
+	waitmovement(0) 
+	msgbox ("Whatsup, {PLAYER}!")
+	waitbuttonpress
+	closemessage
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_down *2, walk_left *3))
+	waitmovement(0)
+	msgbox (format("I was just looking for you!\nHave you found any rare Pokémon with the DexNav yet?"))
+	waitbuttonpress
+	closemessage
+	msgbox (format("Oh, you haven't gotten your DexNav yet?\nHere have mine!\pI'm sure my dad has one more for me, since he didn't give you one."))
+	waitbuttonpress
+	closemessage
+	setflag(FLAG_DEXNAV_GET)
+	msgbox (format("anyways, I have to go find my dad.\nSee you later!"))
+	applymovement (LOCALID_RIVAL_DEXNAV_BRENDAN, moves(walk_right *7, walk_up *2))
+	waitmovement(0)
+	setvar (VAR_RIVAL_GIVES_DEXNAV, 1)
+	end
+}
