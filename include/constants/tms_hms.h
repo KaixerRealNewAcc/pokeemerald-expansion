@@ -87,7 +87,6 @@
     F(DRILL_PECK) \
     F(DRAIN_PUNCH) \
     F(FLASH) \
-    F(TAKE_FLIGHT) \
     F(POWER_GEM) \
 
 #define FOREACH_HM(F) \
