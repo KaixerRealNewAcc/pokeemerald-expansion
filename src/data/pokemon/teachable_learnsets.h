@@ -89,7 +89,6 @@
 // - MOVE_DRILL_PECK                                   //
 // - MOVE_DRAIN_PUNCH                                  //
 // - MOVE_FLASH                                        //
-// - MOVE_TAKE_FLIGHT                                  //
 // - MOVE_POWER_GEM                                    //
 // - MOVE_CUT                                          //
 // - MOVE_FLY                                          //

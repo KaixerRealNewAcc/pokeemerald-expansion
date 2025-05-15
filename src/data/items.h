@@ -11691,7 +11691,7 @@ const struct Item gItemsInfo[] =
 
     [ITEM_TM_FLASH] =
     {
-        .name = _("TM85"),
+        .name = _("TM85 Flash"),
         .price = 3000,
         .description = COMPOUND_STRING(
             "Looses a powerful\n"
@@ -11704,21 +11704,9 @@ const struct Item gItemsInfo[] =
         .secondaryId = MOVE_FLASH,
     },
 
-    [ITEM_TM86] =
-    {
-        .name = _("TM86"),
-        .price = 3000,
-        .description = sUTurnDescription,
-        .importance = I_REUSABLE_TMS,
-        .pocket = POCKET_TM_HM,
-        .type = ITEM_USE_PARTY_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_TMHM,
-        .secondaryId = MOVE_NONE,
-    },
-
     [ITEM_TM_POWER_GEM] =
     {
-        .name = _("TM87 Power Gem"),
+        .name = _("TM86 Power Gem"),
         .price = 3000,
         .description = COMPOUND_STRING(
             "Attacks with rays\n"
@@ -11729,6 +11717,21 @@ const struct Item gItemsInfo[] =
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TMHM,
         .secondaryId = MOVE_POWER_GEM,
+    },
+
+    [ITEM_TM87] =
+    {
+        .name = _("TM87"),
+        .price = 3000,
+        .description = COMPOUND_STRING(
+            "??????????????\n"
+            "??????????????\n"
+            "??????????????"), // Todo
+        .importance = I_REUSABLE_TMS,
+        .pocket = POCKET_TM_HM,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_TMHM,
+        .secondaryId = MOVE_NONE,
     },
 
     [ITEM_TM88] =
@@ -14465,4 +14468,24 @@ const struct Item gItemsInfo[] =
         .iconPic = gItemIcon_Repel,
         .iconPalette = gItemIconPalette_MaxRepel,
     },
+
+    [ITEM_INF_CANDY] =
+    {
+        .name = _("Inf. Candy"),
+        .pluralName = _("Inf. Candies"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Raises the level\n"
+            "of a Pokémon by\n"
+            "one. Infinite use."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .holdEffectParam = 1,
+        .fieldUseFunc = ItemUseOutOfBattle_RareCandy,
+        .effect = gItemEffect_RareCandy,
+        .iconPic = gItemIcon_RareCandy,
+        .iconPalette = gItemIconPalette_RareCandy,
+    },
+
 };

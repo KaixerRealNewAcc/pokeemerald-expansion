@@ -203,6 +203,24 @@
       "var": "VAR_RIVAL_GIVES_DEXNAV",
       "var_value": "0",
       "script": "Route104_Trigger_RivalApproachPlayer_2"
+    },
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 8,
+      "elevation": 0,
+      "var": "VAR_RIVAL_GIVES_DEXNAV",
+      "var_value": "0",
+      "script": "Route104_Trigger_RivalApproachPlayer_3"
+    },
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 9,
+      "elevation": 0,
+      "var": "VAR_RIVAL_GIVES_DEXNAV",
+      "var_value": "0",
+      "script": "Route104_Trigger_RivalApproachPlayer_4"
     }
   ],
   "bg_events": [

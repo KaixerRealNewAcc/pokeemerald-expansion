@@ -899,16 +899,39 @@ LittlerootTown_EventScript_SetReceivedRunningShoes::
 	end
 
 LittlerootTown_EventScript_GiveRunningShoes::
-	msgbox LittlerootTown_Text_WearTheseRunningShoes, MSGBOX_DEFAULT
-	playfanfare MUS_OBTAIN_ITEM
-	message LittlerootTown_Text_SwitchShoesWithRunningShoes
-	waitfanfare
-	setflag FLAG_RECEIVED_RUNNING_SHOES
-	msgbox LittlerootTown_Text_ExplainRunningShoes, MSGBOX_DEFAULT
+	msgbox LittlerootTown_Text_PlayerGetItems, MSGBOX_DEFAULT
+	giveitem ITEM_FISHING_ROD, 1
+	giveitem ITEM_INF_REPEL, 1
+	checkflag EZLEVELING_CODE
+	call_if_eq VAR_RESULT, 0, LittlerootTown_EventScript_GiveInfCandy
 	msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
 	closemessage
 	delay 30
 	return
+
+LittlerootTown_EventScript_GiveInfCandy::
+	giveitem ITEM_INF_CANDY, 1
+	msgbox LittlerootTown_Text_ExplainRunningShoes, MSGBOX_DEFAULT
+	closemessage
+	delay 30
+	return
+
+LittlerootTown_Text_PlayerGetItems:
+	.string "Mom: {PLAYER}! {PLAYER}! Did you\n"
+	.string "introduce yourself to Prof. Birch?\p"
+	.string "Oh! What an adorable Pokémon!\n"
+	.string "You got it from Prof. Birch. How nice!\p"
+	.string "You're your father's child, all right.\n"
+	.string "You look good together with Pokémon!\p"
+	.string "Here, honey! If you're going out on an\n"
+	.string "adventure, take this fishing rod, too!\p"
+	.string "It's your dad's old rod.\p"
+	.string "You can fish anywhere near a body\n"
+	.string "of water.\p"
+	.string "Just use the rod and press {A_BUTTON} when a\n"
+	.string "Pokémon is reeled in!\p"
+	.string "Oh! Also here's a Repel to make Pokémon!\n"
+	.string "not attack you!$"
 
 LittlerootTown_Text_OurNewHomeLetsGoInside:
 	.string "MOM: {PLAYER}, we're here, honey!\p"
