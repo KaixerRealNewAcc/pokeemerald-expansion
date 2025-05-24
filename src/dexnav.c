@@ -2009,6 +2009,24 @@ static void TryDrawIconInSlot(u16 species, s16 x, s16 y)
         CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF);
 }
 
+static void TryDrawIconInSlotNew(u16 species, s16 x, s16 y)
+{
+    u8 spriteId;
+    if (species == SPECIES_NONE || species > NUM_SPECIES)
+    {
+        CreateNoDataIcon(x, y);   //'X' in slot
+    }
+    else if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
+    {
+        spriteId = CreateMonIconNoPalette(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF); // Loads grayscale copy of palette to slots 3-6
+        gSprites[spriteId].oam.paletteNum += 3; // Use grayscale palette for this icon
+    }
+    else
+    {
+        CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF);
+    }
+}
+
 static void DrawSpeciesIcons(void)
 {
     s16 x, y;
@@ -2021,7 +2039,7 @@ static void DrawSpeciesIcons(void)
         species = sDexNavUiDataPtr->landSpecies[i];
         x = ROW_LAND_ICON_X + (24 * (i % COL_LAND_COUNT));
         y = ROW_LAND_TOP_ICON_Y + (i > COL_LAND_MAX ? 28 : 0);
-        TryDrawIconInSlot(species, x, y);
+        TryDrawIconInSlotNew(species, x, y);
     }
 
     for (i = 0; i < WATER_WILD_COUNT; i++)
@@ -2029,7 +2047,7 @@ static void DrawSpeciesIcons(void)
         species = sDexNavUiDataPtr->waterSpecies[i];
         x = ROW_WATER_ICON_X + 24 * i;
         y = ROW_WATER_ICON_Y;
-        TryDrawIconInSlot(species, x, y);
+        TryDrawIconInSlotNew(species, x, y);
     }
 
     for (i = 0; i < HIDDEN_WILD_COUNT; i++)
@@ -2038,7 +2056,7 @@ static void DrawSpeciesIcons(void)
         x = ROW_HIDDEN_ICON_X + 24 * i;
         y = ROW_HIDDEN_ICON_Y;
         if (FlagGet(DN_FLAG_DETECTOR_MODE))
-            TryDrawIconInSlot(species, x, y);
+            TryDrawIconInSlotNew(species, x, y);
        else if (species == SPECIES_NONE || species > NUM_SPECIES)
             CreateNoDataIcon(x, y);
         else
