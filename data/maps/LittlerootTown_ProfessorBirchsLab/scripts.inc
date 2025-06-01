@@ -511,26 +511,6 @@ EventScript_RegisterProfBirch::
 	release
 	end
 
-LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex::
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex, MSGBOX_DEFAULT
-	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex, MSGBOX_DEFAULT
-	closemessage
-	applymovement LOCALID_RIVAL, LittlerootTown_ProfessorBirchsLab_Movement_RivalApproachPlayer
-	waitmovement 0
-	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
-	waitmovement 0
-	checkplayergender
-	call_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls
-	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanGivePokeBalls
-	setvar VAR_BIRCH_LAB_STATE, 5
-	setflag FLAG_ADVENTURE_STARTED
-	setvar VAR_OLDALE_TOWN_STATE, 1
-	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
-	setvar VAR_LITTLEROOT_TOWN_STATE, 3
-	releaseall
-	end
-
 LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_MayGotPokedexTooTakeThese, MSGBOX_DEFAULT
 	giveitem ITEM_POKE_BALL, 5
@@ -1000,3 +980,44 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex, MSGBOX_DEFAULT
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_RIVAL, LittlerootTown_ProfessorBirchsLab_Movement_RivalApproachPlayer
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
+	waitmovement 0
+	checkplayergender
+	call_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls
+	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanGivePokeBalls
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_0, MSGBOX_DEFAULT
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp
+	waitmovement 0
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_1, MSGBOX_DEFAULT
+	giveitem ITEM_TIME_CHANGER, 1
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_2, MSGBOX_DEFAULT
+	setvar VAR_BIRCH_LAB_STATE, 5
+	setflag FLAG_ADVENTURE_STARTED
+	setvar VAR_OLDALE_TOWN_STATE, 1
+	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
+	setvar VAR_LITTLEROOT_TOWN_STATE, 3
+	releaseall
+	end
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_0:
+	.string "PROF. BIRCH: Oh, wait a second\n"
+	.string "{PLAYER}, i also have something else\l"
+	.string "for you.$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_1:
+	.string "PROF. BIRCH: here have it.$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex_Text_2:
+	.string "PROF. BIRCH: The Time Changer is a\n"
+	.string "device that can change time, useful to\l"
+	.string "catch encounters that you can find at\l"
+	.string "a different time.$"

@@ -4919,20 +4919,14 @@ s32 GetBattleMovePriority(u32 battler, u32 ability, u32 move)
     if (((ability == ABILITY_GALE_WINGS
         || BattlerHasPassiveAbility(battler, ABILITY_GALE_WINGS))
         && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FLYING)
-        || (ability == ABILITY_FLAMING_SOUL
-        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FIRE))
+        && GetMoveType(move) == TYPE_FLYING))
     {
         priority++;
     }
     else if (((ability == ABILITY_FLAMING_SOUL
         || BattlerHasPassiveAbility(battler, ABILITY_FLAMING_SOUL))
         && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FLYING)
-        || (ability == ABILITY_FLAMING_SOUL
-        && (GetGenConfig(GEN_CONFIG_GALE_WINGS) < GEN_7 || IsBattlerAtMaxHp(battler))
-        && GetMoveType(move) == TYPE_FIRE))
+        && GetMoveType(move) == TYPE_FLYING))
     {
         priority++;
     }
@@ -6020,20 +6014,20 @@ u32 GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, u8 *ateBoost)
             if (monInBattle)
             {
                 typeBits = ((gBattleMons[battler].hpIV & 1) << 0)
-                        | ((gBattleMons[battler].attackIV & 1) << 1)
-                        | ((gBattleMons[battler].defenseIV & 1) << 2)
-                        | ((gBattleMons[battler].speedIV & 1) << 3)
-                        | ((gBattleMons[battler].spAttackIV & 1) << 4)
-                        | ((gBattleMons[battler].spDefenseIV & 1) << 5);
+                         | ((gBattleMons[battler].attackIV & 1) << 0)
+                         | ((gBattleMons[battler].defenseIV & 1) << 1)
+                         | ((gBattleMons[battler].spAttackIV & 1) << 2)
+                         | ((gBattleMons[battler].spDefenseIV & 1) << 3)
+                         | ((gBattleMons[battler].speedIV & 1) << 4);
             }
             else
             {
                 typeBits = ((GetMonData(mon, MON_DATA_HP_IV) & 1) << 0)
-                        | ((GetMonData(mon, MON_DATA_ATK_IV) & 1) << 1)
-                        | ((GetMonData(mon, MON_DATA_DEF_IV) & 1) << 2)
-                        | ((GetMonData(mon, MON_DATA_SPEED_IV) & 1) << 3)
-                        | ((GetMonData(mon, MON_DATA_SPATK_IV) & 1) << 4)
-                        | ((GetMonData(mon, MON_DATA_SPDEF_IV) & 1) << 5);
+                         | ((gBattleMons[battler].attackIV & 1) << 0)
+                         | ((gBattleMons[battler].defenseIV & 1) << 1)
+                         | ((gBattleMons[battler].spAttackIV & 1) << 2)
+                         | ((gBattleMons[battler].spDefenseIV & 1) << 3)
+                         | ((gBattleMons[battler].speedIV & 1) << 4);
             }
 
             u32 hpTypes[NUMBER_OF_MON_TYPES] = {0};

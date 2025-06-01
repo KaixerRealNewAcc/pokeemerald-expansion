@@ -9757,9 +9757,9 @@ static inline u32 CalcMoveBasePower(struct DamageCalculationData *damageCalcData
             u8 powerBits = ((gBattleMons[battlerAtk].hpIV & 2) >> 1)
                          | ((gBattleMons[battlerAtk].attackIV & 2) << 0)
                          | ((gBattleMons[battlerAtk].defenseIV & 2) << 1)
-                         | ((gBattleMons[battlerAtk].speedIV & 2) << 2)
-                         | ((gBattleMons[battlerAtk].spAttackIV & 2) << 3)
-                         | ((gBattleMons[battlerAtk].spDefenseIV & 2) << 4);
+                         | ((gBattleMons[battlerAtk].spAttackIV & 2) << 2)
+                         | ((gBattleMons[battlerAtk].spDefenseIV & 2) << 3)
+                         | ((gBattleMons[battlerAtk].speedIV & 2) << 4);
 
             basePower = (40 * powerBits) / 63 + 30;
         }
@@ -13090,7 +13090,7 @@ bool32 IsSleepClauseEnabled()
     if (FlagGet(B_FLAG_SLEEP_CLAUSE))
         return TRUE;
     if(GetBattlerAbility(battlerAtk) != ABILITY_BAD_DREAMS)
-        return FALSE; 
+        return TRUE; 
     return FALSE;
 }
 

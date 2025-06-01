@@ -1815,9 +1815,9 @@ void CalculateMonStats(struct Pokemon *mon)
 
     CALC_STAT(baseAttack, attackIV, attackEV, STAT_ATK, MON_DATA_ATK)
     CALC_STAT(baseDefense, defenseIV, defenseEV, STAT_DEF, MON_DATA_DEF)
-    CALC_STAT(baseSpeed, speedIV, speedEV, STAT_SPEED, MON_DATA_SPEED)
     CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
     CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
+    CALC_STAT(baseSpeed, speedIV, speedEV, STAT_SPEED, MON_DATA_SPEED)
 
     // Since a pokemon's maxHP data could either not have
     // been initialized at this point or this pokemon is
@@ -7001,6 +7001,24 @@ void HealPokemon(struct Pokemon *mon)
 
     data = STATUS1_NONE;
     SetMonData(mon, MON_DATA_STATUS, &data);
+
+    MonRestorePP(mon);
+}
+
+void HealStatusOnlyChansey(struct Pokemon *mon)
+{
+    u32 data;
+    data = STATUS1_NONE;
+    SetMonData(mon, MON_DATA_STATUS, &data);
+
+    MonRestorePP(mon);
+}
+
+void HealHPOnlyChansey(struct Pokemon *mon)
+{
+    u32 data;
+    data = GetMonData(mon, MON_DATA_MAX_HP);
+    SetMonData(mon, MON_DATA_HP, &data);
 
     MonRestorePP(mon);
 }

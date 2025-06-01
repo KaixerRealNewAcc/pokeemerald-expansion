@@ -9967,37 +9967,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 103  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
-- Ice Punch  
 - Fire Punch  
-- Drain Punch  
+- Ice Punch  
+- Mach Punch  
 
-Gligar @ Yache Berry
-Ability: Hyper Cutter  
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Dual Wingbeat  
-- Rock Slide  
-- Knock Off 
-- Roost  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simipour @ Mystic Water
-Level: 104  
-Tera Type: Water  
-IVs: 30 SpA
-Jolly Nature  
-- Water Pulse 
-- Icy Wind  
-- Hidden Power  
-- Knock Off  
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
+Tera Type: Grass  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave   
 
 Grovyle @ Eviolite
 Ability: Technician
-Level: 103  
+Level: 31  
 IVs: 30 Spe
 Tera Type: Grass  
 Jolly Nature  
@@ -10053,37 +10055,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 104  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
+- Fire Punch  
 - Ice Punch  
 - Mach Punch  
-- Drain Punch 
 
-Misdreavus @ Eviolite  
-Ability: Levitate  
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Shadow Ball 
-- Dazzling Gleam  
-- Power Gem  
-- Nasty Plot  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simisage @ Miracle Seed
-Level: 104  
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
 Tera Type: Grass  
-IVs: 30 Atk / 30 SpA / 30 Spe
-Timid Nature   
-- Giga Drain  
-- Hidden Power 
-- Power Gem  
-- Knock Off  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave  
 
 Combusken @ Eviolite
 Ability: Speed Boost  
-Level: 103  
+Level: 31  
 Tera Type: Fire  
 Jolly Nature  
 - Drain Punch  
@@ -10138,37 +10142,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 104  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
+- Fire Punch  
 - Ice Punch  
 - Mach Punch  
-- Drain Punch  
 
-Sneasel @ Focus Sash
-Ability: Inner Focus 
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Knock Off  
-- Icicle Crash  
-- Low Kick  
-- Swords Dance  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simisear @ Charcoal  
-Level: 104  
-Tera Type: Dark  
-IVs: 30 Def / 30 SpD 
-Timid Nature  
-- Lava Plume  
-- Hidden Power  
-- Grass Knot
-- Knock Off 
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
+Tera Type: Grass  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave  
 
 Marshtomp @ Eviolite  
 Ability: Torrent  
-Level: 103  
+Level: 31  
 Tera Type: Water  
 Adamant Nature  
 - Liquidation  
@@ -10223,37 +10229,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 103  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
-- Ice Punch  
 - Fire Punch  
-- Drain Punch  
+- Ice Punch  
+- Mach Punch  
 
-Gligar @ Yache Berry
-Ability: Hyper Cutter  
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Dual Wingbeat  
-- Rock Slide  
-- Knock Off 
-- Roost  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simipour @ Mystic Water
-Level: 104  
-Tera Type: Water  
-IVs: 30 SpA
-Jolly Nature  
-- Water Pulse  
-- Icy Wind  
-- Hidden Power  
-- Knock Off  
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
+Tera Type: Grass  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave    
 
 Grovyle @ Eviolite
 Ability: Technician
-Level: 103  
+Level: 31  
 IVs: 30 Spe
 Tera Type: Grass  
 Jolly Nature  
@@ -10307,37 +10315,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 104  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
+- Fire Punch  
 - Ice Punch  
 - Mach Punch  
-- Drain Punch 
 
-Misdreavus @ Eviolite  
-Ability: Levitate  
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Shadow Ball 
-- Dazzling Gleam  
-- Power Gem  
-- Nasty Plot  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simisage @ Miracle Seed
-Level: 104  
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
 Tera Type: Grass  
-IVs: 30 Atk / 30 SpA / 30 Spe
-Timid Nature   
-- Giga Drain  
-- Hidden Power 
-- Power Gem  
-- Knock Off  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave   
 
 Combusken @ Eviolite
 Ability: Speed Boost  
-Level: 103  
+Level: 31  
 Tera Type: Fire  
 Jolly Nature  
 - Drain Punch  
@@ -10378,6 +10388,8 @@ AI: Basic Trainer
 Mudkip
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Growl
 
 === TRAINER_MAY_ROUTE_110_TORCHIC ===
 Name: May
@@ -10390,37 +10402,39 @@ AI: Smart Trainer
 
 Pawmot @ Punching Glove  
 Ability: Iron Fist  
-Level: 104  
-Tera Type: Electric    
+Level: 30  
+Tera Type: Electric  
 Jolly Nature  
 - Thunder Punch  
+- Fire Punch  
 - Ice Punch  
 - Mach Punch  
-- Drain Punch  
 
-Sneasel @ Focus Sash
-Ability: Inner Focus 
-Level: 103  
-Tera Type: Flying  
-Jolly Nature  
-- Knock Off  
-- Icicle Crash  
-- Low Kick  
-- Swords Dance  
+Hattrem @ Eviolite  
+Ability: Magic Bounce  
+Level: 29  
+Tera Type: Psychic  
+Modest Nature  
+IVs: 0 Atk / 30 SpA / 30 Spe  
+- Calm Mind  
+- Psybeam  
+- Draining Kiss  
+- Hidden Power
 
-Simisear @ Charcoal  
-Level: 104  
-Tera Type: Dark  
-IVs: 30 Def / 30 Spe  
-Timid Nature  
-- Lava Plume  
-- Hidden Power  
-- Grass Knot
-- Knock Off 
+Ferroseed @ Rocky Helmet  
+Ability: Iron Barbs  
+Level: 29  
+Tera Type: Grass  
+Hardy Nature  
+IVs: 0 Spe  
+- Curse  
+- Gyro Ball  
+- Seed Bomb  
+- Thunder Wave  
 
 Marshtomp @ Eviolite  
 Ability: Torrent  
-Level: 103  
+Level: 31  
 Tera Type: Water  
 Adamant Nature  
 - Liquidation  

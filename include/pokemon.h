@@ -812,6 +812,8 @@ bool32 IsSpeciesEnabled(u16 species);
 u16 GetCryIdBySpecies(u16 species);
 u16 GetSpeciesPreEvolution(u16 species);
 void HealPokemon(struct Pokemon *mon);
+void HealStatusOnlyChansey(struct Pokemon *mon);
+void HealHPOnlyChansey(struct Pokemon *mon);
 void HealBoxPokemon(struct BoxPokemon *boxMon);
 void UpdateDaysPassedSinceFormChange(u16 days);
 void TrySetDayLimitToFormChange(struct Pokemon *mon);
